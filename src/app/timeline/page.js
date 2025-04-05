@@ -1,4 +1,4 @@
-import CampaignIdeas from '@/components/AITimeline';
+import AITimeline from '@/components/AITimeline';
 
 export default function TimelinePage() {
   return (
