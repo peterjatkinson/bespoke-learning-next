@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "jspdf": "^3.0.1",
+    "lucide-react": "^0.487.0",
     "next": "15.2.4",
     "openai": "^4.91.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-tagcloud": "^2.3.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
