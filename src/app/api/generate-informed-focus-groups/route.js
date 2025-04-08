@@ -35,13 +35,16 @@ async function generatePersonas(brandInfo) {
 
   const systemPrompt = `Create 4 diverse synthetic focus group personas to provide feedback on a brand/product. For each persona, provide:
 1. First name
-2. Age
-3. Gender
-4. Region/Location
-5. Occupation
-6. Brief personality description
-7. Attitude toward the brand
+2. Age (varied across different demographics)
+3. Gender (ensure diversity)
+4. Region/Location (varied across different regions)
+5. Occupation (should vary – don't assume everyone is a white-collar worker, unless that's likely based on the brand)
+6. Brief personality description (1-2 sentences)
+7. Attitude toward the brand (e.g., loyalist, skeptic, new customer, etc.)
 8. One relevant personal detail or hobby
+
+Make sure the personas are diverse in terms of demographics, backgrounds, attitudes toward the brand, and perspectives.
+Each persona should feel like a real person with unique traits, not a stereotype.
 
 Make sure the personas are diverse. Return valid JSON. Follow the schema exactly.`;
 
@@ -142,9 +145,17 @@ Detail: ${p.personalDetail}
   `.trim()).join("\n\n");
 
   const systemPrompt = `You are simulating a focus group for ${brandName}${conceptDescription ? ` (${conceptDescription})` : ''}.
-Generate 2–3 sentence responses for each persona.
-Use their traits and brand attitude.
-Keep the tone natural and realistic.
+Your task is to generate responses from each persona that reflect their unique character, attitude toward the brand, and background.
+Each response should be 2-3 sentences and sound natural, as if spoken in a real focus group.
+Keep responses conversational but insightful, with occasional speech quirks or hesitations for realism.
+Ensure the responses reflect the persona's attitude toward the brand (loyalist, skeptic, etc.) and their personal background.
+The personas should not always be unrelentingly positive – sometimes they'll be critical, express doubt or be unsure.
+
+IMPORTANT: Your responses should be informed by relevant market research, consumer behavior, and industry trends that apply to this type of product or service. Use the file search function to find relevant information that might inform how these personas would realistically respond.  
+
+You will be given the chat history showing previous questions and answers. Use this to maintain consistency and context. 
+If a question refers to something mentioned earlier, make sure the personas acknowledge this and respond appropriately.
+If personas have expressed strong opinions in previous answers, their new responses should remain consistent with those opinions.
 Return valid JSON:
 {
   "responses": {
@@ -267,7 +278,7 @@ ${participantNames.map(name => `    "${name}": "sentiment analysis for ${name}"`
 
 For key takeaways: Identify 3-5 main insights from the discussion, focusing on patterns across multiple responses.
 
-For participant sentiment: 
+For the four participants' sentiment: 
 - Focus primarily on what each participant actually said during the discussion
 - Analyze how their opinions evolved throughout the conversation
 - Note specific product features or aspects they responded to positively or negatively
@@ -280,19 +291,53 @@ For overall conclusion: Provide a concise paragraph summarizing the findings and
 
 Ensure your response is valid JSON.`;
 
-  const response = await openai.responses.create({
-    model: "gpt-4o-mini",
-    input: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: transcript },
-    ],
-    text: {
-      format: { type: "json_object" },
+const response = await openai.responses.create({
+  model: "gpt-4o-mini",
+  input: [
+    { role: "system", content: systemPrompt },
+    { role: "user", content: transcript },
+  ],
+  text: {
+    format: {
+      type: "json_schema",
+      name: "focus_group_summary",
+      strict: true,
+      schema: {
+        type: "object",
+        properties: {
+          keyTakeaways: {
+            type: "array",
+            items: { type: "string" },
+          },
+          participantSentiment: {
+            type: "object",
+            properties: participantNames.reduce((acc, name) => {
+              acc[name] = { type: "string" };
+              return acc;
+            }, {}),
+            required: participantNames,
+            additionalProperties: false,
+          },
+          recommendations: {
+            type: "array",
+            items: { type: "string" },
+          },
+          overallConclusion: { type: "string" },
+        },
+        required: [
+          "keyTakeaways",
+          "participantSentiment",
+          "recommendations",
+          "overallConclusion",
+        ],
+        additionalProperties: false,
+      },
     },
-    temperature: 0.7,
-    max_output_tokens: 2048,
-    top_p: 1,
-  });
+  },
+  temperature: 0.7,
+  max_output_tokens: 2048,
+  top_p: 1,
+});
 
   if (!response.output_text) {
     console.error("API response was:", JSON.stringify(response, null, 2));
