@@ -5,7 +5,7 @@ html, body {
   padding: 0;
 }
 
-
+button { cursor: pointer; }
 :root {
   --background: #ffffff;
   --foreground: #171717;
