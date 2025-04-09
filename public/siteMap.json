@@ -1,0 +1,10 @@
+{
+  "smo-tim": [
+    "ai-timeline",
+    "campaign-generator",
+    "module-map"
+  ],
+  "test-apps": [
+    "informed-focus-groups"
+  ]
+}
