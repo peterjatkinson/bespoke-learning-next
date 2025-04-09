@@ -1,5 +1,7 @@
 // Auto-generated landing page for the smo-tim module.
 // Do not manually edit this file.
+import Link from "next/link";
+
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-12">
@@ -8,9 +10,9 @@ export default function LandingPage() {
           <h1 className="text-3xl font-bold text-gray-900">
             SMO-TIM Apps
           </h1>
-          <a href="/" className="text-indigo-600 hover:text-indigo-800 font-medium">
+          <Link href="/" className="text-indigo-600 hover:text-indigo-800 font-medium">
             Home
-          </a>
+          </Link>
         </div>
         <ul className="grid grid-cols-1 gap-4">
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">

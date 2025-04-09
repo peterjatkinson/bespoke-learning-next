@@ -61,9 +61,12 @@ function generateLandingPage(moduleFolderPath) {
 
   // Generate the content for the landing page.
   // The marker comment "Auto-generated landing page for" identifies the file.
-  // For the header, the module name is rendered in all uppercase and "Apps" is capitalized properly.
+  // For the header, the module name is rendered in all uppercase (e.g. "SMO") and "Apps" is capitalized as "Apps".
+  // Also, we import Link from "next/link" to navigate to the home page.
   const content = `// Auto-generated landing page for the ${moduleName} module.
 // Do not manually edit this file.
+import Link from "next/link";
+
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-12">
@@ -72,9 +75,9 @@ export default function LandingPage() {
           <h1 className="text-3xl font-bold text-gray-900">
             ${moduleName.toUpperCase()} Apps
           </h1>
-          <a href="/" className="text-indigo-600 hover:text-indigo-800 font-medium">
+          <Link href="/" className="text-indigo-600 hover:text-indigo-800 font-medium">
             Home
-          </a>
+          </Link>
         </div>
         <ul className="grid grid-cols-1 gap-4">
             ${listItems}
@@ -94,8 +97,7 @@ export default function LandingPage() {
 // --------------------------
 // SITE MAP GENERATION
 // --------------------------
-// Build a site map object where keys are top-level module names and values
-// are arrays of sub-app names.
+// Build a site map object where keys are top-level module names and values are arrays of sub-app names.
 function buildSiteMap() {
   const siteMap = {};
   const topLevelItems = fs.readdirSync(appDir, { withFileTypes: true });
