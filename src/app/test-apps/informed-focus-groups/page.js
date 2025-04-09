@@ -77,7 +77,7 @@ const InformedFocusGroupBuilder = () => {
     }
     
     try {
-      const response = await fetch("/api/generate-informed-focus-groups", {
+      const response = await fetch("/test-apps/informed-focus-groups/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -146,7 +146,7 @@ const InformedFocusGroupBuilder = () => {
     
     try {
       // Now we send the full question history to maintain context
-      const response = await fetch("/api/generate-informed-focus-groups", {
+      const response = await fetch("/test-apps/informed-focus-groups/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -216,7 +216,7 @@ const InformedFocusGroupBuilder = () => {
     }
     
     try {
-      const response = await fetch("/api/generate-informed-focus-groups", {
+      const response = await fetch("/test-apps/informed-focus-groups/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

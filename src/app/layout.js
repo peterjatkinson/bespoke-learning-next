@@ -4,8 +4,8 @@ import './globals.css';
 import ResizeWrapper from '../components/ResizeWrapper';
 
 export const metadata = {
-  title: 'My App',
-  description: 'A description of my app',
+  title: 'Custom interactive',
+  description: 'This is bespoke interactive component.',
 };
 
 export default function RootLayout({ children }) {
