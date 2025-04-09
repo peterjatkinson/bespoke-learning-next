@@ -1,0 +1,35 @@
+name: Update Site Map and Landing Pages
+
+on:
+  push:
+    paths:
+      - "src/app/**"
+      - "scripts/**"  # or specifically "scripts/updateSiteMapAndLandingPages.js" if preferred
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Run Site Map and Landing Pages Generation Script
+        run: node scripts/generateSiteMap.js
+
+      - name: Commit and Push Changes if Any
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          # If there are changes, commit and push them.
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore: update site map and landing pages"
+            git push
+          else
+            echo "No changes to commit."
+          fi
