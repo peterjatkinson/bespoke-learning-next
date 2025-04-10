@@ -5,7 +5,6 @@
     "module-map"
   ],
   "test-apps": [
-    "brand-positioning",
     "informed-focus-groups",
     "server-side-database",
     "test-database"
