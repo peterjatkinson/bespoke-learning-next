@@ -229,8 +229,9 @@ const BrandPositioningMap = () => {
   
   // Initial fetch of average positions
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchAveragePositions();
-  }, []);
+  }, [/* eslint-disable-next-line react-hooks/exhaustive-deps */]);
   
   return (
     <div className="min-h-full bg-gray-50 p-4">
@@ -270,8 +271,8 @@ const BrandPositioningMap = () => {
               <li>Position brands based on where you think they fall on each axis</li>
               <li>Horizontal axis: <strong>Traditional (Left) to High-Tech (Right)</strong></li>
               <li>Vertical axis: <strong>Affordable (Bottom) to Luxury (Top)</strong></li>
-              <li>Click "Submit" when you're done to save your positions</li>
-              <li>Toggle "Show Class Average" to see where others have placed the brands</li>
+              <li>Click &quot;Submit&quot; when you&apos;re done to save your positions</li>
+              <li>Toggle &quot;Show Class Average&quot; to see where others have placed the brands</li>
             </ul>
           </div>
         </div>
