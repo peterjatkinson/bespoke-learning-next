@@ -104,7 +104,7 @@ const CampaignIdeas = () => {
         previousCampaigns: storedCampaigns,
       };
 
-      const response = await fetch("/smo/campaign-generator/api", {
+      const response = await fetch("/smo-tim/campaign-generator/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
