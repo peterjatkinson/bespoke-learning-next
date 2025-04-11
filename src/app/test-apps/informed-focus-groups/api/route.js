@@ -158,7 +158,7 @@ If a question refers to something mentioned earlier, make sure the personas ackn
 If personas have expressed strong opinions in previous answers, their new responses should remain consistent with those opinions.
 Return valid JSON:
 {
-  "responses": {
+  "responses": 
     "Name1": "...",
     "Name2": "..."
   }
