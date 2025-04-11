@@ -1,12 +1,14 @@
 {
   "smo-tim": [
     "ai-timeline",
+    "blockchain-demo",
     "campaign-generator",
     "job-risk",
     "module-map",
     "start-up-generator"
   ],
   "test-apps": [
+    "claude-test",
     "informed-focus-groups",
     "server-side-database",
     "test-database"
