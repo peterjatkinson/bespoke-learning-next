@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Layers, Zap, Settings, BookOpen, Code, BarChart2, Brain, Database, Award, ArrowRight, ChevronDown, ChevronRight } from 'lucide-react';
+import { Layers, Zap, Settings, BookOpen, Code, BarChart2, Brain, Database, Award, ArrowRight,   ChevronDown, ChevronRight, MessageSquare, Image } from 'lucide-react';
 
 const DeepLearningGuide = () => {
   // State to track expanded sections
@@ -309,7 +309,7 @@ const DeepLearningGuide = () => {
                         <div className="ml-4">
                           <h4 className="text-sm font-medium">Loss Calculation</h4>
                           <p className="text-xs text-slate-600 mt-1">
-                            The network's output is compared to the actual target values, and a loss function quantifies the error
+                            The network&apos;s output is compared to the actual target values, and a loss function quantifies the error
                           </p>
                         </div>
                       </div>
@@ -339,7 +339,7 @@ const DeepLearningGuide = () => {
                         <div className="ml-4">
                           <h4 className="text-sm font-medium">Iteration</h4>
                           <p className="text-xs text-slate-600 mt-1">
-                            This process repeats many times with the entire dataset, with each complete pass called an "epoch"
+                            This process repeats many times with the entire dataset, with each complete pass called an &quot;epoch&quot;
                           </p>
                         </div>
                       </div>

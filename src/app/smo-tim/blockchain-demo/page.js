@@ -230,7 +230,7 @@ export default function BlockchainDemo() {
               </div>
               <div>
                 <p className="text-sm font-medium">
-                  Timestamp (for when this block's data was last modified)
+                  Timestamp (for when this block&apos;s data was last modified)
                 </p>
                 <p className="font-mono text-xs break-all">
                   {new Date(block.lastModified).toLocaleString()}
@@ -337,7 +337,7 @@ export default function BlockchainDemo() {
           Try amending some of the data in the blocks below and observe the
           impact of your changes on the hashes and subsequent blocks. In this
           example, the data for each block contains some imaginary payment
-          data. (Note that the first block is often called the 'genesis block'.)
+          data. (Note that the first block is often called the &apos;genesis block&apos;.)
         </p>
 
         {blocks.some((b) => !b.isValid) && (
