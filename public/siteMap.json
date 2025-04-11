@@ -2,7 +2,8 @@
   "smo-tim": [
     "ai-timeline",
     "campaign-generator",
-    "module-map"
+    "module-map",
+    "start-up-generator"
   ],
   "test-apps": [
     "informed-focus-groups",

@@ -30,6 +30,11 @@ export default function LandingPage() {
               Module Map
             </a>
           </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/smo-tim/start-up-generator" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Start Up Generator
+            </a>
+          </li>
         </ul>
       </div>
     </main>
