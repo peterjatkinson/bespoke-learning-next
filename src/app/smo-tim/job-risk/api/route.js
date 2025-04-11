@@ -57,7 +57,7 @@ export async function POST(request) {
             text: `Evaluate the risk for the job title: "${jobTitle}".
 Respond as an array with a single object. Provide:
 - A risk score between 0 (no risk) and 10 (high risk)
-- A brief explanation for the score.
+- A short paragraph explanation for the score.
 
 Return your response strictly using the provided JSON schema.`,
           },
