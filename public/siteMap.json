@@ -2,6 +2,7 @@
   "smo-tim": [
     "ai-timeline",
     "campaign-generator",
+    "job-risk",
     "module-map",
     "start-up-generator"
   ],

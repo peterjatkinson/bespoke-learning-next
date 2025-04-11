@@ -92,7 +92,7 @@ const StartupIdeaGenerator = () => {
               value={industryInput}
               onChange={handleIndustryChange}
               placeholder="Optional: enter an industry"
-              className="px-4 py-2 border rounded-md w-80 "
+              className="px-4 py-2 border rounded-md w-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label="Enter an industry (optional)"
             />
             <p className="text-gray-500 text-sm mt-1">

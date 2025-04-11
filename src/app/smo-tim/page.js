@@ -26,6 +26,11 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/smo-tim/job-risk" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Job Risk
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/smo-tim/module-map" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Module Map
             </a>
