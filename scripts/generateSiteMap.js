@@ -104,10 +104,9 @@ function buildSiteMap() {
 
   topLevelItems.forEach((item) => {
     // Process only directories and skip folders like "api"
-    if (!item.isDirectory() || item.name.toLowerCase() === "api") {
+    if (!item.isDirectory() || item.name.toLowerCase() === "api" || item.name.toLowerCase() === "password-gate") {
       return;
-    }
-    const moduleName = item.name; // e.g., "SMO" or "Test Apps"
+    }    const moduleName = item.name; // e.g., "SMO" or "Test Apps"
     const modulePath = path.join(appDir, moduleName);
     const topPagePath = path.join(modulePath, "page.js");
 
@@ -152,8 +151,13 @@ function writeSiteMapFile(siteMap) {
 function processModules() {
   const topLevelItems = fs.readdirSync(appDir, { withFileTypes: true });
   topLevelItems.forEach((item) => {
-    if (!item.isDirectory() || item.name.toLowerCase() === "api") {
+    if (
+      !item.isDirectory() ||
+      item.name.toLowerCase() === "api" ||
+      item.name.toLowerCase() === "password-gate"
+    ) {
       return;
+
     }
     const moduleFolderPath = path.join(appDir, item.name);
     const landingPagePath = path.join(moduleFolderPath, "page.js");
