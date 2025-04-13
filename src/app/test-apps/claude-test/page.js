@@ -4,6 +4,64 @@ import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign } from 'lucide-react';
 
+const calculateWaterfall = (
+  investmentAmount,
+  exitMultiple,
+  preferredReturn,
+  catchup,
+  carryPercentage,
+  setWaterfallData,
+  setChartData
+) => {
+  // Calculate exit value
+  const exitValue = investmentAmount * exitMultiple;
+  const totalProfit = exitValue - investmentAmount;
+
+  const returnOfCapital = investmentAmount;
+  let remainingProfit = totalProfit;
+
+  const preferredReturnAmount = (investmentAmount * preferredReturn) / 100;
+  const actualPreferredReturn = Math.min(preferredReturnAmount, remainingProfit);
+  remainingProfit -= actualPreferredReturn;
+
+  const totalPreferred = returnOfCapital + actualPreferredReturn;
+  const gpTargetAmount = (totalPreferred * carryPercentage) / (100 - carryPercentage);
+  const catchupAmount = Math.min(remainingProfit, (gpTargetAmount * catchup) / 100);
+  remainingProfit -= catchupAmount;
+
+  const lpCarriedInterest = remainingProfit * (100 - carryPercentage) / 100;
+  const gpCarriedInterest = remainingProfit * carryPercentage / 100;
+
+  const totalLPDistribution = returnOfCapital + actualPreferredReturn + lpCarriedInterest;
+  const totalGPDistribution = catchupAmount + gpCarriedInterest;
+
+  const lpROI = ((totalLPDistribution / investmentAmount) - 1) * 100;
+  const gpROIMultiple = totalGPDistribution > 0 ? totalGPDistribution / (investmentAmount * 0.02) : 0;
+
+  setWaterfallData({
+    investment: investmentAmount,
+    exitValue,
+    totalProfit,
+    returnOfCapital,
+    preferredReturn: actualPreferredReturn,
+    catchup: catchupAmount,
+    lpCarriedInterest,
+    gpCarriedInterest,
+    totalLPDistribution,
+    totalGPDistribution,
+    lpROI,
+    gpROIMultiple
+  });
+
+  setChartData([
+    { name: 'Return of Capital', LP: returnOfCapital, GP: 0 },
+    { name: 'Preferred Return', LP: actualPreferredReturn, GP: 0 },
+    { name: 'GP Catch-up', LP: 0, GP: catchupAmount },
+    { name: 'Carried Interest', LP: lpCarriedInterest, GP: gpCarriedInterest }
+  ]);
+};
+
+
 const PrivateEquityWaterfall = () => {
   // Default values
   const [investmentAmount, setInvestmentAmount] = useState(10000000);
@@ -29,68 +87,20 @@ const PrivateEquityWaterfall = () => {
   });
   const [chartData, setChartData] = useState([]);
   
-  // Calculate waterfall distributions
   useEffect(() => {
-    calculateWaterfall();
+    calculateWaterfall(
+      investmentAmount,
+      exitMultiple,
+      preferredReturn,
+      catchup,
+      carryPercentage,
+      setWaterfallData,
+      setChartData
+    );
   }, [investmentAmount, exitMultiple, preferredReturn, catchup, carryPercentage]);
   
-  const calculateWaterfall = () => {
-    // Calculate exit value
-    const exitValue = investmentAmount * exitMultiple;
-    const totalProfit = exitValue - investmentAmount;
+  // Calculate waterfall distributions
     
-    // Step 1: Return of Capital to LPs
-    const returnOfCapital = investmentAmount;
-    let remainingProfit = totalProfit;
-    
-    // Step 2: Preferred Return to LPs
-    const preferredReturnAmount = (investmentAmount * preferredReturn / 100);
-    const actualPreferredReturn = Math.min(preferredReturnAmount, remainingProfit);
-    remainingProfit -= actualPreferredReturn;
-    
-    // Step 3: GP Catch-up (if applicable and if there's profit left)
-    const totalPreferred = returnOfCapital + actualPreferredReturn;
-    const gpTargetAmount = (totalPreferred * carryPercentage / (100 - carryPercentage));
-    const catchupAmount = Math.min(remainingProfit, gpTargetAmount * catchup / 100);
-    remainingProfit -= catchupAmount;
-    
-    // Step 4: Carried Interest Split
-    const lpCarriedInterest = remainingProfit * (100 - carryPercentage) / 100;
-    const gpCarriedInterest = remainingProfit * carryPercentage / 100;
-    
-    // Total distributions
-    const totalLPDistribution = returnOfCapital + actualPreferredReturn + lpCarriedInterest;
-    const totalGPDistribution = catchupAmount + gpCarriedInterest;
-    
-    // ROI calculations
-    const lpROI = ((totalLPDistribution / investmentAmount) - 1) * 100;
-    const gpROIMultiple = totalGPDistribution > 0 ? totalGPDistribution / (investmentAmount * 0.02) : 0; // Assuming 2% GP commitment
-    
-    // Set the waterfall data for display
-    setWaterfallData({
-      investment: investmentAmount,
-      exitValue,
-      totalProfit,
-      returnOfCapital,
-      preferredReturn: actualPreferredReturn,
-      catchup: catchupAmount,
-      lpCarriedInterest,
-      gpCarriedInterest,
-      totalLPDistribution,
-      totalGPDistribution,
-      lpROI,
-      gpROIMultiple
-    });
-    
-    // Prepare chart data
-    setChartData([
-      { name: 'Return of Capital', LP: returnOfCapital, GP: 0 },
-      { name: 'Preferred Return', LP: actualPreferredReturn, GP: 0 },
-      { name: 'GP Catch-up', LP: 0, GP: catchupAmount },
-      { name: 'Carried Interest', LP: lpCarriedInterest, GP: gpCarriedInterest }
-    ]);
-  };
-  
   // Format currency values
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
