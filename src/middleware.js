@@ -1,23 +1,24 @@
-import { NextResponse } from 'next/server';
+// Updated middleware.js
+import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 
-export function middleware(request) {
-  const pathname = request.nextUrl.pathname;
+export async function middleware(req) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const { pathname } = req.nextUrl;
 
-  // Skip password gate page itself
-  if (pathname === '/password-gate') {
+  // Skip NextAuth API routes and the sign-in page:
+  if (pathname.startsWith("/api/auth") || pathname.startsWith("/auth/signin")) {
     return NextResponse.next();
   }
 
-  const cookie = request.cookies.get('access-token')?.value;
+  // Protect only certain routes; for instance, the root and first-level routes
+  const isProtected = pathname === "/" || /^\/[^/]+\/?$/.test(pathname);
 
-  const isProtected =
-    pathname === '/' ||
-    /^\/[^/]+\/?$/.test(pathname); // only root or one-level routes
-
-  if (isProtected && cookie !== 'granted') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/password-gate';
-    url.searchParams.set('redirect', pathname); // ← add original path
+  if (isProtected && !token) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/auth/signin";
+    // You can set callbackUrl to the original pathname
+    url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
   }
 
@@ -25,5 +26,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/', '/(.*)'],
+  matcher: ['/', '/(.*)'], // adjust as needed
 };
