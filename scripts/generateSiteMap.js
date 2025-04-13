@@ -104,7 +104,7 @@ function buildSiteMap() {
 
   topLevelItems.forEach((item) => {
     // Process only directories and skip folders like "api"
-    if (!item.isDirectory() || item.name.toLowerCase() === "api" || item.name.toLowerCase() === "password-gate") {
+    if (!item.isDirectory() || item.name.toLowerCase() === "api" || item.name.toLowerCase() === "auth") {
       return;
     }    const moduleName = item.name; // e.g., "SMO" or "Test Apps"
     const modulePath = path.join(appDir, moduleName);
@@ -154,7 +154,7 @@ function processModules() {
     if (
       !item.isDirectory() ||
       item.name.toLowerCase() === "api" ||
-      item.name.toLowerCase() === "password-gate"
+      item.name.toLowerCase() === "auth"
     ) {
       return;
 
