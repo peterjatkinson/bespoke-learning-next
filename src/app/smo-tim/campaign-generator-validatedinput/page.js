@@ -20,8 +20,12 @@ const CampaignIdeas = () => {
   const [loading, setLoading] = useState(false);
   const [campaigns, setCampaigns] = useState(null);
 
-  // Initialize submissionCount as null to avoid SSR issues.
-  const [submissionCount, setSubmissionCount] = useState(null);
+  // Initialize submission count from localStorage or default to 0
+  const initialSubmissionCount =
+    typeof window !== "undefined"
+      ? parseInt(localStorage.getItem("campaignSubmissionCount") || "0", 10)
+      : 0;
+  const [submissionCount, setSubmissionCount] = useState(initialSubmissionCount);
   const submissionLimit = 5;
 
   const charLimit = 200;
@@ -39,12 +43,6 @@ const CampaignIdeas = () => {
       generatedContentRef.current.querySelector("h2").focus();
     }
   }, [campaigns]);
-
-  // Load submissionCount from localStorage only on the client.
-  useEffect(() => {
-    const storedCount = parseInt(localStorage.getItem("campaignSubmissionCount") || "0", 10);
-    setSubmissionCount(storedCount);
-  }, []);
 
   // Update the count function to count characters instead of words.
   const countWords = (text) => {
@@ -106,7 +104,7 @@ const CampaignIdeas = () => {
         previousCampaigns: storedCampaigns,
       };
 
-      const response = await fetch("/smo-tim/campaign-generator/api", {
+      const response = await fetch("/smo-tim/campaign-generator2/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -122,7 +120,7 @@ const CampaignIdeas = () => {
       localStorage.setItem("previousCampaigns", JSON.stringify(storedCampaigns));
 
       // Increment the submission count and update localStorage.
-      const newCount = (submissionCount !== null ? submissionCount : 0) + 1;
+      const newCount = submissionCount + 1;
       setSubmissionCount(newCount);
       localStorage.setItem("campaignSubmissionCount", newCount);
 
@@ -313,28 +311,28 @@ const CampaignIdeas = () => {
         <button
           ref={submitButtonRef}
           onClick={handleSubmit}
-          disabled={loading || (submissionCount !== null && submissionCount >= submissionLimit)}
+          disabled={loading || submissionCount >= submissionLimit}
           className={`w-full p-3 rounded-lg transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 relative ${
-            loading || (submissionCount !== null && submissionCount >= submissionLimit)
+            loading || submissionCount >= submissionLimit
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
               : "bg-blue-900 text-white hover:from-green-700 hover:to-blue-700"
           }`}
           aria-busy={loading}
-          aria-disabled={submissionCount !== null && submissionCount >= submissionLimit}
+          aria-disabled={submissionCount >= submissionLimit}
         >
           {loading ? (
             <div className="flex items-center justify-center">
               <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></span>
               Generating...
             </div>
-          ) : submissionCount !== null && submissionCount >= submissionLimit ? (
+          ) : submissionCount >= submissionLimit ? (
             "Submission limit reached"
           ) : (
             "Generate campaign ideas"
           )}
         </button>
 
-        {submissionCount !== null && submissionCount < submissionLimit && (
+        {submissionCount < submissionLimit && (
           <p className="text-center mt-2 text-sm text-gray-600">
             You have {submissionLimit - submissionCount} submission
             {submissionLimit - submissionCount !== 1 ? "s" : ""} remaining.

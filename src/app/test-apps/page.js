@@ -16,6 +16,16 @@ export default function LandingPage() {
         </div>
         <ul className="grid grid-cols-1 gap-4">
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/average-calculator" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Average Calculator
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/cientside-database" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Cientside Database
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/claude-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Claude Test
             </a>
@@ -26,13 +36,13 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
-            <a href="/test-apps/server-side-database" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
-              Server Side Database
+            <a href="/test-apps/marketing-dashboard" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Marketing Dashboard
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
-            <a href="/test-apps/test-database" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
-              Test Database
+            <a href="/test-apps/server-side-database" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Server Side Database
             </a>
           </li>
         </ul>

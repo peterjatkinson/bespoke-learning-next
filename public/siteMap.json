@@ -3,14 +3,17 @@
     "ai-timeline",
     "blockchain-demo",
     "campaign-generator",
+    "campaign-generator-validatedinput",
     "job-risk",
     "module-map",
     "start-up-generator"
   ],
   "test-apps": [
+    "average-calculator",
+    "cientside-database",
     "claude-test",
     "informed-focus-groups",
-    "server-side-database",
-    "test-database"
+    "marketing-dashboard",
+    "server-side-database"
   ]
 }
