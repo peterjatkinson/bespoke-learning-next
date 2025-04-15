@@ -1,6 +1,7 @@
 name: Update Site Map and Landing Pages
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "src/app/**"
