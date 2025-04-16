@@ -1,376 +1,214 @@
 "use client";
+import React, { useState } from 'react';
+import { Search, BookOpen } from 'lucide-react';
 
-import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DollarSign } from 'lucide-react';
-
-const calculateWaterfall = (
-  investmentAmount,
-  exitMultiple,
-  preferredReturn,
-  catchup,
-  carryPercentage,
-  setWaterfallData,
-  setChartData
-) => {
-  // Calculate exit value
-  const exitValue = investmentAmount * exitMultiple;
-  const totalProfit = exitValue - investmentAmount;
-
-  const returnOfCapital = investmentAmount;
-  let remainingProfit = totalProfit;
-
-  const preferredReturnAmount = (investmentAmount * preferredReturn) / 100;
-  const actualPreferredReturn = Math.min(preferredReturnAmount, remainingProfit);
-  remainingProfit -= actualPreferredReturn;
-
-  const totalPreferred = returnOfCapital + actualPreferredReturn;
-  const gpTargetAmount = (totalPreferred * carryPercentage) / (100 - carryPercentage);
-  const catchupAmount = Math.min(remainingProfit, (gpTargetAmount * catchup) / 100);
-  remainingProfit -= catchupAmount;
-
-  const lpCarriedInterest = remainingProfit * (100 - carryPercentage) / 100;
-  const gpCarriedInterest = remainingProfit * carryPercentage / 100;
-
-  const totalLPDistribution = returnOfCapital + actualPreferredReturn + lpCarriedInterest;
-  const totalGPDistribution = catchupAmount + gpCarriedInterest;
-
-  const lpROI = ((totalLPDistribution / investmentAmount) - 1) * 100;
-  const gpROIMultiple = totalGPDistribution > 0 ? totalGPDistribution / (investmentAmount * 0.02) : 0;
-
-  setWaterfallData({
-    investment: investmentAmount,
-    exitValue,
-    totalProfit,
-    returnOfCapital,
-    preferredReturn: actualPreferredReturn,
-    catchup: catchupAmount,
-    lpCarriedInterest,
-    gpCarriedInterest,
-    totalLPDistribution,
-    totalGPDistribution,
-    lpROI,
-    gpROIMultiple
-  });
-
-  setChartData([
-    { name: 'Return of Capital', LP: returnOfCapital, GP: 0 },
-    { name: 'Preferred Return', LP: actualPreferredReturn, GP: 0 },
-    { name: 'GP Catch-up', LP: 0, GP: catchupAmount },
-    { name: 'Carried Interest', LP: lpCarriedInterest, GP: gpCarriedInterest }
-  ]);
-};
-
-
-const PrivateEquityWaterfall = () => {
-  // Default values
-  const [investmentAmount, setInvestmentAmount] = useState(10000000);
-  const [exitMultiple, setExitMultiple] = useState(2.5);
-  const [preferredReturn, setPreferredReturn] = useState(8);
-  const [catchup, setCatchup] = useState(100);
-  const [carryPercentage, setCarryPercentage] = useState(20);
-  // Removed tooltip state
-  // Initialize waterfallData with default values to prevent undefined properties
-  const [waterfallData, setWaterfallData] = useState({
-    investment: investmentAmount,
-    exitValue: investmentAmount * exitMultiple,
-    totalProfit: investmentAmount * exitMultiple - investmentAmount,
-    returnOfCapital: investmentAmount,
-    preferredReturn: 0,
-    catchup: 0,
-    lpCarriedInterest: 0,
-    gpCarriedInterest: 0,
-    totalLPDistribution: investmentAmount,
-    totalGPDistribution: 0,
-    lpROI: 0,
-    gpROIMultiple: 0
-  });
-  const [chartData, setChartData] = useState([]);
-  
-  useEffect(() => {
-    calculateWaterfall(
-      investmentAmount,
-      exitMultiple,
-      preferredReturn,
-      catchup,
-      carryPercentage,
-      setWaterfallData,
-      setChartData
-    );
-  }, [investmentAmount, exitMultiple, preferredReturn, catchup, carryPercentage]);
-  
-  // Calculate waterfall distributions
-    
-  // Format currency values
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-  
-  // Tooltip component removed
-  
-  // Custom tooltip for chart
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 border rounded shadow">
-          <p className="font-bold">{label}</p>
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }}>
-              {entry.name}: {formatCurrency(entry.value)}
-            </p>
-          ))}
-        </div>
-      );
+// Simple Marketing Concept Finder App
+const MarketingConceptFinder = () => {
+  // Marketing concepts database
+  const concepts = [
+    {
+      term: "Marketing Mix (4Ps)",
+      definition: "Product, Price, Place, Promotion. The four key elements that make up a company's marketing strategy.",
+      example: "A smartphone company designs a new phone (Product), sets a premium price (Price), sells it through retail stores and online (Place), and creates TV ads and social media campaigns (Promotion)."
+    },
+    {
+      term: "STP Marketing",
+      definition: "Segmentation, Targeting, Positioning. A three-step strategic approach to effective market communication.",
+      example: "A clothing retailer divides customers by age and style preference (Segmentation), focuses on young professionals (Targeting), and positions itself as affordable luxury fashion (Positioning)."
+    },
+    {
+      term: "SWOT Analysis",
+      definition: "Strengths, Weaknesses, Opportunities, Threats. A framework used to evaluate competitive position and develop strategic planning.",
+      example: "A coffee chain might identify their quality beans as a Strength, high prices as a Weakness, international expansion as an Opportunity, and increasing competition as a Threat."
+    },
+    {
+      term: "Market Segmentation",
+      definition: "The process of dividing a market of potential customers into groups based on different characteristics.",
+      example: "A car manufacturer segments the market by income level, family size, and lifestyle to create vehicles for specific consumer groups."
+    },
+    {
+      term: "Brand Equity",
+      definition: "The value premium a company generates from a product with a recognizable name compared to a generic equivalent.",
+      example: "Consumers willingly pay more for Nike shoes compared to unbranded alternatives because of the perceived quality and status associated with the Nike brand."
+    },
+    {
+      term: "Customer Lifetime Value (CLV)",
+      definition: "The total worth of a customer to a business over the entire period of their relationship.",
+      example: "A subscription service calculates that the average customer stays for 3 years and spends $50 monthly, making their CLV $1,800."
+    },
+    {
+      term: "Conversion Rate",
+      definition: "The percentage of visitors who take a desired action, such as making a purchase or signing up for a newsletter.",
+      example: "An online store had 10,000 visitors last month and 300 made purchases, giving a conversion rate of 3%."
+    },
+    {
+      term: "Value Proposition",
+      definition: "A statement that clearly communicates the benefits a customer will receive by purchasing a product or service.",
+      example: "Spotify's value proposition focuses on offering unlimited access to millions of songs on demand for a low monthly fee."
+    },
+    {
+      term: "Blue Ocean Strategy",
+      definition: "Creating uncontested market space (blue oceans) rather than competing in existing markets (red oceans).",
+      example: "Cirque du Soleil created a new market space by reimagining circus entertainment with theatrical elements and eliminating the use of animals."
+    },
+    {
+      term: "Porter's Five Forces",
+      definition: "A framework for analyzing competition of a business based on five key factors: supplier power, buyer power, competitive rivalry, threat of substitution, and threat of new entry.",
+      example: "A restaurant owner assesses the local market by examining supplier relationships, customer loyalty, nearby competing restaurants, alternative dining options, and the ease of opening a new restaurant in the area."
+    },
+    {
+      term: "Content Marketing",
+      definition: "Strategic marketing approach focused on creating and distributing valuable content to attract and engage a target audience.",
+      example: "HubSpot publishes free marketing guides, templates, and blog posts to attract potential customers to their marketing software services."
+    },
+    {
+      term: "Customer Persona",
+      definition: "A semi-fictional representation of your ideal customer based on market research and real data about existing customers.",
+      example: "A fitness app creates detailed personas including 'Busy Professional Paula' who wants quick workouts and 'Fitness Enthusiast Fred' who tracks detailed metrics about his training."
+    },
+    {
+      term: "Net Promoter Score (NPS)",
+      definition: "A metric for assessing customer loyalty, calculated by asking customers how likely they are to recommend your product/service on a scale of 0-10.",
+      example: "A hotel surveys guests after their stay, finding that 70% are Promoters (9-10), 15% are Passives (7-8), and 15% are Detractors (0-6), resulting in an NPS of 55."
+    },
+    {
+      term: "Omnichannel Marketing",
+      definition: "A sales approach that provides customers with an integrated shopping experience across multiple channels.",
+      example: "A retailer allows customers to browse products online, check in-store availability, purchase via mobile app, and pick up in-store or have items delivered."
+    },
+    {
+      term: "Price Elasticity of Demand",
+      definition: "A measure of how responsive quantity demanded is to a change in price.",
+      example: "When a streaming service increases its subscription price by 20% and loses only 5% of subscribers, it demonstrates that its service has inelastic demand."
     }
-    return null;
+  ];
+
+  // State for search input and selected concept
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedConcept, setSelectedConcept] = useState(null);
+
+  // Filter concepts based on search term
+  const filteredConcepts = concepts.filter(concept => 
+    concept.term.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Handle search input changes
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setSelectedConcept(null); // Clear selected concept when search changes
+  };
+
+  // Handle concept selection
+  const handleConceptSelect = (concept) => {
+    setSelectedConcept(concept);
+    // When using a screen reader, announce the selection
+    document.getElementById('selected-concept-announcement').textContent = 
+      `${concept.term} selected. Definition shown below.`;
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-4 font-sans">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Private Equity Waterfall Model</h1>
-        
-        {/* Explanation block */}
-        <div className="mb-6 bg-blue-50 p-4 rounded text-sm text-gray-700">
-          <h2 className="text-lg font-semibold mb-2">What is a PE Waterfall?</h2>
-          <p className="mb-2">
-            A private equity waterfall refers to the method by which capital is distributed to limited partners (LPs) and 
-            general partners (GPs) as investments are realized. The structure typically follows four stages:
-          </p>
-          <ol className="list-decimal pl-5 space-y-1">
-            <li><strong>Return of Capital:</strong> 100% to LPs until they receive their initial investment back</li>
-            <li><strong>Preferred Return:</strong> 100% to LPs until they receive their preferred return (hurdle rate)</li>
-            <li><strong>GP Catch-up:</strong> 100% (or a percentage) to GPs until they receive their target carry percentage of profits</li>
-            <li><strong>Carried Interest:</strong> Remaining profits split according to the carried interest percentage (typically 80/20)</li>
-          </ol>
-        </div>
-        
-        {/* Input controls */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <div className="p-3 bg-gray-50 rounded">
-            <label htmlFor="investmentAmount" className="block text-sm font-medium text-gray-700 mb-1">
-              Investment ($)
-            </label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <DollarSign size={16} />
-              </span>
-              <input
-                id="investmentAmount"
-                type="number"
-                min="1000000"
-                max="1000000000"
-                value={investmentAmount}
-                onChange={(e) => setInvestmentAmount(Number(e.target.value))}
-                className="pl-10 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                aria-label="Investment amount in dollars"
-              />
-            </div>
+    <div className="min-h-full bg-gray-50 p-4 md:p-6">
+      {/* Announcement for screen readers */}
+      <div id="selected-concept-announcement" className="sr-only" aria-live="polite"></div>
+      
+      <header className="text-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Marketing Concept Finder</h1>
+        <p className="text-gray-600">
+          Find and understand key marketing concepts and theories
+        </p>
+      </header>
+
+      {/* Search box */}
+      <div className="relative max-w-md mx-auto mb-6">
+        <div className="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden">
+          <div className="pl-3 text-gray-400">
+            <Search size={20} />
           </div>
-          
-          <div className="p-3 bg-gray-50 rounded">
-            <label htmlFor="exitMultiple" className="block text-sm font-medium text-gray-700 mb-1">
-              Exit Multiple (x)
-            </label>
-            <input
-              id="exitMultiple"
-              type="number"
-              min="1"
-              max="10"
-              step="0.1"
-              value={exitMultiple}
-              onChange={(e) => setExitMultiple(Number(e.target.value))}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              aria-label="Exit multiple value"
-            />
-          </div>
-          
-          <div className="p-3 bg-gray-50 rounded">
-            <label htmlFor="preferredReturn" className="block text-sm font-medium text-gray-700 mb-1">
-              Preferred Return (%)
-            </label>
-            <input
-              id="preferredReturn"
-              type="number"
-              min="0"
-              max="20"
-              step="0.5"
-              value={preferredReturn}
-              onChange={(e) => setPreferredReturn(Number(e.target.value))}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              aria-label="Preferred return percentage"
-            />
-          </div>
-          
-          <div className="p-3 bg-gray-50 rounded">
-            <label htmlFor="catchup" className="block text-sm font-medium text-gray-700 mb-1">
-              GP Catch-up (%)
-            </label>
-            <input
-              id="catchup"
-              type="number"
-              min="0"
-              max="100"
-              step="5"
-              value={catchup}
-              onChange={(e) => setCatchup(Number(e.target.value))}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              aria-label="GP Catch-up percentage"
-            />
-          </div>
-          
-          <div className="p-3 bg-gray-50 rounded">
-            <label htmlFor="carryPercentage" className="block text-sm font-medium text-gray-700 mb-1">
-              Carried Interest (%)
-            </label>
-            <input
-              id="carryPercentage"
-              type="number"
-              min="10"
-              max="30"
-              step="1"
-              value={carryPercentage}
-              onChange={(e) => setCarryPercentage(Number(e.target.value))}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              aria-label="Carried interest percentage"
-            />
-          </div>
-        </div>
-        
-        {/* Visualization */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Distribution Visualization</h2>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={chartData}
-                layout="vertical"
-                margin={{ top: 20, right: 30, left: 60, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" tickFormatter={(value) => formatCurrency(value)} />
-                <YAxis type="category" dataKey="name" />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend />
-                <Bar dataKey="LP" name="Limited Partners" fill="#3b82f6" barSize={30} />
-                <Bar dataKey="GP" name="General Partner" fill="#10b981" barSize={30} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        
-        {/* Results table */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Waterfall Results</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Stage
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Description
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    LP Amount
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    GP Amount
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {/* Investment Summary */}
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Investment</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    Initial investment amount
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.investment)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">-</td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Exit Value</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    Value at exit ({exitMultiple}x multiple)
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.exitValue)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">-</td>
-                </tr>
-                
-                {/* Stage 1 */}
-                <tr className="bg-blue-50">
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Stage 1</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    Return of Capital (100% to LPs)
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.returnOfCapital)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">$0</td>
-                </tr>
-                
-                {/* Stage 2 */}
-                <tr className="bg-blue-50">
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Stage 2</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    Preferred Return ({preferredReturn}% to LPs)
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.preferredReturn)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">$0</td>
-                </tr>
-                
-                {/* Stage 3 */}
-                <tr className="bg-green-50">
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Stage 3</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    GP Catch-up ({catchup}%)
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">$0</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.catchup)}</td>
-                </tr>
-                
-                {/* Stage 4 */}
-                <tr className="bg-green-50">
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Stage 4</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    Carried Interest ({100-carryPercentage}/{carryPercentage} Split)
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.lpCarriedInterest)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.gpCarriedInterest)}</td>
-                </tr>
-                
-                {/* Totals */}
-                <tr className="bg-gray-100 font-medium">
-                  <td className="px-6 py-4 whitespace-nowrap">Totals</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">Total distributions</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.totalLPDistribution)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatCurrency(waterfallData.totalGPDistribution)}</td>
-                </tr>
-                
-                {/* ROI */}
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">Return Metrics</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">Return on Investment</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{(waterfallData.lpROI || 0).toFixed(2)}%</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{(waterfallData.gpROIMultiple || 0).toFixed(2)}x</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search marketing concepts..."
+            className="w-full p-3 outline-none text-gray-700"
+            aria-label="Search marketing concepts"
+          />
         </div>
       </div>
-      
-      {/* Footer with attribution */}
-      <div className="mt-8 text-center text-sm text-gray-500">
-        <p>This is a simplified model for educational purposes. Actual PE waterfalls may have different structures.</p>
+
+      <div className="max-w-3xl mx-auto grid md:grid-cols-3 gap-6">
+        {/* Concepts list */}
+        <div className="md:col-span-1 bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+          <h2 className="font-bold text-lg p-3 bg-indigo-50 text-indigo-800 border-b border-gray-200">
+            Marketing Concepts
+          </h2>
+          
+          <ul 
+            className="divide-y divide-gray-200 max-h-96 overflow-y-auto" 
+            role="listbox"
+            aria-label="List of marketing concepts"
+          >
+            {filteredConcepts.length > 0 ? (
+              filteredConcepts.map((concept, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => handleConceptSelect(concept)}
+                    className={`w-full text-left p-3 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition-colors ${
+                      selectedConcept && selectedConcept.term === concept.term 
+                        ? 'bg-indigo-50 font-medium' 
+                        : ''
+                    }`}
+                    role="option"
+                    aria-selected={selectedConcept && selectedConcept.term === concept.term}
+                  >
+                    {concept.term}
+                  </button>
+                </li>
+              ))
+            ) : (
+              <li className="p-4 text-gray-500 text-center">
+                No matching concepts found
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* Concept details */}
+        <div className="md:col-span-2 bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+          {selectedConcept ? (
+            <div>
+              <h2 className="font-bold text-lg p-3 bg-indigo-50 text-indigo-800 border-b border-gray-200">
+                {selectedConcept.term}
+              </h2>
+              <div className="p-4">
+                <div className="mb-4">
+                  <h3 className="font-medium text-gray-700 mb-2">Definition</h3>
+                  <p className="text-gray-600">{selectedConcept.definition}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-700 mb-2">Example</h3>
+                  <p className="text-gray-600">{selectedConcept.example}</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full p-8 text-center text-gray-500">
+              <BookOpen size={40} className="mb-3 text-gray-300" />
+              <h2 className="text-lg font-medium mb-2">No Concept Selected</h2>
+              <p>Select a marketing concept from the list to view its definition and example.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Quick tips */}
+      <div className="max-w-3xl mx-auto mt-6 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
+        <h3 className="font-medium mb-2">Study Tip:</h3>
+        <p>
+          Understanding these key marketing concepts will help you analyze case studies and develop comprehensive marketing strategies in your MSc program.
+        </p>
       </div>
     </div>
   );
 };
 
-export default PrivateEquityWaterfall;
+export default MarketingConceptFinder;
