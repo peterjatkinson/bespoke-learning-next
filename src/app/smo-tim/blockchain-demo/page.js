@@ -169,90 +169,116 @@ export default function BlockchainDemo() {
   //
   // 5. Render full-size chain (top section).
   //
+  //
+  // 5. Render full-size chain (top section).
+  //
   const renderChainFull = (chain, canEdit) => (
     <div className="space-y-4">
-      {chain.map((block, idx) => (
-        <div key={block.id} className="flex flex-col items-center">
-          <div
-            // Each block container gets an aria-label for screen readers
-            aria-label={`Block #${block.id}${
-              block.id === 1 ? " (genesis)" : ""
-            } is ${block.isValid ? "untampered (green)" : "tampered (red)"}`}
-            className={`w-full border-2 rounded-lg p-4 text-gray-100 ${
-              block.isValid
-                ? "bg-green-900 border-green-700"
-                : "bg-red-900 border-red-700"
-            }`}
-          >
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <p className="text-sm font-medium">
-                    Block #{block.id}
-                    {block.id === 1 ? " (genesis)" : ""}
-                    {/* Screenreader-only text indicating block state */}
-                    <span className="sr-only">
-                      {block.isValid
-                        ? ", untampered, green"
-                        : ", tampered, red"}
-                    </span>
-                  </p>
-                  <div>
-                    {block.isValid ? (
-                      <span aria-hidden="true" className="inline-flex w-6 h-6 border border-white rounded-full text-white flex items-center justify-center">✓</span>
-                    ) : (
-                      <span aria-hidden="true" className="inline-flex w-6 h-6 border border-white rounded-full text-white flex items-center justify-center">✕</span>
-                    )}
-                  </div>
-                </div>
-                {canEdit ? (
-                  <input
-                    type="text"
-                    value={block.data}
-                    onChange={(e) => tamperBlock(idx, e.target.value)}
-                    className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-black border-gray-300"
-                  />
-                ) : (
-                  <p className="mt-1 w-full px-3 py-2 border rounded-md bg-gray-800 border-gray-600">
-                    {block.data}
-                  </p>
-                )}
-              </div>
-              <div>
-                <p className="text-sm font-medium">Hash</p>
-                <p className="font-mono text-xs break-all">{block.hash}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Previous Hash</p>
-                <p className="font-mono text-xs break-all">
-                  {block.previousHash}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">
-                  Timestamp (for when this block&apos;s data was last modified)
-                </p>
-                <p className="font-mono text-xs break-all">
-                  {new Date(block.lastModified).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </div>
-          {idx < chain.length - 1 && (
+      {chain.map((block, idx) => {
+        // Generate a unique ID for the input field based on the block's ID
+        const inputId = `block-data-input-${block.id}`;
+
+        return (
+          <div key={block.id} className="flex flex-col items-center">
             <div
-              className={`py-2 ${
-                block.isValid ? "text-green-400" : "text-red-400"
+              // Each block container gets an aria-label for screen readers
+              aria-label={`Block #${block.id}${
+                block.id === 1 ? " (genesis)" : ""
+              } is ${block.isValid ? "untampered (green)" : "tampered (red)"}`}
+              className={`w-full border-2 rounded-lg p-4 text-gray-100 ${
+                block.isValid
+                  ? "bg-green-900 border-green-700"
+                  : "bg-red-900 border-red-700"
               }`}
             >
-              {/* chain arrow or line */}
-              &#8595;
+              <div className="grid grid-cols-2 gap-4">
+                {/* --- Column 1: Block Info & Data Input --- */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-sm font-medium">
+                      Block #{block.id}
+                      {block.id === 1 ? " (genesis)" : ""}
+                      {/* Screenreader-only text indicating block state */}
+                      <span className="sr-only">
+                        {block.isValid
+                          ? ", untampered, green"
+                          : ", tampered, red"}
+                      </span>
+                    </p>
+                    <div>
+                      {block.isValid ? (
+                        <span aria-hidden="true" className="inline-flex w-6 h-6 border border-white rounded-full text-white flex items-center justify-center">✓</span>
+                      ) : (
+                        <span aria-hidden="true" className="inline-flex w-6 h-6 border border-white rounded-full text-white flex items-center justify-center">✕</span>
+                      )}
+                    </div>
+                  </div>
+                  {canEdit ? (
+                    // Use a fragment <> to group label and input without extra DOM nodes
+                    <>
+                      {/* --- START: Added Accessible Label --- */}
+                      <label
+                        htmlFor={inputId}
+                        // Add classes for styling and screen reader visibility
+                        className="block text-sm font-medium mb-1" // Make it a block element and add margin
+                      >
+                        {/* Descriptive label text */}
+                        Data for Block #{block.id}
+                      </label>
+                      {/* --- END: Added Accessible Label --- */}
+
+                      <input
+                        type="text"
+                        id={inputId} // Add the unique ID here
+                        value={block.data}
+                        onChange={(e) => tamperBlock(idx, e.target.value)}
+                        // Add aria-describedby if needed for more context, but label is primary
+                        className="w-full px-3 py-2 border rounded-md bg-white text-black border-gray-300"
+                      />
+                    </>
+                  ) : (
+                    // Read-only display - no input, so no label needed here
+                    <p className="mt-1 w-full px-3 py-2 border rounded-md bg-gray-800 border-gray-600">
+                      {block.data}
+                    </p>
+                  )}
+                </div>
+                {/* --- Column 2: Hash, Prev Hash, Timestamp --- */}
+                <div>
+                  <p className="text-sm font-medium">Hash</p>
+                  <p className="font-mono text-xs break-all">{block.hash}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Previous Hash</p>
+                  <p className="font-mono text-xs break-all">
+                    {block.previousHash}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">
+                    Timestamp (for when this block's data was last modified)
+                  </p>
+                  <p className="font-mono text-xs break-all">
+                    {new Date(block.lastModified).toLocaleString()}
+                  </p>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-      ))}
+            {idx < chain.length - 1 && (
+              <div
+                className={`py-2 ${
+                  block.isValid ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {/* chain arrow or line */}
+                ↓
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
-
   //
   // 6. Render mini chain (side-by-side, small squares).
   //
