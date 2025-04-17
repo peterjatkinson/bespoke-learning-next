@@ -6,7 +6,9 @@
     "campaign-generator-validatedinput",
     "job-risk",
     "module-map",
-    "start-up-generator"
+    "persona-generator",
+    "start-up-generator",
+    "t-shaped-marketer"
   ],
   "test-apps": [
     "average-calculator",
