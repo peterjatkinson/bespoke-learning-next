@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.SMO_OPENAI_API_KEY,
 });
 
 // --- Corrected Zod Schema ---

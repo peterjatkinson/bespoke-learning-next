@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 
 // Initialise the OpenAI client with the API key from environment variables
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.SMO_OPENAI_API_KEY,
 });
 
 // Define the runtime environment

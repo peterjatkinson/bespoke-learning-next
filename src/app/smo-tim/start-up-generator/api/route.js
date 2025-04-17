@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Ensure your API key is set in your environment variables
+  apiKey: process.env.SMO_OPENAI_API_KEY, // Ensure your API key is set in your environment variables
 });
 
 // Define the JSON schema for the start-up ideas response.

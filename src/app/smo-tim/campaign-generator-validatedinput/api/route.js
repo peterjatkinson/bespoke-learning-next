@@ -7,7 +7,7 @@ import DOMPurify from "isomorphic-dompurify";
 
 // Create an instance of the OpenAI client.
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.SMO_OPENAI_API_KEY,
 });
 
 // Define a Joi schema for the input payload.
