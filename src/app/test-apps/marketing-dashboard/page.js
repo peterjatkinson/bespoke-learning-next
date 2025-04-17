@@ -225,7 +225,6 @@ const MarketingROISimulator = () => {
   // Run fetchResults once on mount (or if appId changes)
   useEffect(() => {
     fetchResults();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchResults]);
 
   // Build chart data for Recharts

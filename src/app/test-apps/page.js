@@ -50,6 +50,11 @@ export default function LandingPage() {
               Server Side Database
             </a>
           </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/social-media" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Social Media
+            </a>
+          </li>
         </ul>
       </div>
     </main>
