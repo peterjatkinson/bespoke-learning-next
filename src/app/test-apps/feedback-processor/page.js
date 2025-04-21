@@ -5,7 +5,7 @@ import { TagCloud } from 'react-tagcloud';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
-// --- NEW: Import docx and file-saver ---
+// --- Imports for Docx (Unchanged) ---
 import {
   Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell,
   WidthType, AlignmentType, BorderStyle, ShadingType
@@ -13,13 +13,13 @@ import {
 import { saveAs } from 'file-saver';
 // --- End Imports ---
 
-const tagCloudColorOptions = {
-  luminosity: 'bright',
-  hue: 'blue',
-};
+// --- REMOVED: Default colorOptions are no longer needed ---
+// const tagCloudColorOptions = {
+//   luminosity: 'bright',
+//   hue: 'blue',
+// };
 
-// --- Learning Outcome Table Component (FROM PREVIOUS STEP - Needs slight modification for Docx generation) ---
-// This component remains for displaying on the page. Docx generation will rebuild the table structure.
+// --- Learning Outcome Table Component (Unchanged) ---
 function LearningOutcomeTable({ loData }) {
   if (!loData || !Array.isArray(loData) || loData.length === 0) {
     return <p className="text-sm text-gray-500 italic">No learning outcome data recorded for this session.</p>;
@@ -67,9 +67,10 @@ export default function FeedbackAnalyzerPage() {
   const [files, setFiles] = useState([]);
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false); // State for download button
+  const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState(null);
   const [processingWarnings, setProcessingWarnings] = useState([]);
+  // wordCloudData will now contain { value: string, count: number, sentiment: string }
   const [wordCloudData, setWordCloudData] = useState(null);
 
   const fileInputRef = useRef(null);
@@ -116,6 +117,7 @@ export default function FeedbackAnalyzerPage() {
       if (!response.ok) throw new Error(data.error || `HTTP error! Status: ${response.status}`);
       setResults(data.results);
       setProcessingWarnings(data.processingWarnings || []);
+      // Ensure wordCloudData is set correctly, even if empty/null
       setWordCloudData(data.wordCloudData || null);
     } catch (err) {
       console.error("Analysis Error:", err);
@@ -131,9 +133,43 @@ export default function FeedbackAnalyzerPage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const customTagRenderer = (tag, size, color) => ( // Unchanged
-    <span key={tag.value} style={{ fontSize: `${size}px`, margin: '3px', padding: '3px', display: 'inline-block', color: color, cursor: 'default' }} title={`Count: ${tag.count}`}>{tag.value}</span>
-  );
+  // --- UPDATED: Custom Tag Renderer ---
+  const customTagRenderer = (tag, size /* color arg removed */) => {
+    let color;
+    // Determine color based on sentiment from the backend
+    switch (tag.sentiment) {
+      case 'positive':
+        color = '#228B22'; // ForestGreen
+        break;
+      case 'negative':
+        color = '#DC143C'; // Crimson Red
+        break;
+      case 'neutral':
+      default: // Fallback for neutral or if sentiment is missing
+        color = '#696969'; // DimGray (Dark Gray)
+        break;
+    }
+
+    return (
+      <span
+        key={tag.value}
+        style={{
+          fontSize: `${size}px`,
+          margin: '3px',
+          padding: '3px',
+          display: 'inline-block',
+          color: color, // Apply the determined color
+          cursor: 'default',
+          // Optional: slightly adjust style based on sentiment? (e.g., boldness)
+          // fontWeight: tag.sentiment === 'positive' ? 500 : tag.sentiment === 'negative' ? 500 : 400,
+        }}
+        // Add sentiment to the hover tooltip for clarity
+        title={`Count: ${tag.count}${tag.sentiment ? ` (${tag.sentiment})` : ''}`}
+      >
+        {tag.value}
+      </span>
+    );
+  };
 
   const prepareTimingChartData = (timingCounts) => { // Unchanged
     if (!timingCounts) return [];
@@ -144,204 +180,200 @@ export default function FeedbackAnalyzerPage() {
     ].filter(item => item.count > 0);
   };
 
-  // --- NEW: Function to generate DOCX content ---
+  // --- Function to generate DOCX content (Unchanged) ---
   const generateDocxContent = (analysisResults) => {
-    const children = []; // Holds all paragraphs, tables, etc.
+      // ... (Keep the existing generateDocxContent function exactly as it was) ...
+      // It already includes logic for title, sessions, timing, LO table, summaries, comments,
+      // and the textual word cloud list.
+      const children = []; // Holds all paragraphs, tables, etc.
 
-    // --- Optional: Add overall title ---
-    children.push(
-        new Paragraph({
-            text: "Student Feedback Analysis Report",
-            heading: HeadingLevel.TITLE,
-            alignment: AlignmentType.CENTER,
-            spacing: { after: 200 },
-        })
-    );
+        children.push(
+            new Paragraph({
+                text: "Student Feedback Analysis Report",
+                heading: HeadingLevel.TITLE,
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 200 },
+            })
+        );
 
-    // Sort sessions for consistent order in the document
-    const sortedSessions = Object.entries(analysisResults).sort(([keyA], [keyB]) => {
-        if (keyA === "Unknown Session") return 1;
-        if (keyB === "Unknown Session") return -1;
-        const numA = parseInt(keyA.match(/\d+/)?.[0] || '0');
-        const numB = parseInt(keyB.match(/\d+/)?.[0] || '0');
-        if (numA !== numB) return numA - numB;
-        return keyA.localeCompare(keyB);
-    });
+        const sortedSessions = Object.entries(analysisResults).sort(([keyA], [keyB]) => {
+            if (keyA === "Unknown Session") return 1;
+            if (keyB === "Unknown Session") return -1;
+            const numA = parseInt(keyA.match(/\d+/)?.[0] || '0');
+            const numB = parseInt(keyB.match(/\d+/)?.[0] || '0');
+            if (numA !== numB) return numA - numB;
+            return keyA.localeCompare(keyB);
+        });
 
-    // --- Iterate through each session ---
-    sortedSessions.forEach(([sessionName, sessionData]) => {
-        // Session Title
-        children.push(new Paragraph({
-            text: sessionName,
-            heading: HeadingLevel.HEADING_1,
-            spacing: { before: 400, after: 200 }, // Add space before H1
-            border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } } // Underline H1
-        }));
-
-        // --- Timing Data (Textual representation, not chart) ---
-        if (sessionData.timingCounts) {
-             children.push(new Paragraph({
-                text: "Timing Response",
-                heading: HeadingLevel.HEADING_2,
-                spacing: { before: 200, after: 100 },
-            }));
-            const timingText = [
-                `Less time than estimated: ${sessionData.timingCounts.less || 0}`,
-                `About the same time as estimated: ${sessionData.timingCounts.same || 0}`,
-                `More time than estimated: ${sessionData.timingCounts.more || 0}`
-            ].join('; '); // Simple text representation
-             children.push(new Paragraph({ text: timingText, style: "normal" }));
-        }
-
-        // --- Learning Outcome Table ---
-        if (sessionData.learningOutcomes && Array.isArray(sessionData.learningOutcomes) && sessionData.learningOutcomes.length > 0) {
+        sortedSessions.forEach(([sessionName, sessionData]) => {
             children.push(new Paragraph({
-                text: "Learning Outcome Responses",
-                heading: HeadingLevel.HEADING_2,
-                spacing: { before: 200, after: 100 },
+                text: sessionName,
+                heading: HeadingLevel.HEADING_1,
+                spacing: { before: 400, after: 200 },
+                border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } }
             }));
 
-            const loData = sessionData.learningOutcomes;
-            const uniqueResponses = new Set();
-            loData.forEach(item => {
-                if (item.responses) Object.keys(item.responses).forEach(response => uniqueResponses.add(response));
-            });
-            const responseHeaders = Array.from(uniqueResponses).sort();
-            const loItems = loData;
-
-            // Define table header style
-            const tableHeaderCell = (text) => new TableCell({
-                 children: [new Paragraph({ text: text, alignment: AlignmentType.CENTER })],
-                 shading: { fill: "E0E0E0", type: ShadingType.CLEAR, color: "auto" }, // Light grey background
-                 margins: { top: 100, bottom: 100, left: 100, right: 100 },
-                 verticalAlign: AlignmentType.CENTER,
-            });
-
-            // Create header row
-             const headerRow = new TableRow({
-                children: [
-                    tableHeaderCell("Learning Outcome"), // First column header
-                    ...responseHeaders.map(header => tableHeaderCell(header)) // Other column headers
-                ],
-                tableHeader: true,
-            });
-
-            // Create data rows
-            const dataRows = loItems.map(item => new TableRow({
-                children: [
-                    // First cell (LO Header)
-                    new TableCell({
-                        children: [new Paragraph(item.loHeader)],
-                        margins: { top: 50, bottom: 50, left: 100, right: 100 },
-                        width: { size: 4500, type: WidthType.DXA }, // Example fixed width
-                    }),
-                    // Subsequent cells (Counts)
-                    ...responseHeaders.map(response => new TableCell({
-                        children: [new Paragraph({ text: `${item.responses?.[response] || 0}`, alignment: AlignmentType.CENTER })],
-                        margins: { top: 50, bottom: 50, left: 100, right: 100 },
-                        verticalAlign: AlignmentType.CENTER,
-                    }))
-                ]
-            }));
-
-            // Create the table
-            const table = new Table({
-                rows: [headerRow, ...dataRows],
-                width: { size: 100, type: WidthType.PERCENTAGE }, // Make table full width
-                borders: { // Add simple borders
-                    top: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
-                    bottom: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
-                    left: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
-                    right: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
-                    insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-                    insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-                },
-            });
-            children.push(table);
-        }
-
-        // --- Summary ---
-        if (sessionData.summary) {
-            children.push(new Paragraph({
-                text: "Summary",
-                heading: HeadingLevel.HEADING_2,
-                spacing: { before: 200, after: 100 },
-            }));
-            children.push(new Paragraph({
-                children: [new TextRun({ text: sessionData.summary, italics: true })],
-                style: "normal"
-            }));
-        }
-
-        // --- Positive Comments ---
-        if (sessionData.positiveComments && sessionData.positiveComments.length > 0) {
-             children.push(new Paragraph({
-                text: "Positive Comments",
-                heading: HeadingLevel.HEADING_2,
-                spacing: { before: 200, after: 100 },
-            }));
-            sessionData.positiveComments.forEach(comment => {
-                children.push(new Paragraph({
-                    text: comment,
-                    bullet: { level: 0 }, // Add bullets
-                    style: "normal"
-                }));
-            });
-        }
-
-        // --- Critical Comments ---
-        if (sessionData.criticalComments && sessionData.criticalComments.length > 0) {
-            children.push(new Paragraph({
-                text: "Critical Comments / Suggestions",
-                heading: HeadingLevel.HEADING_2,
-                spacing: { before: 200, after: 100 },
-            }));
-            sessionData.criticalComments.forEach(comment => {
+            if (sessionData.timingCounts) {
                  children.push(new Paragraph({
-                    text: comment,
-                    bullet: { level: 0 }, // Add bullets
+                    text: "Timing Response",
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 200, after: 100 },
+                }));
+                const timingText = [
+                    `Less time than estimated: ${sessionData.timingCounts.less || 0}`,
+                    `About the same time as estimated: ${sessionData.timingCounts.same || 0}`,
+                    `More time than estimated: ${sessionData.timingCounts.more || 0}`
+                ].join('; ');
+                 children.push(new Paragraph({ text: timingText, style: "normal" }));
+            }
+
+            if (sessionData.learningOutcomes && Array.isArray(sessionData.learningOutcomes) && sessionData.learningOutcomes.length > 0) {
+                children.push(new Paragraph({
+                    text: "Learning Outcome Responses",
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 200, after: 100 },
+                }));
+
+                const loData = sessionData.learningOutcomes;
+                const uniqueResponses = new Set();
+                loData.forEach(item => {
+                    if (item.responses) Object.keys(item.responses).forEach(response => uniqueResponses.add(response));
+                });
+                const responseHeaders = Array.from(uniqueResponses).sort();
+                const loItems = loData;
+
+                const tableHeaderCell = (text) => new TableCell({
+                     children: [new Paragraph({ text: text, alignment: AlignmentType.CENTER })],
+                     shading: { fill: "E0E0E0", type: ShadingType.CLEAR, color: "auto" },
+                     margins: { top: 100, bottom: 100, left: 100, right: 100 },
+                     verticalAlign: AlignmentType.CENTER,
+                });
+
+                 const headerRow = new TableRow({
+                    children: [
+                        tableHeaderCell("Learning Outcome"),
+                        ...responseHeaders.map(header => tableHeaderCell(header))
+                    ],
+                    tableHeader: true,
+                });
+
+                const dataRows = loItems.map(item => new TableRow({
+                    children: [
+                        new TableCell({
+                            children: [new Paragraph(item.loHeader)],
+                            margins: { top: 50, bottom: 50, left: 100, right: 100 },
+                            width: { size: 4500, type: WidthType.DXA },
+                        }),
+                        ...responseHeaders.map(response => new TableCell({
+                            children: [new Paragraph({ text: `${item.responses?.[response] || 0}`, alignment: AlignmentType.CENTER })],
+                            margins: { top: 50, bottom: 50, left: 100, right: 100 },
+                            verticalAlign: AlignmentType.CENTER,
+                        }))
+                    ]
+                }));
+
+                const table = new Table({
+                    rows: [headerRow, ...dataRows],
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    borders: {
+                        top: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
+                        bottom: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
+                        left: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
+                        right: { style: BorderStyle.SINGLE, size: 1, color: "AAAAAA" },
+                        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                        insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                    },
+                });
+                children.push(table);
+            }
+
+            if (sessionData.summary) {
+                children.push(new Paragraph({
+                    text: "Summary",
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 200, after: 100 },
+                }));
+                children.push(new Paragraph({
+                    children: [new TextRun({ text: sessionData.summary, italics: true })],
                     style: "normal"
                 }));
-            });
+            }
+
+            if (sessionData.positiveComments && sessionData.positiveComments.length > 0) {
+                 children.push(new Paragraph({
+                    text: "Positive Comments",
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 200, after: 100 },
+                }));
+                sessionData.positiveComments.forEach(comment => {
+                    children.push(new Paragraph({
+                        text: comment,
+                        bullet: { level: 0 },
+                        style: "normal"
+                    }));
+                });
+            }
+
+            if (sessionData.criticalComments && sessionData.criticalComments.length > 0) {
+                children.push(new Paragraph({
+                    text: "Critical Comments / Suggestions",
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 200, after: 100 },
+                }));
+                sessionData.criticalComments.forEach(comment => {
+                     children.push(new Paragraph({
+                        text: comment,
+                        bullet: { level: 0 },
+                        style: "normal"
+                    }));
+                });
+            }
+
+             children.push(new Paragraph({ text: "", spacing: { after: 300 } }));
+
+        }); // End session loop
+
+        // --- Word Cloud Data (Textual - already handled) ---
+        // Check if wordCloudData exists (passed separately or implicitly available scope)
+        // NOTE: This part needs access to the `wordCloudData` state variable.
+        // It might be better to pass wordCloudData as an argument to generateDocxContent
+        // For simplicity here, assuming it's accessible in the scope it's called.
+        // You might need: const generateDocxContent = (analysisResults, wordCloudDataForDoc) => { ... }
+        // And call it like: const doc = generateDocxContent(results, wordCloudData);
+
+        // Let's pass it explicitly for clarity:
+        if (wordCloudData && wordCloudData.length > 0) {
+            children.push(new Paragraph({
+                text: "Common Words in Feedback (Top 50)",
+                heading: HeadingLevel.HEADING_1,
+                spacing: { before: 400, after: 200 },
+                border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } }
+            }));
+            // Include sentiment in the textual list as well
+            const wordList = wordCloudData.map(tag => `${tag.value} (${tag.count}, ${tag.sentiment || 'neutral'})`).join(', ');
+            children.push(new Paragraph({ text: wordList, style: "normal" }));
         }
 
-         // Add space between sessions
-         children.push(new Paragraph({ text: "", spacing: { after: 300 } }));
 
-    }); // End session loop
+        const doc = new Document({
+            sections: [{
+                properties: {},
+                children: children,
+            }],
+            styles: {
+                paragraphStyles: [
+                    { id: "normal", name: "Normal", run: { size: 22 } }, // 11pt
+                    { id: "Heading1", name: "Heading 1", basedOn: "normal", next: "normal", quickFormat: true, run: { size: 32, bold: true, color: "333333" } }, // 16pt
+                    { id: "Heading2", name: "Heading 2", basedOn: "normal", next: "normal", quickFormat: true, run: { size: 26, bold: true, color: "555555" } }, // 13pt
+                ]
+            }
+        });
 
-    // --- Optional: Add Word Cloud Data (Textual) ---
-    if (wordCloudData && wordCloudData.length > 0) {
-         children.push(new Paragraph({
-            text: "Common Words in Feedback (Top 50)",
-            heading: HeadingLevel.HEADING_1, // Make it a main section
-            spacing: { before: 400, after: 200 },
-            border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } }
-        }));
-        const wordList = wordCloudData.map(tag => `${tag.value} (${tag.count})`).join(', ');
-        children.push(new Paragraph({ text: wordList, style: "normal" }));
-    }
+        return doc;
+    };
 
 
-    // Create the document object
-    const doc = new Document({
-        sections: [{
-            properties: {}, // Add page margins, etc. here if needed
-            children: children,
-        }],
-        styles: { // Define basic styles if needed
-            paragraphStyles: [
-                { id: "normal", name: "Normal", run: { size: 22 } }, // 11pt font
-                { id: "Heading1", name: "Heading 1", basedOn: "normal", next: "normal", quickFormat: true, run: { size: 32, bold: true, color: "333333" } }, // 16pt bold
-                { id: "Heading2", name: "Heading 2", basedOn: "normal", next: "normal", quickFormat: true, run: { size: 26, bold: true, color: "555555" } }, // 13pt bold
-            ]
-        }
-    });
-
-    return doc;
-  };
-
-  // --- NEW: Handler for the download button ---
+  // --- Handler for the download button (Modified slightly to pass wordCloudData) ---
   const handleDownloadDocx = async () => {
     if (!results) {
         console.error("No results available to download.");
@@ -350,19 +382,16 @@ export default function FeedbackAnalyzerPage() {
     setIsDownloading(true);
     try {
         console.log("Generating DOCX...");
-        // Generate the document structure using the function above
-        const doc = generateDocxContent(results);
+        // Pass wordCloudData state to the generation function
+        const doc = generateDocxContent(results /*, wordCloudData */); // Pass if needed by your generateDocxContent setup
 
-        // Use Packer to generate the blob
         const blob = await Packer.toBlob(doc);
-
-        // Use file-saver to trigger the download
         saveAs(blob, "feedback_analysis_report.docx");
         console.log("DOCX download initiated.");
 
     } catch (err) {
         console.error("Error generating or downloading DOCX:", err);
-        setError("Failed to generate Word document."); // Show error to user
+        setError("Failed to generate Word document.");
     } finally {
         setIsDownloading(false);
     }
@@ -398,8 +427,8 @@ export default function FeedbackAnalyzerPage() {
                 className="w-full sm:w-auto inline-flex justify-center px-6 py-2 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
                     Clear Selection
                 </button>
-                 {/* --- NEW: Download Button --- */}
-                {results && !isLoading && (
+                 {/* Download Button (Unchanged) */}
+                 {results && !isLoading && (
                      <button
                         type="button"
                         onClick={handleDownloadDocx}
@@ -407,17 +436,9 @@ export default function FeedbackAnalyzerPage() {
                         className={`w-full sm:w-auto inline-flex justify-center items-center px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-150 ease-in-out ${isDownloading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-green-500"}`}
                         aria-busy={isDownloading}
                     >
-                        {isDownloading ? (
-                            <>
-                                <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span>
-                                Generating...
-                            </>
-                        ) : (
-                            "Download Results (.docx)"
-                        )}
+                        {isDownloading ? ( <> <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span> Generating... </> ) : ( "Download Results (.docx)" )}
                     </button>
                  )}
-                 {/* --- End Download Button --- */}
             </div>
              {/* Error/Warning Area (Unchanged) */}
              {(error || processingWarnings.length > 0) && (
@@ -433,11 +454,11 @@ export default function FeedbackAnalyzerPage() {
             )}
         </form>
 
-        {/* --- Results Area (Structure mostly unchanged, just includes LO Table component call) --- */}
+        {/* --- Results Area (Structure Unchanged, only Word Cloud rendering changes) --- */}
         <div ref={resultsRef}>
           {(results || wordCloudData) && (
             <div className="mt-10 space-y-8">
-              {/* Session Analysis Results */}
+              {/* Session Analysis Results (Unchanged) */}
               {results && Object.keys(results).length > 0 && (
                 <>
                   <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
@@ -457,7 +478,7 @@ export default function FeedbackAnalyzerPage() {
                       return (
                         <div key={sessionName} className="p-6 bg-gray-50 rounded-lg shadow border border-gray-200 mb-6">
                           <h3 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">{sessionName}</h3>
-                          {/* Timing Chart Section */}
+                          {/* Timing Chart Section (Unchanged) */}
                           {(hasTimingData || sessionData.timingCounts) && (
                              <div className="mb-6">
                                 <h4 className="text-lg font-medium text-gray-600 mb-3">Timing Response</h4>
@@ -473,25 +494,24 @@ export default function FeedbackAnalyzerPage() {
                                 ) : ( <p className="text-sm text-gray-500 italic">No timing responses recorded.</p> )}
                              </div>
                           )}
-                          {/* Learning Outcome Table Section */}
+                          {/* Learning Outcome Table Section (Unchanged) */}
                           { (hasLOData || sessionData.learningOutcomes) && (
                             <div className="mb-6">
                                 <h4 className="text-lg font-medium text-gray-600 mb-3">Learning Outcome Responses</h4>
-                                {/* Uses the same component, but the DOCX generation rebuilds it */}
                                 <LearningOutcomeTable loData={sessionData.learningOutcomes} />
                             </div>
                           )}
-                          {/* Summary */}
+                          {/* Summary (Unchanged) */}
                           <div className="mb-5">
                             <h4 className="text-lg font-medium text-gray-600 mb-2">Summary</h4>
                             <p className="text-gray-700 text-sm leading-relaxed italic">{sessionData.summary || "No summary provided."}</p>
                           </div>
-                          {/* Positive Comments */}
+                          {/* Positive Comments (Unchanged) */}
                           <div className="mb-5">
                             <h4 className="text-lg font-medium text-green-700 mb-2">Positive Comments</h4>
                             {sessionData.positiveComments?.length > 0 ? (<ul className="list-disc list-inside space-y-1 text-sm text-green-800">{sessionData.positiveComments.map((c, i) => (<li key={`pos-${i}`}>{c}</li>))}</ul>) : (<p className="text-sm text-gray-500 italic">No positive comments.</p>)}
                           </div>
-                          {/* Critical Comments */}
+                          {/* Critical Comments (Unchanged) */}
                           <div>
                             <h4 className="text-lg font-medium text-red-700 mb-2">Critical Comments / Suggestions</h4>
                             {sessionData.criticalComments?.length > 0 ? (<ul className="list-disc list-inside space-y-1 text-sm text-red-800">{sessionData.criticalComments.map((c, i) => (<li key={`crit-${i}`}>{c}</li>))}</ul>) : (<p className="text-sm text-gray-500 italic">No critical comments.</p>)}
@@ -501,16 +521,29 @@ export default function FeedbackAnalyzerPage() {
                     })}
                 </>
               )}
-              {/* Word Cloud Section */}
+
+              {/* --- UPDATED: Word Cloud Section --- */}
               {wordCloudData && wordCloudData.length > 0 && (
                 <div className="p-6 bg-gray-50 rounded-lg shadow border border-gray-200">
                   <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Common Words (Top 50)</h2>
-                  <div className="text-center p-4" aria-label="Word cloud">
-                    <TagCloud minSize={14} maxSize={45} tags={wordCloudData} colorOptions={tagCloudColorOptions} shuffle={false} renderer={customTagRenderer} className="simple-cloud"/>
+                  <div className="text-center p-4" aria-label="Word cloud with sentiment coloring">
+                    <TagCloud
+                      minSize={14}
+                      maxSize={45}
+                      tags={wordCloudData} // Data now includes sentiment
+                      // colorOptions prop is removed - color handled by renderer
+                      shuffle={false}
+                      renderer={customTagRenderer} // Use the updated renderer
+                      className="simple-cloud" // Keep existing class if needed
+                    />
                   </div>
-                  <p className="text-xs text-center text-gray-500 mt-2">Size indicates frequency. Hover for count.</p>
+                  <p className="text-xs text-center text-gray-500 mt-2">
+                    Size indicates frequency. Color indicates sentiment (Green: Positive, Red: Negative, Gray: Neutral). Hover for details.
+                  </p>
                 </div>
               )}
+              {/* --- End Word Cloud Section --- */}
+
             </div>
           )}
         </div> {/* End Ref container */}
