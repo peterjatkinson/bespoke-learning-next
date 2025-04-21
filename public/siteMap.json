@@ -19,6 +19,7 @@
     "claude-test",
     "claude-test-two",
     "feedback-processor",
+    "feedback-processor-clientside",
     "informed-focus-groups",
     "marketing-dashboard",
     "server-side-database",
