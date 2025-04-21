@@ -58,14 +58,56 @@ export default function PdfCommentAnalyzerPage() {
 
     // --- Improved Text Processing Function using Regex (Unchanged) ---
     function extractRelevantText(fullText, marker) {
-        const escapedMarker = marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const markerRegex = new RegExp(`^.*?${escapedMarker}.*$`, "im");
+        // 1. Split the marker phrase by spaces
+        const markerParts = marker.split(' ');
+
+        // 2. Escape regex special characters in each part
+        //    (Handles cases where parts might contain ., *, ?, etc.)
+        const escapedParts = markerParts.map(part =>
+            part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape regex metacharacters
+        );
+
+        // 3. Join the escaped parts with \s+
+        //    \s+ matches one or more whitespace characters (space, tab, newline, etc.)
+        //    This makes the search tolerant to extra spaces between words in the marker.
+        const flexibleMarkerPattern = escapedParts.join('\\s+');
+
+        // 4. Construct the final regex to find the *line* containing the flexible marker pattern
+        //    ^ matches the start of a line (due to 'm' flag)
+        //    .*? matches any character non-greedily
+        //    $ matches the end of a line (due to 'm' flag)
+        //    'i' flag for case-insensitivity
+        //    'm' flag for multiline matching (^ and $ match start/end of lines)
+        const markerRegex = new RegExp(`^.*?${flexibleMarkerPattern}.*$`, "im");
+
+        console.log("Searching with flexible marker regex:", markerRegex); // For debugging
+
         const match = markerRegex.exec(fullText);
-        if (!match) { console.warn(`Marker phrase "${marker}" not found using regex.`); setProcessingWarning(prev => prev ? `${prev}\nMarker phrase "${marker}" not found. Processing all extracted text.` : `Marker phrase "${marker}" not found. Processing all extracted text.`); return fullText; }
-        const endOfMatchIndex = match.index + match[0].length;
-        const nextNewlineIndex = fullText.indexOf('\n', endOfMatchIndex);
-        if (nextNewlineIndex === -1) { console.log("Marker found, but no newline after it."); return fullText.slice(endOfMatchIndex).trim(); }
-        console.log(`Marker found at index ${match.index}. Extracting text from index ${nextNewlineIndex + 1}.`);
+
+        if (!match) {
+            console.warn(`Marker phrase "${marker}" (with flexible spacing) not found using regex.`);
+            // Keep the existing warning behavior or adjust as needed
+            setProcessingWarning(prev => prev ? `${prev}\nMarker phrase "${marker}" not found. Processing all extracted text.` : `Marker phrase "${marker}" not found. Processing all extracted text.`);
+            return fullText; // Return the whole text if marker isn't found
+        }
+
+        // --- The rest of the logic remains the same: find the end of the matched line ---
+        // --- and extract text starting from the *next* line.                ---
+
+        const endOfMatchedLineIndex = match.index + match[0].length;
+
+        // Find the next newline character *after* the matched line ends
+        const nextNewlineIndex = fullText.indexOf('\n', endOfMatchedLineIndex);
+
+        if (nextNewlineIndex === -1) {
+            // Marker found, but it might be the last line or there's no text after it.
+            console.log("Marker found, but no newline character after the matched line.");
+            // Return text immediately following the matched line (if any)
+            return fullText.slice(endOfMatchedLineIndex).trim();
+        }
+
+        // Extract text starting from the character *after* the newline
+        console.log(`Flexible marker pattern found on line ending at index ${endOfMatchedLineIndex}. Extracting text from index ${nextNewlineIndex + 1}.`);
         return fullText.slice(nextNewlineIndex + 1).trim();
     }
 
