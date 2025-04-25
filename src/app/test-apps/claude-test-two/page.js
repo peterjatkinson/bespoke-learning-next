@@ -1,408 +1,165 @@
 "use client";
 import React, { useState } from 'react';
-import { 
-  ArrowDown, 
-  Brain, 
-  Star, 
-  Zap, 
-  MessageCircle, 
-  CheckSquare
-} from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const SimpleELM = () => {
-  // State to track which route is being viewed
-  const [activeRoute, setActiveRoute] = useState(null);
-  
-  // State to track which component is being viewed
-  const [activeComponent, setActiveComponent] = useState(null);
-  
-  // Content for information panels
-  const infoContent = {
-    message: {
-      title: 'Persuasive Message',
-      description: 'The starting point - an advertisement, speech, article, or any communication designed to influence attitudes or behaviour.'
-    },
-    motivation: {
-      title: 'Motivation to Process',
-      description: 'Whether someone is motivated depends on personal relevance, need for cognition, and responsibility.'
-    },
-    ability: {
-      title: 'Ability to Process',
-      description: 'Factors affecting ability include distraction, message complexity, prior knowledge, and time.'
-    },
-    central: {
-      title: 'Central Route Processing',
-      description: 'Careful evaluation of arguments and evidence quality. Leads to enduring attitude change that predicts behaviour and resists counter-persuasion.'
-    },
-    peripheral: {
-      title: 'Peripheral Route Processing',
-      description: 'Reliance on simple cues like source attractiveness, credibility, or number of arguments rather than quality. Leads to temporary attitude change.'
-    }
+const WaterfallApp = () => {
+  const [investedCapital, setInvestedCapital] = useState(100);
+  const [realisation, setRealisation] = useState(200);
+  const [preferredReturnRate, setPreferredReturnRate] = useState(8);
+  const [carrySplit, setCarrySplit] = useState({ lp: 80, gp: 20 });
+
+  const calculateWaterfall = () => {
+    const preferredReturn = investedCapital * (preferredReturnRate / 100);
+    const totalWithPreferred = investedCapital + preferredReturn;
+    const catchUp = (carrySplit.gp / carrySplit.lp) * preferredReturn;
+    const totalAfterCatchUp = totalWithPreferred + catchUp;
+    const remaining = realisation - totalAfterCatchUp;
+    const lpCarry = remaining * (carrySplit.lp / 100);
+    const gpCarry = remaining * (carrySplit.gp / 100);
+
+    return [
+      {
+        stage: '1. Invested capital',
+        lp: investedCapital,
+        gp: 0
+      },
+      {
+        stage: `2. Preferred return (${preferredReturnRate}%)`,
+        lp: preferredReturn,
+        gp: 0
+      },
+      {
+        stage: '3. Catch-up',
+        lp: 0,
+        gp: catchUp
+      },
+      {
+        stage: `4. 80/20 carry split`,
+        lp: lpCarry,
+        gp: gpCarry
+      }
+    ];
   };
-  
-  // Handle card click to show information
-  const handleCardClick = (component) => {
-    setActiveComponent(activeComponent === component ? null : component);
-  };
-  
+
+  const data = calculateWaterfall();
+  const totalLP = data.reduce((sum, row) => sum + row.lp, 0);
+  const totalGP = data.reduce((sum, row) => sum + row.gp, 0);
+
   return (
-    <div className="min-h-full bg-gray-50 p-4 font-sans">
-      <header className="text-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
-          Elaboration Likelihood Model
+    <div className="min-h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 font-sans">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wide drop-shadow-md">
+          Private Equity Waterfall Explorer
         </h1>
-        <p className="max-w-2xl mx-auto text-gray-600">
-          The ELM explains how people process persuasive messages through two routes: central (thoughtful analysis) 
-          and peripheral (simple cues).
-        </p>
-        
-        {/* Route selection buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mt-4">
-          <button
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeRoute === 'central' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-white text-blue-600 border border-blue-300 hover:bg-blue-50'
-            }`}
-            onClick={() => setActiveRoute('central')}
-            aria-pressed={activeRoute === 'central'}
-          >
-            <Brain className="w-5 h-5" />
-            <span>Central Route</span>
-          </button>
-          
-          <button
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeRoute === 'peripheral' 
-                ? 'bg-green-600 text-white' 
-                : 'bg-white text-green-600 border border-green-300 hover:bg-green-50'
-            }`}
-            onClick={() => setActiveRoute('peripheral')}
-            aria-pressed={activeRoute === 'peripheral'}
-          >
-            <Star className="w-5 h-5" />
-            <span>Peripheral Route</span>
-          </button>
-          
-          {activeRoute && (
-            <button
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300"
-              onClick={() => setActiveRoute(null)}
-              aria-label="Clear route selection"
-            >
-              <span>Clear</span>
-            </button>
-          )}
-        </div>
-      </header>
-      
-      {/* Main ELM diagram */}
-      <div className="max-w-3xl mx-auto">
-        {/* Persuasive Message */}
-        <div className="mb-6">
-          <div 
-            className={`relative p-4 border-2 rounded-lg max-w-md mx-auto text-center cursor-pointer transition-colors ${
-              activeComponent === 'message' 
-                ? 'border-purple-500 bg-purple-50' 
-                : 'border-gray-300 hover:border-purple-200 hover:bg-purple-50'
-            }`}
-            onClick={() => handleCardClick('message')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleCardClick('message');
-              }
-            }}
-            tabIndex="0"
-            role="button"
-            aria-expanded={activeComponent === 'message'}
-            aria-controls="message-info"
-          >
-            <div className="flex justify-center mb-2">
-              <MessageCircle className="w-6 h-6 text-purple-500" aria-hidden="true" />
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left: Inputs */}
+          <div className="flex-1 bg-slate-800 bg-opacity-70 backdrop-blur-md p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <label className="flex flex-col">
+                <span className="mb-1 font-semibold text-sky-300">Invested Capital</span>
+                <input
+                  type="number"
+                  className="border border-sky-600 bg-slate-900 text-white p-2 rounded focus:ring-2 focus:ring-sky-500"
+                  value={investedCapital}
+                  onChange={(e) => setInvestedCapital(Number(e.target.value))}
+                />
+              </label>
+
+              <label className="flex flex-col">
+                <span className="mb-1 font-semibold text-sky-300">Realisation</span>
+                <input
+                  type="number"
+                  className="border border-sky-600 bg-slate-900 text-white p-2 rounded focus:ring-2 focus:ring-sky-500"
+                  value={realisation}
+                  onChange={(e) => setRealisation(Number(e.target.value))}
+                />
+              </label>
+
+              <label className="flex flex-col">
+                <span className="mb-1 font-semibold text-sky-300">Preferred Return Rate (%)</span>
+                <input
+                  type="number"
+                  className="border border-sky-600 bg-slate-900 text-white p-2 rounded focus:ring-2 focus:ring-sky-500"
+                  value={preferredReturnRate}
+                  onChange={(e) => setPreferredReturnRate(Number(e.target.value))}
+                />
+              </label>
+
+              <label className="flex flex-col">
+                <span className="mb-1 font-semibold text-sky-300">Carried Interest Split (LP %)</span>
+                <input
+                  type="number"
+                  className="border border-sky-600 bg-slate-900 text-white p-2 rounded focus:ring-2 focus:ring-sky-500"
+                  value={carrySplit.lp}
+                  onChange={(e) => setCarrySplit({ ...carrySplit, lp: Number(e.target.value) })}
+                />
+              </label>
             </div>
-            <h2 className="font-bold text-gray-900">Persuasive Message</h2>
-          </div>
-          
-          {/* Expanded information panel */}
-          {activeComponent === 'message' && (
-            <div 
-              id="message-info" 
-              className="mt-2 p-4 bg-white rounded-lg shadow-md max-w-md mx-auto"
-            >
-              <h3 className="font-bold text-purple-800">{infoContent.message.title}</h3>
-              <p className="mt-1 text-gray-700">{infoContent.message.description}</p>
-            </div>
-          )}
-        </div>
-        
-        {/* Arrow down */}
-        <div className="flex justify-center mb-6">
-          <ArrowDown className="w-6 h-6 text-gray-400" aria-hidden="true" />
-        </div>
-        
-        {/* Motivation to Process */}
-        <div className="mb-6">
-          <div 
-            className={`relative p-4 border-2 rounded-lg max-w-md mx-auto text-center cursor-pointer transition-colors ${
-              activeComponent === 'motivation' 
-                ? 'border-yellow-500 bg-yellow-50' 
-                : 'border-gray-300 hover:border-yellow-200 hover:bg-yellow-50'
-            }`}
-            onClick={() => handleCardClick('motivation')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleCardClick('motivation');
-              }
-            }}
-            tabIndex="0"
-            role="button"
-            aria-expanded={activeComponent === 'motivation'}
-            aria-controls="motivation-info"
-          >
-            <div className="flex justify-center mb-2">
-              <Zap className="w-6 h-6 text-yellow-500" aria-hidden="true" />
-            </div>
-            <h2 className="font-bold text-gray-900">Motivated to Process?</h2>
-            
-            <div className="flex justify-between mt-3">
-              <div className={`px-3 py-1 rounded-full text-sm ${
-                activeRoute === 'central' 
-                  ? 'bg-blue-100 text-blue-800 font-medium' 
-                  : 'bg-gray-100 text-gray-600'
-              }`}>
-                YES
-              </div>
-              <div className={`px-3 py-1 rounded-full text-sm ${
-                activeRoute === 'peripheral' 
-                  ? 'bg-green-100 text-green-800 font-medium' 
-                  : 'bg-gray-100 text-gray-600'
-              }`}>
-                NO
-              </div>
+            <div className="text-sm text-sky-200 mt-4">
+              GP % will automatically be {100 - carrySplit.lp}%
             </div>
           </div>
-          
-          {/* Expanded information panel */}
-          {activeComponent === 'motivation' && (
-            <div 
-              id="motivation-info" 
-              className="mt-2 p-4 bg-white rounded-lg shadow-md max-w-md mx-auto"
-            >
-              <h3 className="font-bold text-yellow-800">{infoContent.motivation.title}</h3>
-              <p className="mt-1 text-gray-700">{infoContent.motivation.description}</p>
-              <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-100">
-                <p className="text-sm text-gray-700"><strong>High motivation example:</strong> A person researching cars before making an expensive purchase</p>
-              </div>
-              <div className="mt-2 p-2 bg-green-50 rounded border border-green-100">
-                <p className="text-sm text-gray-700"><strong>Low motivation example:</strong> A casual viewer watching TV advertisements for products they don't need</p>
-              </div>
-            </div>
-          )}
-        </div>
-        
-        {/* Arrow or split path based on route */}
-        <div className="flex justify-center mb-6">
-          {activeRoute === 'peripheral' ? (
-            <div className="w-full max-w-md flex justify-end">
-              <div className="w-1/2 relative">
-                <div className="absolute top-0 right-0 h-6 w-6 border-r-2 border-b-2 border-green-400" aria-hidden="true"></div>
-              </div>
-            </div>
-          ) : (
-            <ArrowDown className="w-6 h-6 text-gray-400" aria-hidden="true" />
-          )}
-        </div>
-        
-        {/* Ability to Process (only visible in central route or when no route selected) */}
-        {(activeRoute !== 'peripheral' || !activeRoute) && (
-          <div className="mb-6">
-            <div 
-              className={`relative p-4 border-2 rounded-lg max-w-md mx-auto text-center cursor-pointer transition-colors ${
-                activeComponent === 'ability' 
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-300 hover:border-blue-200 hover:bg-blue-50'
-              } ${activeRoute === 'central' ? 'border-blue-300' : ''}`}
-              onClick={() => handleCardClick('ability')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleCardClick('ability');
-                }
-              }}
-              tabIndex="0"
-              role="button"
-              aria-expanded={activeComponent === 'ability'}
-              aria-controls="ability-info"
-            >
-              <div className="flex justify-center mb-2">
-                <Brain className="w-6 h-6 text-blue-500" aria-hidden="true" />
-              </div>
-              <h2 className="font-bold text-gray-900">Ability to Process?</h2>
-              
-              <div className="flex justify-between mt-3">
-                <div className={`px-3 py-1 rounded-full text-sm ${
-                  activeRoute === 'central' 
-                    ? 'bg-blue-100 text-blue-800 font-medium' 
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  YES
-                </div>
-                <div className={`px-3 py-1 rounded-full text-sm ${
-                  'bg-gray-100 text-gray-600'
-                }`}>
-                  NO
-                </div>
-              </div>
-            </div>
-            
-            {/* Expanded information panel */}
-            {activeComponent === 'ability' && (
-              <div 
-                id="ability-info" 
-                className="mt-2 p-4 bg-white rounded-lg shadow-md max-w-md mx-auto"
-              >
-                <h3 className="font-bold text-blue-800">{infoContent.ability.title}</h3>
-                <p className="mt-1 text-gray-700">{infoContent.ability.description}</p>
-                <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-100">
-                  <p className="text-sm text-gray-700"><strong>High ability example:</strong> A doctor reading a medical journal article in a quiet office</p>
-                </div>
-                <div className="mt-2 p-2 bg-green-50 rounded border border-green-100">
-                  <p className="text-sm text-gray-700"><strong>Low ability example:</strong> A parent trying to read complex information while supervising young children</p>
-                </div>
-              </div>
-            )}
-            
-            {/* Arrow to central processing */}
-            {(activeRoute === 'central' || !activeRoute) && (
-              <div className="flex justify-center my-6">
-                <ArrowDown className={`w-6 h-6 ${activeRoute === 'central' ? 'text-blue-400' : 'text-gray-400'}`} aria-hidden="true" />
-              </div>
-            )}
+
+          {/* Right: Table */}
+          <div className="flex-1 overflow-auto bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-xl">
+            <table className="min-w-full text-sm text-white">
+              <thead className="bg-slate-700 text-sky-200">
+                <tr>
+                  <th className="p-3 text-left">Waterfall Stage</th>
+                  <th className="p-3 text-right">LP</th>
+                  <th className="p-3 text-right">GP</th>
+                  <th className="p-3 text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row, idx) => (
+                  <tr key={idx} className="border-t border-slate-600 hover:bg-slate-700">
+                    <td className="p-3 font-medium text-sky-100">{row.stage}</td>
+                    <td className="p-3 text-right">{row.lp.toFixed(2)}</td>
+                    <td className="p-3 text-right">{row.gp.toFixed(2)}</td>
+                    <td className="p-3 text-right">{(row.lp + row.gp).toFixed(2)}</td>
+                  </tr>
+                ))}
+                <tr className="bg-slate-700 font-bold border-t border-slate-500">
+                  <td className="p-3">Total distribution</td>
+                  <td className="p-3 text-right">{totalLP.toFixed(2)}</td>
+                  <td className="p-3 text-right">{totalGP.toFixed(2)}</td>
+                  <td className="p-3 text-right">{(totalLP + totalGP).toFixed(2)}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        )}
-        
-        {/* Route Processing and Outcomes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Central Route (only visible when central route is selected or no route is selected) */}
-          {(activeRoute === 'central' || !activeRoute) && (
-            <div className={`${!activeRoute ? 'md:col-span-1' : 'md:col-span-2'}`}>
-              <div 
-                className={`relative p-4 border-2 rounded-lg mx-auto text-center cursor-pointer transition-colors ${
-                  activeComponent === 'central' 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-300 hover:border-blue-200 hover:bg-blue-50'
-                } ${activeRoute === 'central' ? 'border-blue-300' : ''}`}
-                onClick={() => handleCardClick('central')}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleCardClick('central');
-                  }
-                }}
-                tabIndex="0"
-                role="button"
-                aria-expanded={activeComponent === 'central'}
-                aria-controls="central-info"
-              >
-                <div className="flex justify-center mb-2">
-                  <CheckSquare className="w-6 h-6 text-blue-500" aria-hidden="true" />
-                </div>
-                <h2 className="font-bold text-gray-900">Central Route Processing</h2>
-                <p className="text-sm mt-1">Thoughtful consideration of arguments</p>
-                
-                <div className="mt-3 p-3 bg-blue-100 text-blue-800 rounded-lg">
-                  <p className="font-medium">Enduring Attitude Change</p>
-                  <p className="text-xs mt-1">Long-lasting, resistant to counter-persuasion</p>
-                </div>
-              </div>
-              
-              {/* Expanded information panel */}
-              {activeComponent === 'central' && (
-                <div 
-                  id="central-info" 
-                  className="mt-2 p-4 bg-white rounded-lg shadow-md mx-auto"
-                >
-                  <h3 className="font-bold text-blue-800">{infoContent.central.title}</h3>
-                  <p className="mt-1 text-gray-700">{infoContent.central.description}</p>
-                  <div className="mt-3 p-3 bg-blue-50 rounded border border-blue-100">
-                    <h4 className="font-medium text-blue-800">Marketing Strategies:</h4>
-                    <ul className="mt-2 space-y-1 text-sm">
-                      <li>• Provide detailed product information and specifications</li>
-                      <li>• Present strong, logical arguments with evidence</li>
-                      <li>• Use comparative advertising with objective benefits</li>
-                      <li>• Include customer testimonials with specific details</li>
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-          
-          {/* Peripheral Route (only visible when peripheral route is selected or no route is selected) */}
-          {(activeRoute === 'peripheral' || !activeRoute) && (
-            <div className={`${!activeRoute ? 'md:col-span-1' : 'md:col-span-2'}`}>
-              <div 
-                className={`relative p-4 border-2 rounded-lg mx-auto text-center cursor-pointer transition-colors ${
-                  activeComponent === 'peripheral' 
-                    ? 'border-green-500 bg-green-50' 
-                    : 'border-gray-300 hover:border-green-200 hover:bg-green-50'
-                } ${activeRoute === 'peripheral' ? 'border-green-300' : ''}`}
-                onClick={() => handleCardClick('peripheral')}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleCardClick('peripheral');
-                  }
-                }}
-                tabIndex="0"
-                role="button"
-                aria-expanded={activeComponent === 'peripheral'}
-                aria-controls="peripheral-info"
-              >
-                <div className="flex justify-center mb-2">
-                  <Star className="w-6 h-6 text-green-500" aria-hidden="true" />
-                </div>
-                <h2 className="font-bold text-gray-900">Peripheral Route Processing</h2>
-                <p className="text-sm mt-1">Focus on simple cues rather than message content</p>
-                
-                <div className="mt-3 p-3 bg-green-100 text-green-800 rounded-lg">
-                  <p className="font-medium">Temporary Attitude Change</p>
-                  <p className="text-xs mt-1">Short-term, easily changed by new information</p>
-                </div>
-              </div>
-              
-              {/* Expanded information panel */}
-              {activeComponent === 'peripheral' && (
-                <div 
-                  id="peripheral-info" 
-                  className="mt-2 p-4 bg-white rounded-lg shadow-md mx-auto"
-                >
-                  <h3 className="font-bold text-green-800">{infoContent.peripheral.title}</h3>
-                  <p className="mt-1 text-gray-700">{infoContent.peripheral.description}</p>
-                  <div className="mt-3 p-3 bg-green-50 rounded border border-green-100">
-                    <h4 className="font-medium text-green-800">Marketing Strategies:</h4>
-                    <ul className="mt-2 space-y-1 text-sm">
-                      <li>• Use attractive visuals, music, and aesthetics</li>
-                      <li>• Feature celebrity endorsements and influencers</li>
-                      <li>• Emphasize limited-time offers and scarcity</li>
-                      <li>• Display social proof (e.g., "10,000+ happy customers")</li>
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
         </div>
-      </div>
-      
-      {/* Simple instructions */}
-      <div className="text-center mt-6 text-gray-500 text-sm">
-        <p>Click on any stage to learn more about the ELM model</p>
+
+        {/* Chart below full-width */}
+        <div className="mt-12 bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-xl">
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="stage" tick={{ fontSize: 12, fill: '#cbd5e1' }} />
+              <YAxis tick={{ fill: '#cbd5e1' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#1e293b', borderColor: '#475569', color: '#f8fafc' }} />
+              <Legend wrapperStyle={{ color: '#f8fafc' }} />
+              <Bar dataKey="lp" stackId="a" fill="#38bdf8" name="LP" />
+              <Bar dataKey="gp" stackId="a" fill="#f472b6" name="GP" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Notes */}
+        <div className="mt-10 text-sm text-slate-200 bg-slate-800 p-6 rounded-xl shadow-xl border border-slate-700">
+          <h2 className="text-lg font-bold mb-3 text-sky-300">Explanation</h2>
+          <p className="mb-2">
+            The <strong>preferred return</strong> ensures that LPs receive a minimum baseline return before GP profits are realised. This example assumes a standard <strong>catch-up</strong> phase, during which the GP receives a greater share of profits until their entitlement aligns with the agreed <strong>carried interest</strong> split.
+          </p>
+          <p>
+            Users can modify capital, return rates, and profit splits to explore different private equity waterfall outcomes.
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-export default SimpleELM;
+export default WaterfallApp;
