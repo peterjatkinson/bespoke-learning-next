@@ -180,8 +180,7 @@ IMPORTANT REQUIREMENTS:
       const imageResponse = await openai.images.generate({
         prompt: imagePrompt,
         n: 1,
-        size: "256x256",
-        quality: "standard",
+        size: "512x512",
         response_format: "url",
       });
 

@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { User, Heart, ShoppingCart, BookOpen, AlertTriangle, Smile } from "lucide-react";
+// Import the Image component from next/image
+import Image from 'next/image';
+import { User, Heart, ShoppingCart, BookOpen, AlertTriangle, Smile, Loader2, Image as LucideImageIcon } from "lucide-react"; // Added Loader2, Renamed Lucide Image icon
 import {
   Radar,
   RadarChart,
@@ -11,6 +13,20 @@ import {
   Tooltip,
 } from "recharts";
 import jsPDF from "jspdf";
+
+// Import the CSS for the spinner animation (assuming you have a global CSS file like app/globals.css)
+// If not, you might need to add the keyframes to your global CSS file (e.g., app/globals.css):
+/*
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: 360deg; }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+*/
+// Or add a <style jsx global> tag here if you prefer component-level CSS injection.
+
 
 /**
  * Writes text to the PDF, wrapping it at 'maxWidth'.
@@ -29,6 +45,10 @@ function addWrappedTextWithPagination(pdf, text, x, y, options) {
 
   // Ensure maxWidth doesn't exceed page bounds based on margins
   const effectiveMaxWidth = Math.min(maxWidth, pdf.internal.pageSize.getWidth() - leftMargin - rightMargin);
+
+  // Check if text is null or empty before processing
+  if (!text) return y;
+
 
   const lines = pdf.splitTextToSize(text, effectiveMaxWidth);
   let currentY = y;
@@ -111,6 +131,8 @@ const ConsumerPersona = () => {
   });
   const [loading, setLoading] = useState(false);
   const [persona, setPersona] = useState(null);
+  // State to track image loading status
+  const [imageStatus, setImageStatus] = useState('idle'); // 'idle', 'loading', 'loaded', 'error' // <-- Added
 
   // Initialize submissionCount as null for SSR safety, useEffect updates it
   const [submissionCount, setSubmissionCount] = useState(null);
@@ -129,18 +151,37 @@ const ConsumerPersona = () => {
     setSubmissionCount(storedCount);
   }, []);
 
+   // Effect to reset image status when persona?.imageUrl changes
   useEffect(() => {
+      // Reset status when persona changes or when image URL specifically changes (including to null)
+      if (persona?.imageUrl) { // Use optional chaining
+          setImageStatus('loading');
+      } else {
+          setImageStatus('idle'); // Reset if persona or imageUrl is cleared
+      }
+  }, [persona?.imageUrl, persona]); // <-- Added dependency on persona as well
+
+
+  useEffect(() => {
+    // This effect runs when persona state is updated (after API call)
     if (persona && generatedContentRef.current) {
+      // Announce generation completion immediately after receiving persona data
       if (liveRegionRef.current) {
         liveRegionRef.current.textContent = "Consumer persona generated.";
       }
-      // Focus the heading of the generated content
+
+      // Focus the heading of the generated content after a slight delay
+      // to allow layout to settle.
       const heading = generatedContentRef.current.querySelector("h2");
       if (heading) {
-        heading.focus();
+          // Adding a slight delay ensures the element is rendered and visible before focusing
+          setTimeout(() => {
+              heading.focus();
+          }, 100); // Adjust delay if needed
       }
     }
-  }, [persona]);
+  }, [persona]); // <-- Keep this useEffect for initial persona display announcement/focus
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -241,17 +282,24 @@ const ConsumerPersona = () => {
     // Prevent submission if limit reached (check against state)
     if (submissionCount !== null && submissionCount >= submissionLimit) {
         console.log("Submission limit reached.");
+         // You might want to set an error message here too
+         const limitMessage = `Submission limit of ${submissionLimit} reached.`;
+         if (errorRegionRef.current) {
+             errorRegionRef.current.textContent = limitMessage;
+         }
+         setFieldErrors((prev) => ({ ...prev, global: limitMessage }));
         return;
     }
 
     setLoading(true);
     setPersona(null); // Clear previous persona
+    setImageStatus('idle'); // Reset image status
     if (liveRegionRef.current) {
       liveRegionRef.current.textContent = "Generating consumer persona. Please wait.";
     }
 
     try {
-      const response = await fetch("/smo-tim/persona-generator/api", { // Updated API endpoint
+      const response = await fetch("/smo-tim/persona-generator/api", { // Ensure this is correct
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -271,9 +319,7 @@ const ConsumerPersona = () => {
       setSubmissionCount(newCount);
       localStorage.setItem("consumerPersonaSubmissionCount", newCount.toString()); // Store as string
 
-      if (liveRegionRef.current) { // Announce success after state update
-        liveRegionRef.current.textContent = "Consumer persona generated.";
-      }
+      // Announcement and focus is handled by the useEffect listening to 'persona'
 
     } catch (error) {
       console.error("Submission error:", error);
@@ -283,6 +329,8 @@ const ConsumerPersona = () => {
         errorRegionRef.current.textContent = errorMessage;
       }
       setFieldErrors((prev) => ({ ...prev, global: errorMessage }));
+      // If generation fails, clear any potentially half-set persona
+      setPersona(null); // <-- Important: Clear persona if API fails
     } finally {
       setLoading(false);
     }
@@ -352,7 +400,9 @@ const ConsumerPersona = () => {
 
     // Helper to add a heading
     const addHeading = (heading) => {
-      checkPageBreak(sectionSpacing + lineHeight); // Check space needed for heading + first line
+      // Estimate space for heading line + some buffer for first text line
+       const neededHeight = lineHeight * 1.5 + sectionSpacing;
+      checkPageBreak(neededHeight);
       pdf.setFontSize(14);
       pdf.setFont("helvetica", "bold");
       pdf.text(heading, leftMargin, y);
@@ -363,11 +413,20 @@ const ConsumerPersona = () => {
 
     // Helper to add wrapped text (uses the global function)
     const addWrapped = (text, prefix = "") => {
-      if (!text) return; // Don't add empty text
+      // Allow text to be 'N/A' or other strings, but not just empty/whitespace if required text is missing
+      if (text === null || text === undefined || (typeof text === 'string' && text.trim() === "" && prefix !== "")) {
+          // If text is empty/whitespace AND there's a prefix, maybe don't add anything, or add 'N/A' explicitly later.
+          // Let's revise this to just not add if the text is effectively empty. Explicit N/A is handled by the caller.
+           if (text === null || text === undefined || (typeof text === 'string' && text.trim() === "")) {
+             return y; // Don't add empty content
+           }
+      }
+
+
        const fullText = prefix ? `${prefix}: ${text}` : text;
        // Estimate height needed before calling the wrapping function
-       const lines = pdf.splitTextToSize(fullText, maxLineWidth);
-       checkPageBreak(lines.length * lineHeight + 2); // Check space for all lines + small buffer
+       const estimatedLines = pdf.splitTextToSize(fullText, maxLineWidth).length;
+       checkPageBreak(estimatedLines * lineHeight + 2); // Check space for all lines + small buffer
        y = addWrappedTextWithPagination(pdf, fullText, leftMargin, y, {
            maxWidth: maxLineWidth,
            lineHeight,
@@ -376,6 +435,7 @@ const ConsumerPersona = () => {
            leftMargin,
        });
        y += 2; // Small gap after wrapped text block
+       return y; // Return updated y
     };
 
 
@@ -388,15 +448,22 @@ const ConsumerPersona = () => {
     pdf.text("Consumer Persona", pageWidth / 2, y, { align: "center" });
     y += 12;
 
+     // Removed the entire block that attempted to add the image to the PDF
+     // if (persona.imageUrl) { ... } is gone
+
+
     // Demographics
     if (persona.demographics) {
         addHeading("Demographics");
         addWrapped(persona.demographics.name, "Name");
         addWrapped(persona.demographics.age, "Age");
         addWrapped(persona.demographics.occupation, "Occupation");
+        // Check incomeLevel existence before formatting
         if (persona.demographics.incomeLevel !== undefined && persona.demographics.incomeLevel !== null) {
              const formattedIncome = `£${persona.demographics.incomeLevel.toLocaleString("en-GB")}`;
              addWrapped(formattedIncome, "Income level");
+        } else {
+             addWrapped('N/A', "Income level"); // Explicitly show N/A if missing
         }
         addWrapped(persona.demographics.educationLevel, "Education level");
         addWrapped(persona.demographics.location, "Location");
@@ -439,8 +506,29 @@ const ConsumerPersona = () => {
     // Context & Story
      if (persona.quote || persona.scenario) {
         addHeading("Context & story");
-        if (persona.quote) addWrapped(persona.quote, "Quote");
-        if (persona.scenario) addWrapped(persona.scenario, "Scenario");
+        // Add quote with a prefix and check existence
+        if (persona.quote && persona.quote.trim() !== "") {
+             checkPageBreak(lineHeight * 2 + 2); // Estimate needed height
+             pdf.setFont("helvetica", "bolditalic"); // Optional: style quote differently
+             y = addWrappedTextWithPagination(pdf, `"${persona.quote}"`, leftMargin, y, {
+                 maxWidth: maxLineWidth,
+                 lineHeight,
+                 bottomMargin,
+                 pageHeight,
+                 leftMargin,
+             });
+             y += 4; // Add more space after quote
+             pdf.setFont("helvetica", "normal"); // Reset font
+        } else if (persona.quote !== undefined && persona.quote !== null) { // Handle empty but not null/undefined quote
+             addWrapped('N/A', "Quote");
+        }
+
+        // Add scenario with a prefix and check existence
+         if (persona.scenario && persona.scenario.trim() !== "") {
+              addWrapped(persona.scenario, "Scenario"); // Uses existing addWrapped for scenario
+         } else if (persona.scenario !== undefined && persona.scenario !== null) { // Handle empty but not null/undefined scenario
+             addWrapped('N/A', "Scenario");
+         }
         y += itemSpacing;
     }
 
@@ -449,11 +537,12 @@ const ConsumerPersona = () => {
     if (persona.personalityRadar) {
         addHeading("Personality traits (Scores 0–100)");
         const radar = persona.personalityRadar;
-        if (radar.openness !== undefined) addWrapped(radar.openness.toString(), "Openness");
-        if (radar.conscientiousness !== undefined) addWrapped(radar.conscientiousness.toString(), "Conscientiousness");
-        if (radar.extraversion !== undefined) addWrapped(radar.extraversion.toString(), "Extraversion");
-        if (radar.agreeableness !== undefined) addWrapped(radar.agreeableness.toString(), "Agreeableness");
-        if (radar.neuroticism !== undefined) addWrapped(radar.neuroticism.toString(), "Neuroticism");
+        // Check existence before trying to stringify and add
+        if (radar.openness !== undefined && radar.openness !== null) addWrapped(radar.openness.toString(), "Openness"); else addWrapped('N/A', "Openness");
+        if (radar.conscientiousness !== undefined && radar.conscientiousness !== null) addWrapped(radar.conscientiousness.toString(), "Conscientiousness"); else addWrapped('N/A', "Conscientiousness");
+        if (radar.extraversion !== undefined && radar.extraversion !== null) addWrapped(radar.extraversion.toString(), "Extraversion"); else addWrapped('N/A', "Extraversion");
+        if (radar.agreeableness !== undefined && radar.agreeableness !== null) addWrapped(radar.agreeableness.toString(), "Agreeableness"); else addWrapped('N/A', "Agreeableness");
+        if (radar.neuroticism !== undefined && radar.neuroticism !== null) addWrapped(radar.neuroticism.toString(), "Neuroticism"); else addWrapped('N/A', "Neuroticism");
         y += itemSpacing;
     }
 
@@ -492,7 +581,7 @@ const ConsumerPersona = () => {
               {/* Brand Information - Left Column */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-800 border-b pb-1">Brand Information</h3>
-                
+
                 {/* Brand Name */}
                 <div className="space-y-1">
                   <label htmlFor="brandName" className="block text-sm font-medium text-gray-700">
@@ -512,18 +601,19 @@ const ConsumerPersona = () => {
                     placeholder="Enter brand name..."
                     maxLength={charLimits.brandName}
                   />
-                  <div className="flex justify-between items-center h-5">
+                  <div className="flex justify-between items-center h-5"> {/* Added flex layout */}
                     {fieldErrors.brandName && (
                       <p id="brandName-error" className="text-red-500 text-xs">
                         {fieldErrors.brandName}
                       </p>
                     )}
-                    <p className="text-gray-500 text-xs ml-auto">
+                    {/* Moved character count here for better flow with error */}
+                    <p className={`text-xs ml-auto ${fieldErrors.brandName ? 'text-red-500' : 'text-gray-500'}`}>
                       {formData.brandName.length}/{charLimits.brandName}
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Brand Description */}
                 <div className="space-y-1">
                   <label htmlFor="brandDescription" className="block text-sm font-medium text-gray-700">
@@ -543,23 +633,24 @@ const ConsumerPersona = () => {
                     rows="3"
                     maxLength={charLimits.brandDescription}
                   />
-                  <div className="flex justify-between items-center h-5">
+                  <div className="flex justify-between items-center h-5"> {/* Added flex layout */}
                     {fieldErrors.brandDescription && (
                       <p id="brandDescription-error" className="text-red-500 text-xs">
                         {fieldErrors.brandDescription}
                       </p>
                     )}
-                    <p className="text-gray-500 text-xs ml-auto">
+                    {/* Moved character count here */}
+                    <p className={`text-xs ml-auto ${fieldErrors.brandDescription ? 'text-red-500' : 'text-gray-500'}`}>
                       {formData.brandDescription.length}/{charLimits.brandDescription}
                     </p>
                   </div>
                 </div>
               </div>
-              
+
               {/* Persona Information - Right Column */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-800 border-b pb-1">Persona Information</h3>
-                
+
                 {/* Two columns for name and age */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Person's Name */}
@@ -581,18 +672,19 @@ const ConsumerPersona = () => {
                       placeholder="Enter name..."
                       maxLength={charLimits.personName}
                     />
-                    <div className="h-5">
+                    <div className="flex justify-between items-center h-5"> {/* Added flex layout */}
                       {fieldErrors.personName && (
                         <p id="personName-error" className="text-red-500 text-xs">
                           {fieldErrors.personName}
                         </p>
                       )}
-                      <p className="text-gray-500 text-xs ml-auto">
+                       {/* Moved character count here */}
+                      <p className={`text-xs ml-auto ${fieldErrors.personName ? 'text-red-500' : 'text-gray-500'}`}>
                       {formData.personName.length}/{charLimits.personName}
                     </p>
                     </div>
                   </div>
-                  
+
                   {/* Person's Age */}
                   <div className="space-y-1">
                     <label htmlFor="personAge" className="block text-sm font-medium text-gray-700">
@@ -612,19 +704,20 @@ const ConsumerPersona = () => {
                       placeholder="e.g., 35..."
                       maxLength={charLimits.personAge}
                     />
-                    <div className="h-5">
+                    <div className="flex justify-between items-center h-5"> {/* Added flex layout */}
                       {fieldErrors.personAge && (
                         <p id="personAge-error" className="text-red-500 text-xs">
                           {fieldErrors.personAge}
                         </p>
                       )}
-                      <p className="text-gray-500 text-xs ml-auto">
+                       {/* Moved character count here */}
+                      <p className={`text-xs ml-auto ${fieldErrors.personAge ? 'text-red-500' : 'text-gray-500'}`}>
                       {formData.personAge.length}/{charLimits.personAge}
                     </p>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Two columns for occupation and location */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Person's Occupation */}
@@ -646,18 +739,19 @@ const ConsumerPersona = () => {
                       placeholder="Enter occupation..."
                       maxLength={charLimits.personOccupation}
                     />
-                    <div className="h-5">
+                    <div className="flex justify-between items-center h-5"> {/* Added flex layout */}
                       {fieldErrors.personOccupation && (
                         <p id="personOccupation-error" className="text-red-500 text-xs">
                           {fieldErrors.personOccupation}
                         </p>
                       )}
-                      <p className="text-gray-500 text-xs ml-auto">
+                       {/* Moved character count here */}
+                      <p className={`text-xs ml-auto ${fieldErrors.personOccupation ? 'text-red-500' : 'text-gray-500'}`}>
                       {formData.personOccupation.length}/{charLimits.personOccupation}
                     </p>
                     </div>
                   </div>
-                  
+
                   {/* Person's Location */}
                   <div className="space-y-1">
                     <label htmlFor="personLocation" className="block text-sm font-medium text-gray-700">
@@ -677,12 +771,14 @@ const ConsumerPersona = () => {
                       placeholder="e.g., London, UK..."
                       maxLength={charLimits.personLocation}
                     />
-                    <div className="h-5">
+                    <div className="flex justify-between items-center h-5"> {/* Added flex layout */}
                       {fieldErrors.personLocation && (
                         <p id="personLocation-error" className="text-red-500 text-xs">
                           {fieldErrors.personLocation}
                         </p>
-                      )}<p className="text-gray-500 text-xs ml-auto">
+                      )}
+                       {/* Moved character count here */}
+                      <p className={`text-xs ml-auto ${fieldErrors.personLocation ? 'text-red-500' : 'text-gray-500'}`}>
                       {formData.personLocation.length}/{charLimits.personLocation}
                     </p>
                     </div>
@@ -699,7 +795,7 @@ const ConsumerPersona = () => {
           disabled={isSubmitDisabled}
           className={`w-full p-3 rounded-lg transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 ${
             isSubmitDisabled
-              ? "bg-gray-400 text-gray-700 cursor-not-allowed" 
+              ? "bg-gray-400 text-gray-700 cursor-not-allowed"
               : "bg-blue-900 text-white hover:bg-blue-800 focus:ring-blue-500"
           }`}
           aria-busy={loading}
@@ -707,7 +803,7 @@ const ConsumerPersona = () => {
         >
           {loading ? (
             <div className="flex items-center justify-center">
-              <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></span>
+              <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></span> {/* Standard spinner */}
               Generating...
             </div>
           ) : (submissionCount !== null && submissionCount >= submissionLimit) ? (
@@ -723,9 +819,16 @@ const ConsumerPersona = () => {
             You have {submissionLimit - submissionCount} submission{submissionLimit - submissionCount !== 1 ? "s" : ""} remaining.
           </p>
         )}
+         {/* Display submission limit message */}
+         {submissionCount !== null && submissionCount >= submissionLimit && (
+             <p className="text-center mt-2 text-sm text-red-600">
+                Submission limit of {submissionLimit} reached. Please try again tomorrow.
+             </p>
+         )}
+
 
         {/* Generated Persona Display */}
-        {persona && (
+        {persona && ( // Only show this section if persona data exists
           <>
             <section
               className="mt-12"
@@ -737,16 +840,51 @@ const ConsumerPersona = () => {
                 Consumer persona
               </h2>
 
-              {/* Persona Image */}
-              {persona.imageUrl && (
-                <div className="flex justify-center mb-8">
-                  <img
-                    src={persona.imageUrl}
-                    alt={persona.demographics?.name ? `Portrait of ${persona.demographics.name}` : 'Generated persona portrait'}
-                    className="rounded-full h-48 w-48 object-cover border-2 border-green-200 shadow-lg"
-                  />
+              {/* Persona Image Container with Loading/Error */}
+              <div className="flex justify-center mb-8">
+                {/* This container is needed for relative positioning and dimensions */}
+                <div className="relative h-48 w-48 rounded-full overflow-hidden border-2 border-green-200 shadow-lg bg-gray-100 flex items-center justify-center"> {/* Added bg and flex centering for loader/placeholder */}
+                    {persona.imageUrl ? (
+                        <> {/* Fragment to hold Image and overlays */}
+                            <Image
+                                src={persona.imageUrl}
+                                alt={persona.demographics?.name ? `Portrait of ${persona.demographics.name}` : 'Generated persona portrait'}
+                                // Added width and height based on the generated image size (256x256 from API)
+                                width={256}
+                                height={256}
+                                // Added sizes prop matching the container width (Tailwind w-48 = ~192px)
+                                // This helps Next.js determine the optimal image size to serve
+                                sizes="192px"
+                                // Use object-cover via className
+                                className={`object-cover transition-opacity duration-300 ${imageStatus === 'loaded' ? 'opacity-100' : 'opacity-0'}`}
+                                onLoad={() => setImageStatus('loaded')}
+                                onError={(e) => {
+                                     console.error("Image failed to load:", e);
+                                     setImageStatus('error');
+                                }}
+                            />
+                            {/* Loader Overlay */}
+                            {imageStatus === 'loading' && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+                                    <Loader2 className="h-8 w-8 animate-spin text-gray-500" /> {/* Use Loader2 icon */}
+                                </div>
+                            )}
+                             {/* Error Overlay */}
+                             {imageStatus === 'error' && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-100/80 z-10 rounded-full text-red-600 p-2 text-center text-sm">
+                                     <AlertTriangle className="h-8 w-8 mb-1" />
+                                     <p>Image Failed</p>
+                                </div>
+                             )}
+                        </>
+                    ) : (
+                         // Placeholder if persona exists but imageUrl is null (e.g., API didn't return one)
+                        <div className="relative h-48 w-48 rounded-full overflow-hidden border-2 border-green-200 shadow-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                             <LucideImageIcon className="w-16 h-16" /> {/* Use appropriate icon */}
+                         </div>
+                    )}
                 </div>
-              )}
+              </div>
 
               {/* Grid Layout for Persona Details - All headings and icons are black */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -819,17 +957,29 @@ const ConsumerPersona = () => {
                     <BookOpen className="h-6 w-6 mr-3 text-black" aria-hidden="true" />
                     <h3 className="text-2xl font-semibold text-black">Context & story</h3>
                   </div>
-                  {persona.quote && (
+                  {/* Changed check to ensure persona.quote is not just empty whitespace before adding */}
+                  {persona.quote && persona.quote.trim() !== "" ? (
                     <div className="mb-4">
                       <p className="font-bold mb-2">Quote:</p>
                       <p className="text-gray-800 italic">{persona.quote}</p>
                     </div>
+                  ) : (persona.quote !== undefined && persona.quote !== null) && ( // Explicitly show N/A if quote is null/undefined/empty string
+                     <div className="mb-4">
+                       <p className="font-bold mb-2">Quote:</p>
+                       <p className="text-gray-800 italic">N/A</p>
+                     </div>
                   )}
-                  {persona.scenario && (
+                  {/* Changed check to ensure persona.scenario is not just empty whitespace before adding */}
+                  {persona.scenario && persona.scenario.trim() !== "" ? (
                     <div>
                       <p className="font-bold mb-2">Scenario:</p>
                       <p className="text-gray-800">{persona.scenario}</p>
                     </div>
+                  ) : (persona.scenario !== undefined && persona.scenario !== null) && ( // Explicitly show N/A if scenario is null/undefined/empty string
+                      <div>
+                       <p className="font-bold mb-2">Scenario:</p>
+                       <p className="text-gray-800">N/A</p>
+                      </div>
                   )}
                 </div>
               )}
@@ -850,7 +1000,9 @@ const ConsumerPersona = () => {
             <div className="text-center mt-10">
               <button
                 onClick={handleDownloadPDF}
-                className="bg-green-700 text-white py-2 px-6 rounded-lg hover:bg-green-800 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                 // Disable download while image is loading if you want to wait for it
+                 // disabled={imageStatus === 'loading'}
+                className="bg-green-700 text-white py-2 px-6 rounded-lg hover:bg-green-800 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Download as PDF
               </button>

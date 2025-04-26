@@ -19,19 +19,31 @@ const PLATFORM_CONFIG = [
     { key: 'tiktok', label: 'TikTok Post', icon: Film },
 ];
 
-// --- PlatformPostDisplay Component (Modified for next/image) ---
+// --- PlatformPostDisplay Component (Modified for next/image modern API) ---
 // Component to render the generated post based on the selected platform
 const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignIdea }) => {
+    // State to track image loading status
+    const [imageStatus, setImageStatus] = useState('idle'); // 'idle', 'loading', 'loaded', 'error'
+
+    // Effect to reset image status when imageUrl changes (new generation)
+    useEffect(() => {
+        // Only set loading if a URL exists, otherwise reset to idle
+        if (imageUrl) {
+            setImageStatus('loading');
+        } else {
+            setImageStatus('idle');
+        }
+    }, [imageUrl]); // Only run when imageUrl updates
+
     // Basic alt text for the generated image
     const imageAlt = `Generated image for ${productName} campaign about ${campaignIdea}`;
     let subjectLine = null;
 
     // Special handling for email subject line
-     if (platform === 'email' && text && text.includes('Subject: ')) {
+    if (platform === 'email' && text && text.includes('Subject: ')) {
         const parts = text.split('Subject: ');
         subjectLine = parts.length > 1 ? parts[1].split('\n')[0].trim() : '[Generated Subject Line]';
         // Remove the subject line from the main body text for display
-        // Find the first newline after the subject line
         const newlineAfterSubjectIndex = text.indexOf('\n', text.indexOf('Subject: ') + 'Subject: '.length);
         if (newlineAfterSubjectIndex !== -1) {
              text = text.substring(0, text.indexOf('Subject: ')) + text.substring(newlineAfterSubjectIndex + 1).trim();
@@ -41,6 +53,79 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
         }
          text = text.trim(); // Final trim just in case
     }
+
+    // Assuming API generates images at 1024x1024 for width/height props (DALL-E 3 standard square)
+    const IMAGE_INTRINSIC_SIZE = 1024;
+
+    // Common image rendering logic with loading/error states, returning the container element
+    const renderImageContainer = ({ containerClasses, placeholderBgClass, imageClasses = '', placeholderIconSize = 'w-16 h-16' }) => {
+
+        // Determine the 'sizes' prop based on the container's max width or explicit size
+        // These values hint to Next.js the expected rendered size for optimization.
+        // Tailwind default breakpoints/widths: sm: 640, md: 768, lg: 1024, xl: 1280, 2xl: 1536
+        // max-w-2xl = 42rem = 672px
+        // max-w-md = 28rem = 448px
+        // max-w-sm = 24rem = 384px
+        // max-w-[280px] = 280px
+        let sizes = '100vw'; // Default, less specific
+
+        if (containerClasses.includes('max-w-2xl')) sizes = '(max-width: 768px) 100vw, 672px';
+        else if (containerClasses.includes('max-w-md')) sizes = '(max-width: 768px) 100vw, 448px';
+        else if (containerClasses.includes('max-w-sm') && containerClasses.includes('aspect-square')) sizes = '(max-width: 640px) 100vw, 384px'; // Assuming full width up to sm, then fixed size
+        else if (containerClasses.includes('max-w-[280px]')) sizes = '280px';
+
+
+        return (
+            // The main container needs position: relative and defined dimensions (from containerClasses)
+            <div className={`relative ${containerClasses} ${placeholderBgClass} overflow-hidden flex items-center justify-center text-gray-400`}>
+
+                {imageUrl ? (
+                    <> {/* Fragment to hold Image and overlays */}
+                        <Image
+                            src={imageUrl}
+                            alt={imageAlt}
+                            // Intrinsic dimensions of the image returned by the API
+                            width={IMAGE_INTRINSIC_SIZE} // Required prop
+                            height={IMAGE_INTRINSIC_SIZE} // Required prop
+                            // Sizes prop hints at the rendered size for optimization
+                            sizes={sizes}
+                            // Use object-cover via className (or other object-* classes)
+                            className={`object-cover ${imageClasses} transition-opacity duration-300 ${imageStatus === 'loaded' ? 'opacity-100' : 'opacity-0'}`}
+                            onLoad={() => setImageStatus('loaded')}
+                            onError={(e) => {
+                                 console.error("Image loading error:", e);
+                                 setImageStatus('error');
+                             }}
+                        />
+                        {/* Loader Overlay */}
+                        {imageStatus === 'loading' && (
+                            // Use placeholder background color, centered flex
+                            <div className={`absolute inset-0 flex items-center justify-center ${placeholderBgClass || 'bg-white/80'} z-10`}>
+                                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+                            </div>
+                        )}
+                         {/* Error Overlay */}
+                         {imageStatus === 'error' && (
+                              // Use placeholder background color, centered flex, text
+                             <div className={`absolute inset-0 flex flex-col items-center justify-center bg-red-100/80 z-10 text-red-600 p-2 text-center text-sm ${imageClasses.includes('rounded') ? 'rounded' : ''}`}> {/* Apply rounded if original image had it */}
+                                  <AlertTriangle className="h-8 w-8 mb-1" />
+                                  <span>Image Failed</span>
+                             </div>
+                         )}
+                    </>
+                ) : (
+                     // Placeholder if no image URL is available
+                     // This div already has containerClasses, placeholderBgClass, centering, and text-gray-400 applied by the parent div.
+                     // Just need the specific icon.
+                     platform === 'tiktok' ? (
+                         <Film className={placeholderIconSize} />
+                     ) : (
+                         <LucideImageIcon className={placeholderIconSize} />
+                     )
+                )}
+            </div>
+        );
+    };
 
 
     switch (platform) {
@@ -53,18 +138,12 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                         <p><strong>To:</strong> Valued Customer (customer@email.com)</p>
                     </div>
                     <div className="p-6 space-y-4">
-                        {imageUrl && (
-                            // Image Container - Added relative and defined height/max-height
-                            <div className="relative w-full h-64 max-h-64 rounded mb-4 border border-gray-200 overflow-hidden">
-                                <Image
-                                    src={imageUrl}
-                                    alt={imageAlt}
-                                    layout="fill" // Use fill layout as dimensions are unknown
-                                    objectFit="cover" // How the image should fit
-                                    className="rounded" // Apply rounded corners to the image within the container
-                                />
-                            </div>
-                        )}
+                        {/* Call renderImageContainer with specific classes for this platform */}
+                         {renderImageContainer({
+                             containerClasses: 'w-full h-64 max-h-64 rounded mb-4 border border-gray-200',
+                             placeholderBgClass: 'bg-gray-100',
+                             imageClasses: 'rounded' // Apply rounded corners to the image
+                         })}
                         <div className="prose prose-sm max-w-none text-gray-800 whitespace-pre-wrap">
                             {text || 'Generated email content will appear here...'}
                         </div>
@@ -94,17 +173,11 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                     <div className="p-3 text-sm text-gray-800 whitespace-pre-wrap">
                         {text || 'Generated Facebook post content will appear here...'}
                     </div>
-                    {/* Facebook Image - Added relative container */}
-                    {imageUrl && (
-                        <div className="relative bg-gray-200 border-t border-b border-gray-200 w-full h-72 max-h-96 overflow-hidden"> {/* Added height/max-height */}
-                            <Image
-                                src={imageUrl}
-                                alt={imageAlt}
-                                layout="fill"
-                                objectFit="cover"
-                            />
-                        </div>
-                    )}
+                    {/* Facebook Image Container */}
+                    {renderImageContainer({
+                        containerClasses: 'w-full h-72 max-h-96 border-t border-b border-gray-200', // Note: Original had border on container
+                        placeholderBgClass: 'bg-gray-200'
+                    })}
                     {/* Facebook Actions */}
                     <div className="p-2 border-t border-gray-200 flex justify-around text-sm text-gray-600">
                         <button className="flex items-center space-x-1 hover:bg-gray-100 rounded px-2 py-1">
@@ -144,18 +217,12 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                             <div className="mt-1 text-sm text-gray-800 whitespace-pre-wrap">
                                 {text || 'Generated X post content will appear here...'}
                             </div>
-                            {/* X Image - Added relative container */}
-                            {imageUrl && (
-                                <div className="relative mt-2 border border-gray-200 rounded-lg overflow-hidden w-full h-64 max-h-80"> {/* Added height/max-height */}
-                                    <Image
-                                        src={imageUrl}
-                                        alt={imageAlt}
-                                        layout="fill"
-                                        objectFit="cover"
-                                        className="rounded-lg" // Apply rounded corners
-                                    />
-                                </div>
-                            )}
+                            {/* X Image Container */}
+                             {renderImageContainer({
+                                 containerClasses: 'mt-2 border border-gray-200 rounded-lg w-full h-64 max-h-80', // Note: Original had border on container
+                                 placeholderBgClass: 'bg-gray-100',
+                                 imageClasses: 'rounded-lg' // Apply rounded corners to the image
+                             })}
                             {/* X Actions */}
                             <div className="mt-2 flex justify-between text-sm text-gray-500 max-w-xs">
                                 <button className="flex items-center space-x-1 hover:text-blue-500">
@@ -194,22 +261,12 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                             <MoreHorizontal className="w-5 h-5" />
                         </div>
                     </div>
-                    {/* Instagram Image - Added relative container with aspect ratio */}
-                    {imageUrl ? (
-                        <div className="relative bg-gray-200 aspect-square overflow-hidden"> {/* Added relative */}
-                             <Image
-                                src={imageUrl}
-                                alt={imageAlt}
-                                layout="fill"
-                                objectFit="cover"
-                            />
-                        </div>
-                    ) : (
-                        // Placeholder - Ensure it has the same aspect ratio and relative positioning if it's a direct sibling possibility
-                        <div className="relative bg-gray-200 aspect-square flex items-center justify-center text-gray-400">
-                            <LucideImageIcon className="w-16 h-16" /> {/* Use renamed icon */}
-                        </div>
-                    )}
+                    {/* Instagram Image Container */}
+                     {renderImageContainer({
+                         containerClasses: 'aspect-square', // Use aspect ratio for sizing
+                         placeholderBgClass: 'bg-gray-200',
+                         imageClasses: '' // No specific image class for Instagram here (like rounded)
+                     })}
                     {/* Instagram Actions */}
                     <div className="p-3 space-y-2">
                         <div className="flex justify-between items-center">
@@ -245,22 +302,15 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
              return (
                 <div className="relative border border-gray-800 rounded-lg shadow-lg w-full max-w-[280px] aspect-[9/16] min-h-[498px] mx-auto bg-black overflow-hidden">
                     {/* TikTok Background Image/Video Placeholder */}
-                    {imageUrl ? (
-                        // Image - Already had absolute/inset, just need to add relative to parent
-                        <Image
-                            src={imageUrl}
-                            alt={imageAlt}
-                            layout="fill"
-                            objectFit="cover"
-                            className="opacity-80" // Apply opacity via className
-                        />
-                    ) : (
-                        <div className="absolute inset-0 bg-gray-700 flex items-center justify-center text-gray-400">
-                            <Film className="w-16 h-16" />
-                        </div>
-                    )}
-                    {/* TikTok Overlay Content */}
-                    <div className="absolute bottom-0 left-0 right-12 p-3 bg-gradient-to-t from-black/70 via-black/40 to-transparent text-white z-10">
+                     {/* Note: TikTok background image needs to be absolutely positioned and cover the *entire* parent div */}
+                     {renderImageContainer({
+                         containerClasses: 'absolute inset-0', // Position absolute to cover parent
+                         placeholderBgClass: 'bg-gray-700/80', // Darker background for TikTok placeholder/loader
+                         imageClasses: 'opacity-80', // Keep the opacity effect
+                         placeholderIconSize: 'w-16 h-16' // Use default size
+                     })}
+                    {/* TikTok Overlay Content - Keep z-index above image and overlays */}
+                    <div className="absolute bottom-0 left-0 right-12 p-3 bg-gradient-to-t from-black/70 via-black/40 to-transparent text-white z-20"> {/* Increased z-index */}
                         <p className="text-sm font-semibold">@yourbrand</p>
                         <p className="text-xs mt-1 leading-tight whitespace-pre-wrap">{text || 'Generated TikTok caption will appear here...'}</p>
                         <p className="text-xs mt-1 flex items-center">
@@ -271,8 +321,8 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                             Original Sound - Your Brand
                         </p>
                     </div>
-                    {/* TikTok Side Action Icons */}
-                    <div className="absolute right-2 bottom-16 flex flex-col items-center space-y-4 text-white z-10">
+                    {/* TikTok Side Action Icons - Keep z-index above image and overlays */}
+                    <div className="absolute right-2 bottom-16 flex flex-col items-center space-y-4 text-white z-20"> {/* Increased z-index */}
                         {/* Profile Pic placeholder */}
                         <div className="w-10 h-10 bg-gray-400 rounded-full border-2 border-white mb-1"></div>
                         {/* Actions */}
@@ -310,6 +360,15 @@ const styles = `
 .animate-spin-slow {
   animation: spin-slow 5s linear infinite;
 }
+/* Add standard spin keyframes if not in global.css */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 `;
 // In Next.js App Router, you can often put global styles in global.css
 // or use a styled-jsx like approach if needed for component-level styles.
@@ -321,7 +380,6 @@ const SocialCampaignGenerator = () => {
     // State for form inputs
     const [campaignIdea, setCampaignIdea] = useState('');
     const [productName, setProductName] = useState('');
-    // Removed platform state: const [platform, setPlatform] = useState('instagram');
 
     // State for API interaction
     const [loading, setLoading] = useState(false);
@@ -385,6 +443,8 @@ const SocialCampaignGenerator = () => {
             if (liveRegionRef.current) {
                 liveRegionRef.current.textContent = `Error generating campaign content: ${err.message}`;
             }
+             // If generation fails, clear any potentially half-set result
+            setResult({ imageUrl: null, texts: null });
         } finally {
             setLoading(false);
         }
@@ -396,15 +456,16 @@ const SocialCampaignGenerator = () => {
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev === 0 ? PLATFORM_CONFIG.length - 1 : prev + 1)); // Fixed prevSlide logic
+        setCurrentSlide((prev) => (prev === 0 ? PLATFORM_CONFIG.length - 1 : prev - 1)); // Fixed prevSlide logic
     };
 
     // Effect to scroll to results when they appear
     useEffect(() => {
+        // Scroll only when texts is available (indicating successful generation)
         if (result.texts && resultRef.current) {
             resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, [result]);
+    }, [result.texts]); // Depend only on texts becoming available
 
     // Get the current platform config based on the slide index
     const currentPlatformConfig = PLATFORM_CONFIG[currentSlide];
@@ -496,7 +557,7 @@ const SocialCampaignGenerator = () => {
                 )}
 
                 {/* Results Display Area - Carousel */}
-                {result.texts && (
+                {result.texts && ( // Show results section as soon as text is available
                     <div ref={resultRef} className="bg-white rounded-lg shadow-md p-6 mt-8" aria-labelledby="results-heading">
                         <h2 id="results-heading" className="text-xl font-semibold text-gray-800 mb-4 text-center">
                             Generated Campaign Content
