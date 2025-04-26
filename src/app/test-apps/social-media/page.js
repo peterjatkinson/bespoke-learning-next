@@ -2,8 +2,10 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+// Import the Image component from next/image
+import Image from 'next/image';
 import {
-    Send, Mail, Facebook, Twitter, Instagram, Film, Loader2, AlertTriangle, Image as ImageIcon,
+    Send, Mail, Facebook, Twitter, Instagram, Film, Loader2, AlertTriangle, Image as LucideImageIcon, // Renamed icon to avoid conflict
     Heart, MessageSquare, ThumbsUp, Share2, Repeat, Upload, Bookmark, MoreHorizontal,
     ChevronLeft, ChevronRight // Icons for carousel controls
 } from 'lucide-react';
@@ -17,8 +19,7 @@ const PLATFORM_CONFIG = [
     { key: 'tiktok', label: 'TikTok Post', icon: Film },
 ];
 
-// --- PlatformPostDisplay Component (No changes needed) ---
-// (Keep the exact same PlatformPostDisplay component from the previous version)
+// --- PlatformPostDisplay Component (Modified for next/image) ---
 // Component to render the generated post based on the selected platform
 const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignIdea }) => {
     // Basic alt text for the generated image
@@ -30,8 +31,17 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
         const parts = text.split('Subject: ');
         subjectLine = parts.length > 1 ? parts[1].split('\n')[0].trim() : '[Generated Subject Line]';
         // Remove the subject line from the main body text for display
-        text = parts[0].trim() + '\n' + text.substring(text.indexOf('\n') + 1).trim();
+        // Find the first newline after the subject line
+        const newlineAfterSubjectIndex = text.indexOf('\n', text.indexOf('Subject: ') + 'Subject: '.length);
+        if (newlineAfterSubjectIndex !== -1) {
+             text = text.substring(0, text.indexOf('Subject: ')) + text.substring(newlineAfterSubjectIndex + 1).trim();
+        } else {
+             // Handle case where subject is the last line (unlikely but safe)
+             text = text.substring(0, text.indexOf('Subject: ')).trim();
+        }
+         text = text.trim(); // Final trim just in case
     }
+
 
     switch (platform) {
         case 'email':
@@ -44,7 +54,16 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                     </div>
                     <div className="p-6 space-y-4">
                         {imageUrl && (
-                            <img src={imageUrl} alt={imageAlt} className="w-full h-auto max-h-64 object-cover rounded mb-4 border border-gray-200" />
+                            // Image Container - Added relative and defined height/max-height
+                            <div className="relative w-full h-64 max-h-64 rounded mb-4 border border-gray-200 overflow-hidden">
+                                <Image
+                                    src={imageUrl}
+                                    alt={imageAlt}
+                                    layout="fill" // Use fill layout as dimensions are unknown
+                                    objectFit="cover" // How the image should fit
+                                    className="rounded" // Apply rounded corners to the image within the container
+                                />
+                            </div>
                         )}
                         <div className="prose prose-sm max-w-none text-gray-800 whitespace-pre-wrap">
                             {text || 'Generated email content will appear here...'}
@@ -75,10 +94,15 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                     <div className="p-3 text-sm text-gray-800 whitespace-pre-wrap">
                         {text || 'Generated Facebook post content will appear here...'}
                     </div>
-                    {/* Facebook Image */}
+                    {/* Facebook Image - Added relative container */}
                     {imageUrl && (
-                        <div className="bg-gray-200 border-t border-b border-gray-200">
-                            <img src={imageUrl} alt={imageAlt} className="w-full h-auto max-h-96 object-cover" />
+                        <div className="relative bg-gray-200 border-t border-b border-gray-200 w-full h-72 max-h-96 overflow-hidden"> {/* Added height/max-height */}
+                            <Image
+                                src={imageUrl}
+                                alt={imageAlt}
+                                layout="fill"
+                                objectFit="cover"
+                            />
                         </div>
                     )}
                     {/* Facebook Actions */}
@@ -120,10 +144,16 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                             <div className="mt-1 text-sm text-gray-800 whitespace-pre-wrap">
                                 {text || 'Generated X post content will appear here...'}
                             </div>
-                            {/* X Image */}
+                            {/* X Image - Added relative container */}
                             {imageUrl && (
-                                <div className="mt-2 border border-gray-200 rounded-lg overflow-hidden">
-                                    <img src={imageUrl} alt={imageAlt} className="w-full h-auto max-h-80 object-cover" />
+                                <div className="relative mt-2 border border-gray-200 rounded-lg overflow-hidden w-full h-64 max-h-80"> {/* Added height/max-height */}
+                                    <Image
+                                        src={imageUrl}
+                                        alt={imageAlt}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        className="rounded-lg" // Apply rounded corners
+                                    />
                                 </div>
                             )}
                             {/* X Actions */}
@@ -164,14 +194,20 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                             <MoreHorizontal className="w-5 h-5" />
                         </div>
                     </div>
-                    {/* Instagram Image */}
+                    {/* Instagram Image - Added relative container with aspect ratio */}
                     {imageUrl ? (
-                        <div className="bg-gray-200 aspect-square">
-                            <img src={imageUrl} alt={imageAlt} className="w-full h-full object-cover" />
+                        <div className="relative bg-gray-200 aspect-square overflow-hidden"> {/* Added relative */}
+                             <Image
+                                src={imageUrl}
+                                alt={imageAlt}
+                                layout="fill"
+                                objectFit="cover"
+                            />
                         </div>
                     ) : (
-                        <div className="bg-gray-200 aspect-square flex items-center justify-center text-gray-400">
-                            <ImageIcon className="w-16 h-16" />
+                        // Placeholder - Ensure it has the same aspect ratio and relative positioning if it's a direct sibling possibility
+                        <div className="relative bg-gray-200 aspect-square flex items-center justify-center text-gray-400">
+                            <LucideImageIcon className="w-16 h-16" /> {/* Use renamed icon */}
                         </div>
                     )}
                     {/* Instagram Actions */}
@@ -210,7 +246,14 @@ const PlatformPostDisplay = ({ platform, text, imageUrl, productName, campaignId
                 <div className="relative border border-gray-800 rounded-lg shadow-lg w-full max-w-[280px] aspect-[9/16] min-h-[498px] mx-auto bg-black overflow-hidden">
                     {/* TikTok Background Image/Video Placeholder */}
                     {imageUrl ? (
-                        <img src={imageUrl} alt={imageAlt} className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                        // Image - Already had absolute/inset, just need to add relative to parent
+                        <Image
+                            src={imageUrl}
+                            alt={imageAlt}
+                            layout="fill"
+                            objectFit="cover"
+                            className="opacity-80" // Apply opacity via className
+                        />
                     ) : (
                         <div className="absolute inset-0 bg-gray-700 flex items-center justify-center text-gray-400">
                             <Film className="w-16 h-16" />
@@ -268,7 +311,10 @@ const styles = `
   animation: spin-slow 5s linear infinite;
 }
 `;
-const StyleInjector = () => <style>{styles}</style>; // Component to inject styles
+// In Next.js App Router, you can often put global styles in global.css
+// or use a styled-jsx like approach if needed for component-level styles.
+// For simplicity, keeping the injector here for now, but consider global styles.
+const StyleInjector = () => <style jsx global>{styles}</style>;
 
 
 const SocialCampaignGenerator = () => {
@@ -350,7 +396,7 @@ const SocialCampaignGenerator = () => {
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev === 0 ? PLATFORM_CONFIG.length - 1 : prev - 1));
+        setCurrentSlide((prev) => (prev === 0 ? PLATFORM_CONFIG.length - 1 : prev + 1)); // Fixed prevSlide logic
     };
 
     // Effect to scroll to results when they appear
@@ -365,7 +411,7 @@ const SocialCampaignGenerator = () => {
 
     return (
         <div className="min-h-full bg-gradient-to-b from-indigo-50 to-purple-100 px-4 py-8">
-             {/* Inject CSS animation */}
+             {/* Inject CSS animation - Use styled-jsx global for App Router */}
             <StyleInjector />
             <div className="max-w-4xl mx-auto"> {/* Increased max-width for better carousel view */}
                 {/* Live region for screen reader announcements */}
@@ -463,9 +509,11 @@ const SocialCampaignGenerator = () => {
                                 {PLATFORM_CONFIG.map((platformConf, index) => (
                                     <div
                                         key={platformConf.key}
-                                        className={`w-full transition-opacity duration-500 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 absolute top-0 left-0 z-0 pointer-events-none'}`}
+                                        // Use flexbox to center the content horizontally
+                                        className={`w-full h-full transition-opacity duration-500 ease-in-out flex justify-center ${index === currentSlide ? 'opacity-100 z-10 relative' : 'opacity-0 absolute top-0 left-0 z-0 pointer-events-none'}`}
                                         aria-hidden={index !== currentSlide}
                                     >
+                                        {/* PlatformPostDisplay content will be centered within this flex item */}
                                         <PlatformPostDisplay
                                             platform={platformConf.key}
                                             text={result.texts[platformConf.key]}
@@ -483,7 +531,6 @@ const SocialCampaignGenerator = () => {
                                     onClick={prevSlide}
                                     className="p-2 rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     aria-label="Previous Platform"
-                                    // Disable if only one platform result exists (though unlikely with current setup)
                                     disabled={PLATFORM_CONFIG.length <= 1}
                                 >
                                     <ChevronLeft className="h-6 w-6" />
