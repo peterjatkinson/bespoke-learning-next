@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Clipboard, RotateCcw, Sparkles } from 'lucide-react';
+import { Clipboard, RotateCcw } from 'lucide-react';
 
 const PositioningStatementCreator = () => {
   // State for form inputs
@@ -15,6 +15,10 @@ const PositioningStatementCreator = () => {
 
   // State for copy success message
   const [copySuccess, setCopySuccess] = useState(false);
+  
+  // State for feedback messages
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -36,6 +40,8 @@ const PositioningStatementCreator = () => {
       usp: ''
     });
     setCopySuccess(false);
+    setFeedbackMessage('Form has been reset');
+    setTimeout(() => setFeedbackMessage(''), 2000);
   };
 
   // Generate positioning statement
@@ -52,8 +58,12 @@ const PositioningStatementCreator = () => {
         navigator.clipboard.writeText(getPositioningStatement())
           .then(() => {
             setCopySuccess(true);
+            setFeedbackMessage('Positioning statement copied to clipboard');
             // Reset success message after 2 seconds
-            setTimeout(() => setCopySuccess(false), 2000);
+            setTimeout(() => {
+              setCopySuccess(false);
+              setFeedbackMessage('');
+            }, 2000);
           })
           .catch(err => {
             console.error('Modern clipboard API failed: ', err);
@@ -90,8 +100,12 @@ const PositioningStatementCreator = () => {
       
       if (successful) {
         setCopySuccess(true);
+        setFeedbackMessage('Positioning statement copied to clipboard');
         // Reset success message after 2 seconds
-        setTimeout(() => setCopySuccess(false), 2000);
+        setTimeout(() => {
+          setCopySuccess(false);
+          setFeedbackMessage('');
+        }, 2000);
       } else {
         console.error('Fallback clipboard copy failed');
       }
@@ -103,8 +117,13 @@ const PositioningStatementCreator = () => {
   return (
     <div className="bg-blue-50 p-6 rounded-lg shadow-sm min-h-full">
       <h1 className="text-4xl font-bold text-center text-gray-800 mb-6 flex justify-center items-center gap-2">
-        Positioning statement creator <Sparkles className="h-6 w-6 text-yellow-400" aria-hidden="true" />
+        Positioning statement creator 
       </h1>
+
+      {/* Screen reader only instructions */}
+      <div className="sr-only" aria-live="polite">
+        This tool helps you create a positioning statement. Fill in each field below: target audience, brand, category or product, key benefit, competitor, and unique selling proposition. As you complete the form, your positioning statement will be generated automatically and is available in full after the input fields.
+      </div>
 
       {/* Form section */}
       <div className="grid grid-cols-1 gap-6 mb-8">
@@ -112,7 +131,6 @@ const PositioningStatementCreator = () => {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Left column */}
             <div className="flex-1">
-              <label htmlFor="targetAudience" className="sr-only">Target audience</label>
               <div className="relative">
                 <input
                   id="targetAudience"
@@ -120,9 +138,9 @@ const PositioningStatementCreator = () => {
                   type="text"
                   value={formData.targetAudience}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors placeholder-black"
                   placeholder="Target audience"
-                  aria-required="true"
+                  aria-label="Target audience"
                 />
                 <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-yellow-400" aria-hidden="true"></span>
               </div>
@@ -130,7 +148,6 @@ const PositioningStatementCreator = () => {
             
             {/* Right column */}
             <div className="flex-1">
-              <label htmlFor="brand" className="sr-only">Brand</label>
               <div className="relative">
                 <input
                   id="brand"
@@ -138,9 +155,9 @@ const PositioningStatementCreator = () => {
                   type="text"
                   value={formData.brand}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors placeholder-black"
                   placeholder="Brand"
-                  aria-required="true"
+                  aria-label="Brand"
                 />
                 <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-yellow-400" aria-hidden="true"></span>
               </div>
@@ -150,7 +167,6 @@ const PositioningStatementCreator = () => {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Left column */}
             <div className="flex-1">
-              <label htmlFor="categoryProduct" className="sr-only">Category/product</label>
               <div className="relative">
                 <input
                   id="categoryProduct"
@@ -158,9 +174,9 @@ const PositioningStatementCreator = () => {
                   type="text"
                   value={formData.categoryProduct}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors placeholder-black"
                   placeholder="Category/product"
-                  aria-required="true"
+                  aria-label="Category or product"
                 />
                 <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-yellow-400" aria-hidden="true"></span>
               </div>
@@ -168,7 +184,6 @@ const PositioningStatementCreator = () => {
             
             {/* Right column */}
             <div className="flex-1">
-              <label htmlFor="keyBenefit" className="sr-only">Key benefit</label>
               <div className="relative">
                 <input
                   id="keyBenefit"
@@ -176,9 +191,9 @@ const PositioningStatementCreator = () => {
                   type="text"
                   value={formData.keyBenefit}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors placeholder-black"
                   placeholder="Key benefit"
-                  aria-required="true"
+                  aria-label="Key benefit"
                 />
                 <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-yellow-400" aria-hidden="true"></span>
               </div>
@@ -188,7 +203,6 @@ const PositioningStatementCreator = () => {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Left column */}
             <div className="flex-1">
-              <label htmlFor="competitor" className="sr-only">Competitor</label>
               <div className="relative">
                 <input
                   id="competitor"
@@ -196,9 +210,9 @@ const PositioningStatementCreator = () => {
                   type="text"
                   value={formData.competitor}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors placeholder-black"
                   placeholder="Competitor"
-                  aria-required="true"
+                  aria-label="Competitor"
                 />
                 <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-yellow-400" aria-hidden="true"></span>
               </div>
@@ -206,7 +220,6 @@ const PositioningStatementCreator = () => {
             
             {/* Right column */}
             <div className="flex-1">
-              <label htmlFor="usp" className="sr-only">USP</label>
               <div className="relative">
                 <input
                   id="usp"
@@ -214,9 +227,9 @@ const PositioningStatementCreator = () => {
                   type="text"
                   value={formData.usp}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors placeholder-black"
                   placeholder="USP"
-                  aria-required="true"
+                  aria-label="USP or unique selling proposition"
                 />
                 <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-yellow-400" aria-hidden="true"></span>
               </div>
@@ -230,9 +243,16 @@ const PositioningStatementCreator = () => {
         <h2 className="text-xl font-bold mb-4 text-gray-700">Your positioning statement:</h2>
         <div 
           className="p-4 border border-blue-100 rounded-lg min-h-16 text-gray-800"
-          aria-live="polite"
         >
           {getPositioningStatement()}
+        </div>
+        
+        {/* Screen reader only feedback message */}
+        <div 
+          className="sr-only" 
+          aria-live="assertive"
+        >
+          {feedbackMessage}
         </div>
       </div>
 
@@ -253,7 +273,7 @@ const PositioningStatementCreator = () => {
         
         <button
           onClick={handleReset}
-          className="flex items-center justify-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-full font-medium transition-colors"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-black hover:bg-gray-700 text-white rounded-full font-medium transition-colors"
           aria-label="Reset form"
         >
           <RotateCcw className="h-5 w-5" aria-hidden="true" />
