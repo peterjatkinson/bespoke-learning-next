@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'; // Import useRef
 import { Clipboard, RotateCcw } from 'lucide-react';
 
 const PositioningStatementCreator = () => {
@@ -19,6 +19,8 @@ const PositioningStatementCreator = () => {
   // State for feedback messages
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
+  // Ref for the copy button
+  const copyButtonRef = useRef(null); // Create a ref
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -41,6 +43,8 @@ const PositioningStatementCreator = () => {
     });
     setCopySuccess(false);
     setFeedbackMessage('Form has been reset');
+    // Note: Focus is typically moved to the first input field after reset,
+    // which is generally a good pattern. Not forcing focus back to reset button.
     setTimeout(() => setFeedbackMessage(''), 2000);
   };
 
@@ -52,26 +56,30 @@ const PositioningStatementCreator = () => {
   // Copy to clipboard
   const copyToClipboard = () => {
     try {
+      const statement = getPositioningStatement(); // Get the statement first
+
       // Create a fallback mechanism for environments where clipboard API is not available
       // First try the modern API
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(getPositioningStatement())
+        navigator.clipboard.writeText(statement)
           .then(() => {
             setCopySuccess(true);
             setFeedbackMessage('Positioning statement copied to clipboard');
+            // *** Add focus call here after setting message ***
+            copyButtonRef.current?.focus(); 
             // Reset success message after 2 seconds
             setTimeout(() => {
               setCopySuccess(false);
-              setFeedbackMessage('');
+              setFeedbackMessage(''); // Clear message
             }, 2000);
           })
           .catch(err => {
             console.error('Modern clipboard API failed: ', err);
-            fallbackCopyToClipboard();
+            fallbackCopyToClipboard(statement); // Pass statement to fallback
           });
       } else {
         // Fall back to older method if modern API is not available
-        fallbackCopyToClipboard();
+        fallbackCopyToClipboard(statement); // Pass statement to fallback
       }
     } catch (err) {
       console.error('Failed to copy: ', err);
@@ -79,11 +87,12 @@ const PositioningStatementCreator = () => {
   };
   
   // Fallback clipboard function for browsers without proper clipboard API
-  const fallbackCopyToClipboard = () => {
+  // Accept statement as an argument
+  const fallbackCopyToClipboard = (statement) => {
     try {
       // Create a temporary textarea element
       const textArea = document.createElement('textarea');
-      textArea.value = getPositioningStatement();
+      textArea.value = statement; // Use the passed statement
       
       // Make the textarea out of viewport
       textArea.style.position = 'fixed';
@@ -101,10 +110,12 @@ const PositioningStatementCreator = () => {
       if (successful) {
         setCopySuccess(true);
         setFeedbackMessage('Positioning statement copied to clipboard');
+         // *** Add focus call here after setting message ***
+        copyButtonRef.current?.focus();
         // Reset success message after 2 seconds
         setTimeout(() => {
           setCopySuccess(false);
-          setFeedbackMessage('');
+          setFeedbackMessage(''); // Clear message
         }, 2000);
       } else {
         console.error('Fallback clipboard copy failed');
@@ -259,6 +270,7 @@ const PositioningStatementCreator = () => {
       {/* Buttons section */}
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <button
+          ref={copyButtonRef} // Attach the ref to the button
           onClick={copyToClipboard}
           className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${
             copySuccess 
