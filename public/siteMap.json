@@ -2,6 +2,9 @@
   "bao-se": [
     "coefficient-graph"
   ],
+  "smo-mf": [
+    "positioning-statement-creator"
+  ],
   "smo-tim": [
     "ai-timeline",
     "blockchain-demo",
