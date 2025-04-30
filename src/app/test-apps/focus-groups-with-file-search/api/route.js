@@ -1,4 +1,3 @@
-// route.js
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -60,13 +59,12 @@ ${targetAudience ? `Audience: ${targetAudience}` : ""}`;
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt },
     ],
-    // Removed the tools parameter for file search
-    // tools: [
-    //   {
-    //     type: "file_search",
-    //     vector_store_ids: ["vs_67ee673383608191b014c30f0581a675"],
-    //   },
-    // ],
+    tools: [
+      {
+        type: "file_search",
+        vector_store_ids: ["vs_67ee673383608191b014c30f0581a675"],
+      },
+    ],
     text: {
       format: {
         type: "json_schema",
@@ -146,9 +144,6 @@ Attitude: ${p.brandAttitude}
 Detail: ${p.personalDetail}
   `.trim()).join("\n\n");
 
-  // Note: The system prompt still mentions using file search for realism,
-  // but the API call below no longer includes the tools parameter,
-  // effectively disabling the functionality.
   const systemPrompt = `You are simulating a focus group for ${brandName}${conceptDescription ? ` (${conceptDescription})` : ''}.
 Your task is to generate responses from each persona that reflect their unique character, attitude toward the brand, and background.
 Each response should be 2-3 sentences and sound natural, as if spoken in a real focus group.
@@ -156,7 +151,7 @@ Keep responses conversational but insightful, with occasional speech quirks or h
 Ensure the responses reflect the persona's attitude toward the brand (loyalist, skeptic, etc.) and their personal background.
 The personas should not always be unrelentingly positive – sometimes they'll be critical, express doubt or be unsure.
 
-IMPORTANT: Your responses should be informed by relevant market research, consumer behavior, and industry trends that apply to this type of product or service.
+IMPORTANT: Your responses should be informed by relevant market research, consumer behavior, and industry trends that apply to this type of product or service. Use the file search function to find relevant information that might inform how these personas would realistically respond.  
 
 You will be given the chat history showing previous questions and answers. Use this to maintain consistency and context. 
 If a question refers to something mentioned earlier, make sure the personas acknowledge this and respond appropriately.
@@ -186,13 +181,12 @@ Return valid JSON:
       { role: "system", content: systemPrompt + "\n\n" + personasContext },
       { role: "user", content: formattedHistory + `\nNEW QUESTION: ${question}` },
     ],
-    // Removed the tools parameter for file search
-    // tools: [
-    //   {
-    //     type: "file_search",
-    //     vector_store_ids: ["vs_67ee673383608191b014c30f0581a675"],
-    //   },
-    // ],
+    tools: [
+      {
+        type: "file_search",
+        vector_store_ids: ["vs_67ee673383608191b014c30f0581a675"],
+      },
+    ],
     text: {
       format: {
         type: "json_object",
@@ -303,7 +297,6 @@ const response = await openai.responses.create({
     { role: "system", content: systemPrompt },
     { role: "user", content: transcript },
   ],
-  // The summary generation function did not originally use the tools parameter
   text: {
     format: {
       type: "json_schema",

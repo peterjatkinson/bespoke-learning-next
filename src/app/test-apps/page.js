@@ -56,6 +56,11 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/focus-groups-with-file-search" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Focus Groups With File Search
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/gaurav-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Gaurav Test
             </a>
