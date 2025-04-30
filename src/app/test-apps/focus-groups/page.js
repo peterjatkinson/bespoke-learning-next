@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { UserCircle, MessageCircle, Send, AlertCircle, RefreshCw, FileText, Download, BarChart, Clipboard, Database } from "lucide-react";
+import { UserCircle, MessageCircle, Send, AlertCircle, RefreshCw, FileText, Download, BarChart, Clipboard } from "lucide-react";
 import { TagCloud } from 'react-tagcloud';
 
 
@@ -77,7 +77,7 @@ const InformedFocusGroupBuilder = () => {
     }
     
     try {
-      const response = await fetch("/test-apps/informed-focus-groups/api", {
+      const response = await fetch("/test-apps/focus-groups/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -146,7 +146,7 @@ const InformedFocusGroupBuilder = () => {
     
     try {
       // Now we send the full question history to maintain context
-      const response = await fetch("/test-apps/informed-focus-groups/api", {
+      const response = await fetch("/test-apps/focus-groups/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -212,11 +212,11 @@ const InformedFocusGroupBuilder = () => {
     setError(null);
     
     if (liveRegionRef.current) {
-      liveRegionRef.current.textContent = "Generating focus group summary with market research insights. Please wait...";
+      liveRegionRef.current.textContent = "Generating focus group summary. Please wait...";
     }
     
     try {
-      const response = await fetch("/test-apps/informed-focus-groups/api", {
+      const response = await fetch("/test-apps/focus-groups/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -342,11 +342,10 @@ const InformedFocusGroupBuilder = () => {
         {/* Header */}
         <header className="text-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-900 mb-2">
-            Data-Informed Focus Group Builder
+            Focus Group Simulator
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto flex items-center justify-center">
-            <Database className="h-4 w-4 mr-2 text-indigo-600" />
-            <span>Create and interact with a diverse focus group that uses existing market research data for more informed responses.</span>
+            <span>Create and interact with a diverse focus group for your brand or product concept.</span>
           </p>
         </header>
         
@@ -516,8 +515,7 @@ const InformedFocusGroupBuilder = () => {
             <div className="h-96 overflow-y-auto p-4" id="chat-container">
               {questionHistory.length === 0 && (
                 <p className="text-center text-gray-500 my-8 flex flex-col items-center">
-                  <Database className="h-10 w-10 mb-2 text-indigo-200" />
-                  Ask a question below to see how the focus group responds with insights informed by market research data!
+                  Ask a question below to see how the focus group responds!
                 </p>
               )}
               
@@ -615,7 +613,7 @@ const InformedFocusGroupBuilder = () => {
               {generatingSummary ? (
                 <>
                   <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
-                  Generating Research-Informed Summary...
+                  Generating Summary...
                 </>
               ) : (
                 <>
@@ -642,7 +640,7 @@ const InformedFocusGroupBuilder = () => {
           <div ref={summaryRef} className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
             <h2 className="text-xl font-semibold text-gray-800 p-4 border-b flex items-center">
               <BarChart className="h-5 w-5 mr-2 text-green-600" />
-              Focus Group Summary with Market Context
+              Focus Group Summary
             </h2>
             
             <div className="p-6">
@@ -729,21 +727,21 @@ const InformedFocusGroupBuilder = () => {
         {questionHistory.length > 0 && (
           <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-100">
             <h2 className="text-xl font-semibold text-indigo-900 mb-4 flex items-center">
-              <Database className="h-5 w-5 mr-2 text-indigo-700" />
-              About Data-Informed Focus Groups
+              Critical Reflection
             </h2>
             <div className="space-y-4 text-gray-700">
               <p className="font-medium">
-                This tool combines synthetic focus group personas with actual market research data to provide more realistic insights.
+              Consider the following questions about this synthetic focus group:
               </p>
               <ul className="list-disc pl-5 space-y-2">
-                <li>Personas are created by AI but their responses are informed by market trends and consumer behavior data</li>
-                <li>The summary provides connections to broader market contexts based on research data</li>
-                <li>This approach helps bridge the gap between purely synthetic responses and real market insights</li>
-                <li>However, while more informed than standard synthetic groups, this should still be validated with real consumer research</li>
+                <li>Were the responses realistic or did they seem stereotyped?</li>
+                <li>Was the sample diverse enough for your research needs?</li>
+                <li>What are the risks of assuming these AI-generated answers reflect real consumer opinions?</li>
+                <li>What questions worked well? What questions could be improved?</li>
+                <li>How might you validate these insights with real consumers?</li>
               </ul>
               <p className="mt-4 text-sm text-indigo-700 italic">
-                Remember: This tool provides realistic simulations grounded in market data, but should be used as a complement to, not a replacement for, direct consumer research.
+                Remember: This is a learning tool that simulates focus group dynamics, but real consumer research remains essential for validating insights.
               </p>
             </div>
           </div>

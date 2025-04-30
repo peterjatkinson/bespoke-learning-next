@@ -51,13 +51,13 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
-            <a href="/test-apps/gaurav-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
-              Gaurav Test
+            <a href="/test-apps/focus-groups" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Focus Groups
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
-            <a href="/test-apps/informed-focus-groups" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
-              Informed Focus Groups
+            <a href="/test-apps/gaurav-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Gaurav Test
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
