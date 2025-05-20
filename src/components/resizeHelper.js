@@ -6,6 +6,9 @@ export function initiateAutoResize(canvasPostMessageToken = null) { // canvasPos
     return;
   }
 
+    container.style.overflow = "hidden"; // Prevent internal scrollbars on the observed container
+
+
   let prevHeight = 0;
   const minHeightThreshold = 100;
   const extraPadding = 30;
