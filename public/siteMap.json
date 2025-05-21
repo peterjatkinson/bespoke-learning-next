@@ -19,6 +19,7 @@
   "test-apps": [
     "analytics-processor",
     "average-calculator",
+    "bad-example",
     "cientside-database",
     "claude-test",
     "claude-test-two",
