@@ -61,7 +61,7 @@ window.parent.postMessage(JSON.stringify(messagePayload), "*");
       console.log("LTI iFrame Resizer: Sending initial resize message.");
       sendResizeMessage(initialHeight);
       prevHeight = initialHeight;
-    }, 250);
+    }, 1000);
   } catch (error) {
     console.error("LTI iFrame Resizer: Error setting up ResizeObserver.", error);
   }
