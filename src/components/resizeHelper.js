@@ -15,10 +15,12 @@ export function initiateLtiAutoResize() {
     console.log("LTI iFrame Resizer: Sending resize message. Height:", newHeight);
 
     // Standard LTI resize message payload
-    const messagePayload = {
-      subject: "lti.frameResize", // This is the standard message subject
-      height: newHeight,
-    };
+const messagePayload = {
+  subject: "lti.frameResize",
+  handler: "lti.frameResize", // Adding this as a fallback
+  height: newHeight,
+};
+
 
     if (window.parent && window.parent !== window) {
       // While Brightspace example stringified, postMessage typically handles objects.
