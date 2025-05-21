@@ -24,7 +24,7 @@ export function initiateLtiAutoResize() {
       // While Brightspace example stringified, postMessage typically handles objects.
       // Sending as an object is more common for this LTI message.
       // If issues persist with Blackboard, you could try JSON.stringify(messagePayload) here.
-      window.parent.postMessage(messagePayload, "*");
+window.parent.postMessage(JSON.stringify(messagePayload), "*");
     } else {
       console.warn("LTI iFrame Resizer: No parent window to send message to.");
     }
