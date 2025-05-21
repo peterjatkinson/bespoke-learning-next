@@ -71,8 +71,8 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
-            <a href="/test-apps/james-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
-              James Test
+            <a href="/test-apps/james-example-accessible" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              James Example Accessible
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
