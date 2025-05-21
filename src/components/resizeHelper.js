@@ -1,33 +1,33 @@
 // resizeHelper.js
-export function initiateBrightspaceAutoResize() {
+export function initiateAutoResize(canvasPostMessageToken = null) { // canvasPostMessageToken will be null in your case
   const container = document.querySelector('#root') || document.querySelector('#__next');
   if (!container) {
-    console.warn("Brightspace iFrame Resizer: Container element (#root or #__next) not found. Auto-resize will not work.");
+    console.warn("Canvas Resizer: Container element (#root or #__next) not found. Auto-resize will not work.");
     return;
   }
 
   let prevHeight = 0;
-  const minHeightThreshold = 100; // Minimum height to prevent collapsing too small
-  const extraPadding = 30;       // Extra padding to avoid scrollbars
+  const minHeightThreshold = 100;
+  const extraPadding = 30;
 
   const sendResizeMessage = (height) => {
     const newHeight = Math.ceil(height); // Ensure integer
-    console.log("Brightspace iFrame Resizer: Sending resize message to parent. Height:", newHeight);
+    console.log("Canvas Resizer: Sending resize message to parent. Height:", newHeight);
 
-    // Payload based on Brightspace's example code
     const messagePayload = {
-      subject: "lti.frameResize",
+      subject: "lti.frameResize", // This is the key for Canvas
       height: newHeight,
     };
 
+    // This 'if' block will NOT execute if canvasPostMessageToken is null
+    if (canvasPostMessageToken) {
+      messagePayload.token = canvasPostMessageToken;
+    }
+
     if (window.parent && window.parent !== window) {
-      // Brightspace example uses JSON.stringify, but postMessage can often handle objects directly.
-      // However, to be perfectly aligned with their example, stringifying is safer.
-      // Most modern browsers will auto-stringify if the second argument is an object,
-      // but explicit stringification matches their example.
-      window.parent.postMessage(JSON.stringify(messagePayload), "*");
+      window.parent.postMessage(messagePayload, "*"); // Target set to "*" as per Canvas example for this message
     } else {
-      console.warn("Brightspace iFrame Resizer: No parent window to send message to, or trying to post to self.");
+      console.warn("Canvas Resizer: No parent window to send message to, or trying to post to self.");
     }
   };
 
@@ -35,12 +35,10 @@ export function initiateBrightspaceAutoResize() {
     let currentHeight = container.scrollHeight;
 
     if (currentHeight < minHeightThreshold) {
-      currentHeight = minHeightThreshold + extraPadding;
-    } else {
       currentHeight += extraPadding;
     }
 
-    if (Math.abs(currentHeight - prevHeight) > 1) { // Only send if height changed meaningfully
+    if (currentHeight !== prevHeight) {
       sendResizeMessage(currentHeight);
       prevHeight = currentHeight;
     }
@@ -48,27 +46,18 @@ export function initiateBrightspaceAutoResize() {
 
   try {
     resizeObserver.observe(container);
-    console.log("Brightspace iFrame Resizer: ResizeObserver watching container:", container);
 
-    // Send initial height after a brief delay
+    // Send initial height after a brief delay to allow content to fully render
     setTimeout(() => {
       let initialHeight = container.scrollHeight;
       if (initialHeight < minHeightThreshold) {
-        initialHeight = minHeightThreshold + extraPadding;
-      } else {
         initialHeight += extraPadding;
       }
-      console.log("Brightspace iFrame Resizer: Sending initial resize message.");
+      console.log("Canvas Resizer: Sending initial resize message.");
       sendResizeMessage(initialHeight);
       prevHeight = initialHeight;
-    }, 250); // Adjust delay if needed
+    }, 150); // Adjust delay if needed, 100-250ms is usually fine
   } catch (error) {
-    console.error("Brightspace iFrame Resizer: Error setting up ResizeObserver.", error);
+    console.error("Canvas Resizer: Error setting up ResizeObserver.", error);
   }
-
-  // Return a cleanup function for the observer
-  return () => {
-    console.log("Brightspace iFrame Resizer: Cleaning up ResizeObserver.");
-    resizeObserver.disconnect();
-  };
 }

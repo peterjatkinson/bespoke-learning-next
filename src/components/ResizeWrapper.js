@@ -2,31 +2,23 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { initiateBrightspaceAutoResize } from './resizeHelper'; // Ensure this path is correct
+import { initiateAutoResize } from './resizeHelper'; // Ensure this path is correct
 
 const ResizeWrapper = ({ children }) => {
   useEffect(() => {
-    let cleanupFunction = null;
+    // This will be undefined/null in your non-LTI scenario, which is fine.
+    const canvasToken = typeof window !== 'undefined' ? window.LTI_POST_MESSAGE_TOKEN || null : null;
 
-    if (typeof window !== 'undefined') {
-      if (window.parent && window.parent !== window) {
-        console.log("Brightspace iFrame Resizer: Initializing for iframe environment.");
-        cleanupFunction = initiateBrightspaceAutoResize();
-      } else {
-        console.log("Brightspace iFrame Resizer: Not in an iframe or parent is self. Skipping resize logic.");
-      }
+    if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+      console.log("Canvas Resizer: Initializing for iframe environment.");
+      initiateAutoResize(canvasToken); // canvasToken will be null
+    } else if (typeof window !== 'undefined' && (!window.parent || window.parent === window)) {
+      console.log("Canvas Resizer: Not in an iframe or parent is self. Skipping resize logic.");
     }
     // If window is undefined (SSR), do nothing.
+  }, []);
 
-    // Cleanup function for when the component unmounts
-    return () => {
-      if (cleanupFunction) {
-        cleanupFunction();
-      }
-    };
-  }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
-
-  return <div>{children}</div>; // Or <>{children}</>
+  return <div>{children}</div>; // Or <>{children}</> if you prefer
 };
 
 export default ResizeWrapper;
