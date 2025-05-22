@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Added useEffect and useRef
 
 const CafePricingExercise = () => {
   // Define the pricing data
@@ -11,24 +11,28 @@ const CafePricingExercise = () => {
     '6': { quantity: 60, revenue: 360 },
     '8': { quantity: 30, revenue: 240 }
   };
-  
+
   // Price options for dropdown
   const priceOptions = ['', '2', '3', '4', '6', '8'];
-  
+
   // State to track selected prices for each row
   const [selectedPrices, setSelectedPrices] = useState(['', '', '', '', '']);
-  
+
+  // State for the ARIA live region message
+  const [liveRegionMessage, setLiveRegionMessage] = useState('');
+  const liveRegionTimeoutRef = useRef(null); // To store timeout ID
+
   // Handle price selection change
   const handlePriceChange = (index, price) => {
     const newSelectedPrices = [...selectedPrices];
     newSelectedPrices[index] = price;
     setSelectedPrices(newSelectedPrices);
   };
-  
+
   // Get feedback based on selected price
   const getFeedback = (price) => {
     if (!price) return "";
-    
+
     const feedbackMap = {
       '2': "You chose a low price and sold a lot of coffee—250 cups! However, your total revenue was only **£500**, which is **less than what you could have earned**. A lower price increases quantity demanded, but doesn't always maximise revenue if the price is too low.",
       '3': "Excellent choice! You priced coffee at £3, sold 200 cups, and earned **£600**—the **highest total revenue** possible. You found the sweet spot where price and quantity are optimally balanced. This is the classic **revenue-maximising point** for a monopolist.",
@@ -36,17 +40,46 @@ const CafePricingExercise = () => {
       '6': "At £6 per cup, you only sold 60 cups and earned £360. Many customers were unwilling to pay the higher price, causing a sharp fall in quantity demanded. Even though each sale earned more per cup, the overall revenue fell because you lost too many buyers. Demand is sensitive—raising price too much can backfire.",
       '8': "You set a very high price of £8 per cup but only sold 30 cups, earning just £240. Most customers found the price too expensive and chose not to buy. In monopolies, being the only seller doesn't mean you can charge anything you want. Customers still react to prices, and elastic demand limits how much you can profit from very high pricing."
     };
-    
+
     return feedbackMap[price];
   };
-  
+
   // Reset all selections
   const resetSelections = () => {
     setSelectedPrices(['', '', '', '', '']);
+    setLiveRegionMessage('Table has been reset.'); // Set the message
+
+    // Clear any existing timeout
+    if (liveRegionTimeoutRef.current) {
+      clearTimeout(liveRegionTimeoutRef.current);
+    }
+
+    // Set a new timeout to clear the message after a few seconds
+    liveRegionTimeoutRef.current = setTimeout(() => {
+      setLiveRegionMessage('');
+    }, 3000); // Message will be available for SRs for 3 seconds
   };
-  
+
+  // Cleanup timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (liveRegionTimeoutRef.current) {
+        clearTimeout(liveRegionTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      {/* ARIA Live Region - Visually Hidden */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only" // Use a screen-reader-only class
+      >
+        {liveRegionMessage}
+      </div>
+
       <div className="bg-blue-50 p-6 rounded-lg mb-8">
         <h1 className="text-2xl font-bold mb-4">Imperial Business School café: Pricing exercise</h1>
         <p className="mb-4">
@@ -79,13 +112,14 @@ const CafePricingExercise = () => {
           <tbody>
             {selectedPrices.map((selectedPrice, index) => (
               <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                
+
                 <td className="py-3 px-6 border-b">
                   <select
                     value={selectedPrice}
                     onChange={(e) => handlePriceChange(index, e.target.value)}
-                    className="border border-gray-500 bg-white rounded p-2 w-full min-w-32 
+                    className="border border-gray-500 bg-white rounded p-2 w-full min-w-32
                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    aria-label={`Price for row ${index + 1}`} // Added aria-label for better select context
                   >
                     {priceOptions.map((price) => (
                       <option key={price} value={price}>
@@ -108,7 +142,7 @@ const CafePricingExercise = () => {
 
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Feedback</h2>
-        <div className="p-4 bg-blue-50 rounded-lg">
+        <div id="feedback-region" className="p-4 bg-blue-50 rounded-lg"> {/* Added id for potential aria-describedby */}
           {selectedPrices.some(price => price) ? (
             <div>
               {selectedPrices.map((price, index) => (
@@ -124,9 +158,9 @@ const CafePricingExercise = () => {
             <p>Select prices from the dropdown menus to see feedback.</p>
           )}
         </div>
-        
-        <button 
-          onClick={resetSelections} 
+
+        <button
+          onClick={resetSelections}
           className="mt-6 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
@@ -138,4 +172,3 @@ const CafePricingExercise = () => {
 };
 
 export default CafePricingExercise;
-
