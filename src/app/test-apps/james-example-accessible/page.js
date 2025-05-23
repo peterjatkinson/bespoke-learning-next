@@ -73,7 +73,7 @@ const CafePricingExercise = () => {
     <div className="p-6 max-w-4xl mx-auto">
       {/* ARIA Live Region - Visually Hidden */}
       <div
-        aria-live="polite"
+        aria-live="assertive"
         aria-atomic="true"
         className="sr-only" // Use a screen-reader-only class
       >
