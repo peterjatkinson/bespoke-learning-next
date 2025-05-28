@@ -44,7 +44,7 @@ const CafePricingExercise = () => {
   
   // Reset all selections
   const resetSelections = () => {
-    setSelectedPrices(['', '', '', '', '', '']);
+    setSelectedPrices(['', '', '', '', '']);
     setAnnouncement('Table has been reset. All price selections have been cleared.');
     // Clear the announcement after it's been read
     setTimeout(() => setAnnouncement(''), 100);
