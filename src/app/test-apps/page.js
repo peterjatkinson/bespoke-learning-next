@@ -81,6 +81,11 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/james-example-step-two" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              James Example Step Two
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/katie-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Katie Test
             </a>
