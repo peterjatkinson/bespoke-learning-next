@@ -62,6 +62,27 @@ const WaterfallApp = () => {
           Private Equity Waterfall Explorer
         </h2>
 
+        {/* MOVED "Show explanation" link HERE */}
+        <div
+          className="text-sky-400 underline cursor-pointer text-sm text-center mb-4" // Adjusted classes for new location
+          onClick={() => setShowExplanation(!showExplanation)}
+        >
+          {showExplanation ? 'Hide explanation' : 'Show explanation'}
+        </div>
+
+        {/* MOVED Explanation content HERE */}
+        {showExplanation && (
+          <div className="mt-4 mb-8 text-sm text-slate-200 bg-slate-800 p-6 rounded-xl shadow-xl border border-slate-700"> {/* Adjusted classes for new location */}
+            <h4 className="text-lg font-bold mb-3 text-sky-300">Explanation</h4>
+            <p className="mb-2">
+              The <strong>preferred return</strong> ensures that LPs receive a minimum baseline return before GP profits are realised. This example assumes a standard <strong>catch-up</strong> phase.
+            </p>
+            <p>
+              Users can modify capital, return rates, and profit splits to explore different private equity waterfall outcomes.
+            </p>
+          </div>
+        )}
+
         {/* Hardcoded layout breaks mobile */}
         <div className="flex gap-6" style={{ width: '100%' }}>
           <div
@@ -166,7 +187,8 @@ const WaterfallApp = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Reveal toggle – inaccessible and non-focusable */}
+        {/* Original position of link and explanation content (now moved) */}
+        {/*
         <div
           className="mt-10 text-sky-400 underline cursor-pointer text-sm"
           onClick={() => setShowExplanation(!showExplanation)}
@@ -185,6 +207,7 @@ const WaterfallApp = () => {
             </p>
           </div>
         )}
+        */}
       </div>
     </div>
   );
