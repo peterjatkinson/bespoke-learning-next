@@ -71,8 +71,8 @@ const CafePricingExercise = () => {
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
-          <caption className="sr-only">
-            Cafe Pricing Experiment Table: Select prices in each row to see the corresponding quantity demanded and total revenue. Feedback is provided after the table.
+          <caption className="caption-top text-left text-lg font-semibold mb-2">
+                Cafe pricing experiment table: Select a price per cup to reveal quantity demanded and total revenue
           </caption>
           <thead>
             <tr className="bg-gray-100">

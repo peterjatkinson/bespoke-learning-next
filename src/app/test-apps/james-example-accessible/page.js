@@ -47,7 +47,7 @@ const CafePricingExercise = () => {
   // Reset all selections
   const resetSelections = () => {
     setSelectedPrices(['', '', '', '', '']);
-    setLiveRegionMessage('Table has been reset.'); // Set the message
+    setLiveRegionMessage('Table has been reset. All price selections have been cleared.'); // Set the message
 
     // Clear any existing timeout
     if (liveRegionTimeoutRef.current) {
@@ -99,10 +99,10 @@ const CafePricingExercise = () => {
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
-          <caption className="sr-only">
-            Cafe Pricing Experiment Table: Select prices in each row to see the corresponding quantity demanded and total revenue. Feedback is provided after the table.
+          <caption className="caption-top text-left text-lg font-semibold mb-2">
+                Cafe pricing experiment table: Select a price per cup to reveal quantity demanded and total revenue
           </caption>
-          <thead>
+                    <thead>
             <tr className="bg-gray-100">
               <th scope="col" className="py-3 px-6 text-left border-b">Price per cup (£)</th>
               <th scope="col" className="py-3 px-6 text-left border-b">Quantity demanded</th>
