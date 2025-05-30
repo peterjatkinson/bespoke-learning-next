@@ -131,7 +131,7 @@ const CafePricingExercise = () => {
         
         <button 
           onClick={resetSelections} 
-          className="mt-6 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-offset-2"
+          className="mt-6 bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-offset-2"
         >
           Reset table
         </button>
