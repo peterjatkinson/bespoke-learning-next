@@ -71,6 +71,11 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/gemini-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Gemini Test
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/james-example" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               James Example
             </a>
@@ -108,6 +113,11 @@ export default function LandingPage() {
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/social-media" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Social Media
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/veo-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Veo Test
             </a>
           </li>
         </ul>

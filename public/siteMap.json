@@ -28,6 +28,7 @@
     "focus-groups",
     "focus-groups-with-file-search",
     "gaurav-test",
+    "gemini-test",
     "james-example",
     "james-example-accessible",
     "james-example-step-two",
@@ -35,6 +36,7 @@
     "marketing-dashboard",
     "nps-processor",
     "server-side-database",
-    "social-media"
+    "social-media",
+    "veo-test"
   ]
 }
