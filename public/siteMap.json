@@ -2,6 +2,9 @@
   "bao-se": [
     "coefficient-graph"
   ],
+  "smo-imc": [
+    "diffusion-innovation"
+  ],
   "smo-mf": [
     "positioning-statement-creator"
   ],
