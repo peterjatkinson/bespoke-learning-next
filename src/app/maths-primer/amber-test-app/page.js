@@ -401,7 +401,7 @@ const CourseOverview = () => {
   };
  
   return (
-    <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
+    <div className="min-h-full bg-gray-50 w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto p-3 sm:p-4 md:p-6 lg:p-8 w-full">
         <div className="mb-4 sm:mb-6 md:mb-8 text-center">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Introduction to Maths</h1>
