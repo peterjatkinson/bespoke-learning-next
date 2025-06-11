@@ -2,6 +2,9 @@
   "bao-se": [
     "coefficient-graph"
   ],
+  "maths-primer": [
+    "amber-test-app"
+  ],
   "smo-imc": [
     "diffusion-innovation"
   ],
@@ -20,7 +23,6 @@
     "t-shaped-marketer"
   ],
   "test-apps": [
-    "amber-test-app",
     "analytics-processor",
     "average-calculator",
     "bad-example",
