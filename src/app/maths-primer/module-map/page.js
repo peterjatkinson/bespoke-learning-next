@@ -48,193 +48,64 @@ const CourseOverview = () => {
   ];
  
   const sessionPages = {
- 
     1: [
-      {
-        text: "1.1 Background: Calculus",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/FVS2TYVQTM"
-      },
-      {
-        text: "1.2 The first derivative",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/QFXKXeGY1t"
-      },
-      {
-        text: "1.3 The nth derivative",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/2p4ttraU6h"
-      },
-      {
-        text: "1.4 The sum and difference rule",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/542a7Fi_qO"
-      },
-      {
-        text: "1.5 The product rule",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/BrapyDsD4X"
-      },
-      {
-        text: "1.6 The quotient rule",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/qJK0yy6LLR"
-      },      
-      {
-        text: "1.7 Logarithmic functions",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/ab4Cx3PquI"
-      },      
-      {
-        text: "1.8 Exponential functions",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/fei8AVq2cv"
-      },
-      {
-        text: "1.9 Partial derivatives: Part one",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/KWAC-psSY"
-      },
-      {
-        text: "1.10 Partial derivatives: Part two",
-        url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/n8bOeWzh-I/screens/cISu-WVtcr"
-      },
+        "1.1 Background: Calculus",
+        "1.2 The first derivative",
+        "1.3 The nth derivative",
+        "1.4 The sum difference rule",
+        "1.5 The product rule",
+        "1.6 The quotient rule",
+        "1.7 Logarithmic functions",
+        "1.8 Exponential functions",
+        "1.9 Partial derivatives (part one)",
+        "1.10 Partial derivatives(part two)"
     ],
     2: [
-        {
-            text: "2.1 Introduction to integration",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/tGhDGlbRJe"
-        },
-        {
-            text: "2.2 Calculating the constant 'c'",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/B6KRXVeXc4"
-        },
-        {
-            text: "2.3 Sum difference rule",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/MGbaIq9WVK"
-        },
-        {
-            text: "2.4 Basic integrals",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/334dpxDlwe"
-        },
-        {
-            text: "2.5 Integration by parts",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/moQ4J2Z4Ze"
-        },
-        {
-            text: "2.6 Definite integrals",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/kA77b34DBq"
-        },
-        {
-            text: "2.7 Multiple integrals",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/4vXZJC0oKg/screens/EfW66qecOe"
-        }   
+        "2.1 Introduction to integration",
+        "2.2 Calculating the constant 'c'",
+        "2.3 Sum difference rule",
+        "2.4 Basic integrals",
+        "2.5 Integration by parts",
+        "2.6 Definite integrals",
+        "2.7 Multiple integrals"   
     ],
     3: [
-        {
-            text: "3.1 Taylor expansion",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/VztFit6brG/screens/pSptAgUTXhM"
-        },
-        {
-            text: "3.2 Taylor expansion further generalised",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/VztFit6brG/screens/2dhsZaXDoMz"
-        },
-        {
-            text: "3.3 Quiz: calculus",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/VztFit6brG/screens/p-KFfOzvj2"
-        }
+        "3.1 Taylor expansion",
+        "3.2 Taylor expansion further generalised",
+        "3.3 Quiz: calculus"
     ],
     4: [
-        {
-            text: "4.1 Background: Linear algebra",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/aCWB1n_NBT"
-        },
-        {
-            text: "4.2 Matrices: Basic definitions",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/crjqAXMIoa"
-        },
-        {
-            text: "4.3 Matrices: Basic operations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/0XxI6fbMaf"
-        },
-        {
-            text: "4.4 Determinants",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/63IM7nRHA3"
-        },
-        {
-            text: "4.5 The determinant of a 3×3 matrix",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/QTqvyPWFWi"
-        },
-        {
-            text: "4.6 The inverse of a matrix",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/E19I7-JMVW"
-        },
-        {
-            text: "4.7 Linear equations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/Ccpokoc_vW"
-        },
-        {
-            text: "4.8 Cramer's rule",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/6mkqi3i7Ze"
-        },
-        {
-            text: "4.9 Characteristic roots and vectors",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/kOi58WAFjp"
-        },
-        {
-            text: "4.10.Quiz: Linear algebra",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/UatDDscu8/screens/-6GDDdX0PY"
-        }
+        "4.1 Background: Linear algebra",
+        "4.2 Matrices: Basic definitions",
+        "4.3 Matrices: Basic operations",
+        "4.4 Determinants",
+        "4.5 The determinant of a 3×3 matrix",
+        "4.6 The inverse of a matrix",
+        "4.7 Linear equations",
+        "4.8 Cramer's rule",
+        "4.9 Characteristic roots and vectors",
+        "4.10 Quiz: Linear algebra"
     ],
     5: [
-        {
-            text: "5.1 Background: Differential equations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/Ym68klHVwP"
-        },
-        {
-            text: "5.2 Ordinary differential equations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/iYJSwB5IH7"
-        },
-        {
-            text: "5.3 Solutions to linear homogeneous ordinary differential equations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/lqfuX3iKpW"
-        },
-        {
-            text: "5.4 First order linear homogeneous ordinary differential equation",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/oTK0TjXX4u"
-        },
-        {
-            text: "5.5 Second order linear homogeneous ODE with constant coefficients",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/aSTt9ESLYK"
-        },
-        {
-            text: "5.6 Linear homogeneous ODE of nth order",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/1EPNTQAF3"
-        },
-        {
-            text: "5.7 Partial differential equations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/winhvPm-YD"
-        },
-        {
-            text: "5.8 Quiz: Differential equations",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/jx8EXCsXoy/screens/fB7VB7pfm3"
-        }
+        "5.1 Background: Differential equations",
+        "5.2 Ordinary differential equations",
+        "5.3 Solutions to linear homogeneous ordinary differential equations",
+        "5.4 First order linear homogeneous ordinary differential equation",
+        "5.5 Second order linear homogeneous ODE with constant coefficients",
+        "5.6 Linear homogeneous ODE of nth order",
+        "5.7 Partial differential equations",
+        "5.8 Quiz: Differential equations"
     ],
     6: [
-        {
-            text: "6.1 Calculus review",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/2MCvfQypZW/screens/Xw2qnvLetT"
-        },
-        {
-            text: "6.2 Linear algebra review",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/2MCvfQypZW/screens/SQNKibcnV-"
-        },
-        {
-            text: "6.3 Differential equations review",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/weeks/2MCvfQypZW/screens/Xm6x1I1XIw"
-        }   
-    ],
-    7: [
-        {
-            text: "Module quiz",
-            url: "https://imperial.insendi.com/programmes/UijMJxtKP/courses/No__XJ2seP/screens/EJq2NTpkX"
-        }
+        "6.1 Calculus review",
+        "6.2 Linear algebra review",
+        "6.3 Differential equations review",
+        "6.4 Module quiz",
+        "6.5 Your feedback"
     ]
   };
  
   const sessions = [
- 
     {
       id: 1,
       title: 'Calculus: differentiation',
@@ -263,12 +134,7 @@ const CourseOverview = () => {
     {
       id: 6,
       title: 'Module summary',
-      tags: ['summary']
-    },
-    {
-      id: 7,
-      title: 'Module quiz',
-      tags: ['assessment']
+      tags: ['summary', 'assessment']
     }
   ];
  
@@ -303,26 +169,7 @@ const CourseOverview = () => {
   };
  
   const isQuizPage = (page) => {
-    const text = typeof page === 'object' ? page.text : page;
-    return text.toLowerCase().includes('quiz');
-  };
- 
-  const renderPageText = (page) => {
-    // Handle object format with URL
-    if (typeof page === 'object' && page.url) {
-      return (
-        <a
-          href={page.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 underline hover:no-underline transition-colors"
-        >
-          {page.text}
-        </a>
-      );
-    }
-    // Handle regular string format
-    return page;
+    return page.toLowerCase().includes('quiz');
   };
  
   // Helper function to render dropdown content
@@ -375,7 +222,7 @@ const CourseOverview = () => {
                   key={index}
                   className={`text-xs sm:text-sm md:text-base text-gray-700 ${isQuizPage(page) ? 'font-bold' : ''} p-1 rounded hover:bg-gray-50 transition-colors w-full break-words`}
                 >
-                  {renderPageText(page)}
+                  {page}
                 </li>
               ))}
             </ul>
@@ -389,7 +236,7 @@ const CourseOverview = () => {
                     key={index + Math.ceil(sessionPages[sessionId].length / 2)}
                     className={`text-xs sm:text-sm md:text-base text-gray-700 ${isQuizPage(page) ? 'font-bold' : ''} p-1 rounded hover:bg-gray-50 transition-colors w-full break-words`}
                   >
-                    {renderPageText(page)}
+                    {page}
                   </li>
                 ))}
               </ul>
@@ -460,20 +307,18 @@ const CourseOverview = () => {
               aria-label={`Filter by ${type.label} sessions`}
               className={`flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer touch-manipulation
                 ${activeType === type.type
-                  ? 'bg-yellow-400 shadow-md scale-105'
-                  : 'hover:bg-gray-100 hover:shadow-sm'}`}
+                  ? 'bg-yellow-400'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300'}`}
             >
-              <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded ${type.color} flex-shrink-0 transition-transform duration-200 ${
-                activeType === type.type ? 'scale-110' : ''
-              }`}></div>
-              <span className={`text-xs sm:text-sm md:text-base whitespace-nowrap transition-colors duration-200 ${
-                activeType === type.type ? 'text-gray-900 font-medium' : 'text-gray-600'
+              <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded ${type.color} flex-shrink-0 shadow-sm`}></div>
+              <span className={`text-xs sm:text-sm md:text-base font-medium whitespace-nowrap transition-colors duration-200 ${
+                activeType === type.type ? 'text-gray-900' : 'text-gray-700'
               }`}>{type.label}</span>
             </button>
           ))}
         </div>
  
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 w-full">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 w-full">
           {sessions.map((session) => (
             <React.Fragment key={session.id}>
               <div
@@ -520,4 +365,3 @@ const CourseOverview = () => {
 };
  
 export default CourseOverview;
- 
