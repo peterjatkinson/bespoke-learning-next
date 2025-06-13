@@ -16,6 +16,11 @@ export default function LandingPage() {
         </div>
         <ul className="grid grid-cols-1 gap-4">
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/smo-imc/ai-awareness-quadrant" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Ai Awareness Quadrant
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/smo-imc/diffusion-innovation" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Diffusion Innovation
             </a>

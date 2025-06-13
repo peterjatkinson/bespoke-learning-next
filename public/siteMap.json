@@ -6,6 +6,7 @@
     "module-map"
   ],
   "smo-imc": [
+    "ai-awareness-quadrant",
     "diffusion-innovation"
   ],
   "smo-mf": [
