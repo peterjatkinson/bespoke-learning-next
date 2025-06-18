@@ -42,7 +42,6 @@ const PromptImproverPage = () => {
   const [error, setError] = useState(null);
   const [structuredAnalysis, setStructuredAnalysis] = useState(null);
 
-  const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null); // Ref for the scrollable chat message area
 
@@ -53,17 +52,18 @@ const PromptImproverPage = () => {
   };
 
   useEffect(() => {
-    // Scroll to bottom only if the user is already near the bottom
-    // This prevents snapping if the user has scrolled up to read previous messages
-    if (chatContainerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-        // The '50' is a threshold in pixels. Adjust as needed.
-        if (scrollHeight - scrollTop - clientHeight < 50) {
-            scrollToBottomChat();
-        }
+    if (chatContainerRef.current && messages.length > 1) {
+      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+      // Only scroll if user is near the bottom or if it's an AI message
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 150; // Increased threshold
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.role === 'assistant' || isNearBottom) {
+        scrollToBottomChat();
+      }
+    } else if (messages.length <=1 && chatContainerRef.current) { // Scroll for initial message too
+        scrollToBottomChat();
     }
   }, [messages]);
-
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -79,19 +79,15 @@ const PromptImproverPage = () => {
     setInputValue("");
     setLoading(true);
     setError(null);
-
-    // Make the user's new message visible before API call starts
-    // Use a timeout to allow DOM to update then scroll
+    
     setTimeout(() => scrollToBottomChat(), 0);
-
 
     try {
       const response = await fetch("/smo-imc/prompt-improver/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: currentConversation.slice(-6)
-                                         .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+          messages: currentConversation.slice(-6).filter(msg => msg.role === 'user' || msg.role === 'assistant')
         }),
       });
 
@@ -99,9 +95,7 @@ const PromptImproverPage = () => {
         const errData = await response.json();
         throw new Error(errData.details || "Failed to fetch response from AI.");
       }
-
       const data = await response.json();
-
       if (data.originalFullPrompt || data.revisedFullPrompt || data.analysisBreakdown) {
         setStructuredAnalysis({
             originalFullPrompt: data.originalFullPrompt,
@@ -109,15 +103,11 @@ const PromptImproverPage = () => {
             analysisBreakdown: data.analysisBreakdown || [],
         });
       }
-
       if (data.chatResponse) {
-        const aiChatMessage = { role: "assistant", content: data.chatResponse };
-        setMessages((prevMessages) => [...prevMessages, aiChatMessage]);
+        setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: data.chatResponse }]);
       } else {
-        const fallbackMessage = { role: "assistant", content: "I've processed your request. Please see the analysis panel." };
-        setMessages((prevMessages) => [...prevMessages, fallbackMessage]);
+        setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: "I've processed your request. Please see the analysis panel." }]);
       }
-
     } catch (err) {
       console.error(err);
       const errorMessage = err.message || "An error occurred. Please try again.";
@@ -126,32 +116,44 @@ const PromptImproverPage = () => {
     } finally {
       setLoading(false);
       inputRef.current?.focus();
-      // Scroll to bottom again after AI response is added
       setTimeout(() => scrollToBottomChat(), 0);
     }
   };
 
   return (
-    // Use min-h-full if this component itself is meant to fill its parent.
-    // If it's the outermost page component, min-h-screen is often for full viewport height.
-    // For this layout, we want the content to define the height, and the outer div to allow scrolling if content overflows.
-    <div className="min-h-full bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col p-4">
+    <div 
+        className="min-h-full bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col p-4"
+        // This style is key for Insendi's initial height calculation.
+        // It ensures the iframe requests enough space from the start.
+        style={{ minHeight: '800px' }} // Adjust as needed for a good default view
+    >
       <header className="w-full max-w-6xl mx-auto bg-indigo-600 text-white p-4 rounded-t-lg mb-4 flex-shrink-0">
         <h1 className="text-2xl font-bold text-center">AI Prompt Improver</h1>
       </header>
 
-      {/* Main content area that grows and allows internal scrolling */}
+      {/* 
+        This grid container will grow to fill the available space left by the header
+        within the parent div's minHeight (or actual height if content pushes it).
+        `overflow-hidden` is important here to establish a block formatting context.
+      */}
       <div className="flex-grow w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
-{/* Panel for Structured Prompt Analysis */}
-        {/* Make this panel scrollable independently */}
-        <div className="bg-white shadow-xl rounded-lg p-6 flex flex-col overflow-y-auto h-auto md:max-h-[calc(100vh-160px)]"> {/* Adjusted max-height */}
-          <h2 className="text-xl font-semibold text-indigo-700 mb-4 py-2"> {/* <<<< REMOVED sticky top-0 bg-white z-10 */}
+        
+        {/* Panel for Structured Prompt Analysis */}
+        {/*
+          - The panel itself is `flex flex-col`.
+          - It has a defined `h-[600px]` (or a `max-h` if preferred, but fixed h can be simpler here).
+            This height should be less than the overall page minHeight to ensure it fits.
+        */}
+        <div className="bg-white shadow-xl rounded-lg p-6 flex flex-col h-[650px]"> {/* Example fixed height */}
+          <h2 className="text-xl font-semibold text-indigo-700 mb-4 py-2 flex-shrink-0">
             Prompt Analysis
           </h2>
-          <div className="flex-grow"> {/* This div will allow content to push sticky header and then scroll */}
+          {/* This inner div takes up remaining space and scrolls */}
+          <div className="flex-grow overflow-y-auto">
             {structuredAnalysis ? (
               <div className="space-y-6">
-                <div>
+                 {/* ... content ... */}
+                 <div>
                   <h3 className="text-lg font-medium text-gray-700 mb-1">Original Prompt:</h3>
                   <p className="p-3 bg-red-50 border border-red-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
                     {structuredAnalysis.originalFullPrompt || "N/A"}
@@ -191,9 +193,13 @@ const PromptImproverPage = () => {
         </div>
 
         {/* Panel for Chat Interface */}
-        {/* Ensure this panel also manages its own scrolling and height */}
-        <div className="bg-white shadow-xl rounded-lg flex flex-col overflow-hidden md:max-h-[calc(100vh-160px)]"> {/* Adjusted max-height */}
-          <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto"> {/* Scrollable message area */}
+        {/*
+          - Similar structure: panel is `flex flex-col` with a fixed height.
+          - The message area (`chatContainerRef`) is `flex-grow overflow-y-auto`.
+          - The form is `flex-shrink-0`.
+        */}
+        <div className="bg-white shadow-xl rounded-lg flex flex-col h-[650px]"> {/* Example fixed height */}
+          <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto">
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -214,8 +220,7 @@ const PromptImproverPage = () => {
                 </div>
               </div>
             ))}
-            <div ref={messagesEndRef} /> {/* For initial scroll to this point if needed, less critical now */}
-             {/* Error message display */}
+            {/* Removed messagesEndRef from here as chatContainerRef handles scroll target */}
             {error && !loading && (
               <div className="text-red-500 text-center p-2 bg-red-100 rounded" role="alert">
                 Error: {error}
