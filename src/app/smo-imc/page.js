@@ -25,6 +25,11 @@ export default function LandingPage() {
               Diffusion Innovation
             </a>
           </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/smo-imc/prompt-improver" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Prompt Improver
+            </a>
+          </li>
         </ul>
       </div>
     </main>

@@ -7,7 +7,8 @@
   ],
   "smo-imc": [
     "ai-awareness-quadrant",
-    "diffusion-innovation"
+    "diffusion-innovation",
+    "prompt-improver"
   ],
   "smo-mf": [
     "positioning-statement-creator"
