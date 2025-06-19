@@ -4,8 +4,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Image as ImageIcon, Video as VideoIcon, Copy as CopyIcon, RotateCcw as StartOverIcon } from "lucide-react";
 
-// Simple SVG Spinner component
+// Spinner component...
 const Spinner = () => (
   <svg
     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -29,22 +30,20 @@ const Spinner = () => (
   </svg>
 );
 
+
 const PromptImproverPage = () => {
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      content:
-        "Hello! I'm your AI Prompt Engineering Assistant. Paste your initial prompt for image or video generation below, and I'll help you refine it.",
-    },
-  ]);
+  const [promptType, setPromptType] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [structuredAnalysis, setStructuredAnalysis] = useState(null);
+  const [isRevisedPromptCopied, setIsRevisedPromptCopied] = useState(false);
 
   const inputRef = useRef(null);
-  const chatContainerRef = useRef(null); // Ref for the scrollable chat message area
+  const chatContainerRef = useRef(null);
 
+  // ... (scrollToBottomChat, useEffects for scroll and focus as before) ...
   const scrollToBottomChat = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -52,26 +51,62 @@ const PromptImproverPage = () => {
   };
 
   useEffect(() => {
-    if (chatContainerRef.current && messages.length > 1) {
+    if (chatContainerRef.current && messages.length > 0) {
       const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-      // Only scroll if user is near the bottom or if it's an AI message
-      const isNearBottom = scrollHeight - scrollTop - clientHeight < 150; // Increased threshold
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 150;
       const lastMessage = messages[messages.length - 1];
-      if (lastMessage.role === 'assistant' || isNearBottom) {
+      if ((lastMessage && lastMessage.role === 'assistant') || isNearBottom) {
         scrollToBottomChat();
       }
-    } else if (messages.length <=1 && chatContainerRef.current) { // Scroll for initial message too
-        scrollToBottomChat();
     }
   }, [messages]);
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    if (promptType && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [promptType]);
+
+
+  const handlePromptTypeSelect = (type) => {
+    setPromptType(type);
+    setMessages([
+      {
+        role: "assistant",
+        content: `Great! You're working on a prompt for a **${type}**. Paste your initial prompt below, and I'll help you refine it.`,
+      },
+    ]);
+    setStructuredAnalysis(null);
+    setError(null);
+    setInputValue("");
+    setIsRevisedPromptCopied(false);
+  };
+
+  const handleStartOver = () => {
+    setPromptType(null);
+    setMessages([]);
+    setStructuredAnalysis(null);
+    setError(null);
+    setInputValue("");
+    setIsRevisedPromptCopied(false);
+  };
+
+  const handleCopyRevisedPrompt = () => {
+    if (structuredAnalysis && structuredAnalysis.revisedFullPrompt) {
+      navigator.clipboard.writeText(structuredAnalysis.revisedFullPrompt).then(() => {
+        setIsRevisedPromptCopied(true);
+        setTimeout(() => setIsRevisedPromptCopied(false), 2000);
+      }).catch(err => {
+        console.error('Failed to copy revised prompt: ', err);
+        // Optionally show an error to user
+      });
+    }
+  };
 
   const handleSubmit = async (e) => {
+    // ... (handleSubmit function remains the same, ensure API path is correct)
     e.preventDefault();
-    if (!inputValue.trim() || loading) return;
+    if (!inputValue.trim() || loading || !promptType) return;
 
     const newUserMessage = { role: "user", content: inputValue.trim() };
     const currentConversation = [...messages, newUserMessage];
@@ -79,14 +114,16 @@ const PromptImproverPage = () => {
     setInputValue("");
     setLoading(true);
     setError(null);
+    setIsRevisedPromptCopied(false); // Reset copy status on new submission
     
     setTimeout(() => scrollToBottomChat(), 0);
 
     try {
-      const response = await fetch("/smo-imc/prompt-improver/api", {
+      const response = await fetch("/smo-imc/prompt-improver/api", { // YOUR API PATH
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          promptType: promptType,
           messages: currentConversation.slice(-6).filter(msg => msg.role === 'user' || msg.role === 'assistant')
         }),
       });
@@ -120,148 +157,193 @@ const PromptImproverPage = () => {
     }
   };
 
+
   return (
     <div 
         className="min-h-full bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col p-4"
-        // This style is key for Insendi's initial height calculation.
-        // It ensures the iframe requests enough space from the start.
-        style={{ minHeight: '800px' }} // Adjust as needed for a good default view
+        // The minHeight on this outermost div is for Insendi integration.
+        // It ensures the iframe requests a reasonable initial height.
+        style={{ minHeight: promptType ? '800px' : 'auto' }} // Only apply large minHeight when chat is active
     >
-      <header className="w-full max-w-6xl mx-auto bg-indigo-600 text-white p-4 rounded-t-lg mb-4 flex-shrink-0">
-        <h1 className="text-2xl font-bold text-center">AI Prompt Improver</h1>
+      <header className="w-full max-w-6xl mx-auto bg-indigo-600 text-white p-4 rounded-t-lg mb-4 flex-shrink-0 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-center flex-grow">AI Prompt Improver</h1>
+        {promptType && (
+          <button
+            onClick={handleStartOver}
+            className="ml-4 p-2 text-sm bg-indigo-500 hover:bg-indigo-400 rounded-md flex items-center transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            title="Start Over"
+          >
+            <StartOverIcon className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Start Over</span>
+          </button>
+        )}
       </header>
 
       {/* 
-        This grid container will grow to fill the available space left by the header
-        within the parent div's minHeight (or actual height if content pushes it).
-        `overflow-hidden` is important here to establish a block formatting context.
+        The structure for the content area:
+        If !promptType, we want a small, centered box.
+        If promptType is set, we use the flex-grow grid for the two-panel layout.
       */}
-      <div className="flex-grow w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
-        
-        {/* Panel for Structured Prompt Analysis */}
-        {/*
-          - The panel itself is `flex flex-col`.
-          - It has a defined `h-[600px]` (or a `max-h` if preferred, but fixed h can be simpler here).
-            This height should be less than the overall page minHeight to ensure it fits.
-        */}
-        <div className="bg-white shadow-xl rounded-lg p-6 flex flex-col h-[650px]"> {/* Example fixed height */}
-          <h2 className="text-xl font-semibold text-indigo-700 mb-4 py-2 flex-shrink-0">
-            Prompt Analysis
-          </h2>
-          {/* This inner div takes up remaining space and scrolls */}
-          <div className="flex-grow overflow-y-auto">
-            {structuredAnalysis ? (
-              <div className="space-y-6">
-                 {/* ... content ... */}
-                 <div>
-                  <h3 className="text-lg font-medium text-gray-700 mb-1">Original Prompt:</h3>
-                  <p className="p-3 bg-red-50 border border-red-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
-                    {structuredAnalysis.originalFullPrompt || "N/A"}
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-green-700 mb-1">Revised Prompt:</h3>
-                  <p className="p-3 bg-green-50 border border-green-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
-                    {structuredAnalysis.revisedFullPrompt || "N/A"}
-                  </p>
-                </div>
-                {structuredAnalysis.analysisBreakdown && structuredAnalysis.analysisBreakdown.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-700 mb-2">Element Breakdown:</h3>
-                    <div className="space-y-3">
-                      {structuredAnalysis.analysisBreakdown.map((item, index) => (
-                        <div key={index} className="p-3 border border-gray-200 rounded-md bg-gray-50">
-                          <p className="font-semibold text-indigo-600">{item.element}</p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            <span className="font-medium">Original:</span> {item.original}
-                          </p>
-                          <p className="text-xs text-green-600 mt-1">
-                            <span className="font-medium">Revised:</span> {item.revised}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center mt-10">
-                Submit a prompt to see the analysis here.
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Panel for Chat Interface */}
-        {/*
-          - Similar structure: panel is `flex flex-col` with a fixed height.
-          - The message area (`chatContainerRef`) is `flex-grow overflow-y-auto`.
-          - The form is `flex-shrink-0`.
-        */}
-        <div className="bg-white shadow-xl rounded-lg flex flex-col h-[650px]"> {/* Example fixed height */}
-          <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`max-w-[85%] p-3 rounded-xl shadow ${
-                    msg.role === "user"
-                      ? "bg-indigo-500 text-white"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
-                >
-                  <div className="prose prose-sm max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-li:my-0.5">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {msg.content}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {/* Removed messagesEndRef from here as chatContainerRef handles scroll target */}
-            {error && !loading && (
-              <div className="text-red-500 text-center p-2 bg-red-100 rounded" role="alert">
-                Error: {error}
-              </div>
-            )}
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="p-4 border-t border-gray-200 bg-white rounded-b-lg flex-shrink-0"
-          >
-            <div className="flex items-center space-x-2">
-              <textarea
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Enter your prompt here..."
-                rows={3}
-                className="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
-                disabled={loading}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }}}
-              />
+      {!promptType ? (
+        // Initial choice screen: This div is now NOT flex-grow, so it won't expand unnecessarily.
+        // It's centered using flex on its direct parent (the main div above with 'flex flex-col').
+        // We ensure its parent uses `justify-center` effectively by making sure this choice screen isn't taking all space.
+        <div className="flex-grow flex flex-col items-center justify-center"> {/* This outer div centers the white box */}
+          <div className="bg-white p-8 sm:p-12 rounded-lg shadow-xl w-full max-w-lg"> {/* The white box itself */}
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 sm:mb-8 text-center">
+              What are you creating a prompt for?
+            </h2>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <button
-                type="submit"
-                disabled={loading || !inputValue.trim()}
-                className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors flex items-center justify-center
-                  ${loading || !inputValue.trim()
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  }`}
+                onClick={() => handlePromptTypeSelect('image')}
+                className="flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium text-base sm:text-lg transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 w-full"
               >
-                {loading ? <Spinner /> : "Send"}
+                <ImageIcon className="mr-2 h-5 w-5 sm:h-6 sm:w-6" /> Image
+              </button>
+              <button
+                onClick={() => handlePromptTypeSelect('video')}
+                className="flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium text-base sm:text-lg transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 w-full"
+              >
+                <VideoIcon className="mr-2 h-5 w-5 sm:h-6 sm:w-6" /> Video
               </button>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      ) : (
+        // Main two-panel layout for chat and analysis
+        <div className="flex-grow w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
+          {/* Panel for Structured Prompt Analysis */}
+          <div className="bg-white shadow-xl rounded-lg p-6 flex flex-col h-[650px]"> {/* Fixed height for panel */}
+            <h2 className="text-xl font-semibold text-indigo-700 mb-4 py-2 flex-shrink-0">
+              Prompt Analysis <span className="text-sm font-normal text-gray-500">({promptType})</span>
+            </h2>
+            <div className="flex-grow overflow-y-auto">
+              {structuredAnalysis ? (
+                <div className="space-y-6">
+                  {/* ... Original Prompt section ... */}
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-700 mb-1">Original Prompt:</h3>
+                    <p className="p-3 bg-red-50 border border-red-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                      {structuredAnalysis.originalFullPrompt || "N/A"}
+                    </p>
+                  </div>
+
+                  {/* Revised Prompt section with Copy Button */}
+                  <div className="relative">
+                    <h3 className="text-lg font-medium text-green-700 mb-1">Revised Prompt:</h3>
+                    <p className="p-3 bg-green-50 border border-green-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                      {structuredAnalysis.revisedFullPrompt || "N/A"}
+                    </p>
+                    {structuredAnalysis.revisedFullPrompt && (
+                      <button
+                        onClick={handleCopyRevisedPrompt}
+                        title="Copy revised prompt"
+                        className="absolute top-0 right-0 mt-1 mr-1 p-1.5 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-700 transition-colors"
+                        aria-label="Copy revised prompt to clipboard"
+                      >
+                        {isRevisedPromptCopied ? (
+                          <span className="text-xs px-1">Copied!</span>
+                        ) : (
+                          <CopyIcon className="h-4 w-4" />
+                        )}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* ... Element Breakdown section ... */}
+                  {structuredAnalysis.analysisBreakdown && structuredAnalysis.analysisBreakdown.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-700 mb-2 mt-4">Element Breakdown:</h3>
+                      <div className="space-y-3">
+                        {structuredAnalysis.analysisBreakdown.map((item, indexItem) => (
+                          <div key={indexItem} className="p-3 border border-gray-200 rounded-md bg-gray-50">
+                            <p className="font-semibold text-indigo-600">{item.element}</p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              <span className="font-medium">Original:</span> {item.original}
+                            </p>
+                            <p className="text-xs text-green-600 mt-1">
+                              <span className="font-medium">Revised:</span> {item.revised}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-gray-500 text-center mt-10">
+                  Enter your {promptType} prompt in the chat to see the analysis.
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Panel for Chat Interface */}
+          <div className="bg-white shadow-xl rounded-lg flex flex-col h-[650px]"> {/* Fixed height for panel */}
+            <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto">
+              {messages.map((msg, index) => (
+                // Removed copy button from individual chat messages
+                <div
+                  key={index}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                    <div
+                      className={`max-w-[85%] p-3 rounded-xl shadow ${
+                        msg.role === "user"
+                          ? "bg-indigo-500 text-white"
+                          : "bg-gray-200 text-gray-800"
+                      }`}
+                    >
+                      <div className="prose prose-sm max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-li:my-0.5">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.content}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                </div>
+              ))}
+              {error && !loading && (
+                <div className="text-red-500 text-center p-2 bg-red-100 rounded" role="alert">
+                  Error: {error}
+                </div>
+              )}
+            </div>
+            {/* ... Form ... */}
+            <form
+              onSubmit={handleSubmit}
+              className="p-4 border-t border-gray-200 bg-white rounded-b-lg flex-shrink-0"
+            >
+             <div className="flex items-center space-x-2">
+                <textarea
+                  ref={inputRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder={promptType ? `Enter your ${promptType} prompt...` : "Select prompt type first"}
+                  rows={3}
+                  className="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                  disabled={loading || !promptType}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit(e);
+                    }}}
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !inputValue.trim() || !promptType}
+                  className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors flex items-center justify-center
+                    ${loading || !inputValue.trim() || !promptType
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    }`}
+                >
+                  {loading ? <Spinner /> : "Send"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
