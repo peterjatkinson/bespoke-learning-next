@@ -165,7 +165,7 @@ You can also use illustrations and specify the type, such as pencil, charcoal, w
 
 Overall, be responsible, ethical and work in a sustainable way when producing AI images and videos.
 
-
+You need to think about who the audience is for the image and how you could get their attention and engage them through using the hints and tips. 
 
 **Output Format (Strict JSON):**
 Respond with a single, valid JSON object conforming *exactly* to the schema.
