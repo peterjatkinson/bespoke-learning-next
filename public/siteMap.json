@@ -25,7 +25,6 @@
     "t-shaped-marketer"
   ],
   "test-apps": [
-    "amber-test-app",
     "analytics-processor",
     "average-calculator",
     "bad-example",
