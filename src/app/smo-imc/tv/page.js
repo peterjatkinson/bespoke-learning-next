@@ -245,7 +245,7 @@ const TVFactsInteractive = () => {
               </p>
               
               <p>
-                The second advantage is that TV reaches large audiences, regardless of age, sex, income or educational level. TV's large coverage also makes it very cost efficient to reach a person. In the US, for instance, it only costs $5–$25 to reach a thousand households.
+                The second advantage is that TV reaches large audiences, regardless of age, sex, income or educational level. TV's large coverage also makes it very cost efficient to reach a person. 
               </p>
               
               <p>
