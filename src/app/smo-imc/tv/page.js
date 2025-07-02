@@ -27,13 +27,15 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '', decim
   }, [end, duration, decimal]);
 
   return (
-    <span className="font-bold text-2xl md:text-3xl text-white">
+    <span className="font-bold text-lg md:text-xl text-white">
       {prefix}{decimal ? count : parseInt(count).toLocaleString()}{suffix}
     </span>
   );
 };
 
 const StatCard = ({ icon: Icon, title, stat, description, index, color = 'blue' }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const colorClasses = {
     blue: 'from-blue-700 to-blue-800 border-blue-300',
     green: 'from-green-700 to-green-800 border-green-300',
@@ -43,23 +45,56 @@ const StatCard = ({ icon: Icon, title, stat, description, index, color = 'blue' 
     indigo: 'from-indigo-700 to-indigo-800 border-indigo-300'
   };
 
+  const handleClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <div className={`bg-gradient-to-br ${colorClasses[color]} text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 h-full border-2`}>
-      <div className="flex items-center justify-center mb-4">
-        <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-          <Icon className="w-6 h-6 text-black" aria-hidden="true" />
+    <button
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setIsExpanded(!isExpanded);
+        }
+      }}
+      className={`w-full text-left bg-gradient-to-br ${colorClasses[color]} text-white rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 p-3 border-2 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer`}
+      aria-expanded={isExpanded}
+      aria-label={`${title}. ${isExpanded ? 'Click to hide' : 'Click to show'} description.`}
+    >
+      {/* Icon */}
+      <div className="flex items-center justify-center mb-2">
+        <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+          <Icon className="w-4 h-4 text-black" aria-hidden="true" />
         </div>
       </div>
       
-      <div className="text-center mb-4">
-        <div className="mb-2">{stat}</div>
-        <h3 className="text-lg font-bold">{title}</h3>
+      {/* Stat and Title */}
+      <div className="text-center mb-2">
+        <div className="mb-1">{stat}</div>
+        <h3 className="text-sm font-bold">{title}</h3>
+      </div>
+
+      {/* Expand/Collapse Indicator */}
+      <div className="flex justify-center mb-1">
+        <div className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+          <svg className="w-full h-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
       
-      <p className="text-sm text-white text-opacity-90 text-center leading-relaxed">
-        {description}
-      </p>
-    </div>
+      {/* Expandable Description */}
+      <div className={`overflow-hidden transition-all duration-300 ${
+        isExpanded ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
+      }`}>
+        <div className="pt-1 border-t border-white border-opacity-30">
+          <p className="text-xs text-white text-opacity-90 text-center leading-relaxed">
+            {description}
+          </p>
+        </div>
+      </div>
+    </button>
   );
 };
 
@@ -271,10 +306,7 @@ const TVFactsInteractive = () => {
           </AudioSection>
         </div>
 
-        {/* Footer */}
-        <div className="text-center text-gray-600 text-sm mt-12">
-          <p>Data reflects global trends and industry insights • Audio recordings will enhance the learning experience</p>
-        </div>
+
       </div>
     </div>
   );
