@@ -9,11 +9,10 @@ const VimeoVideoEmbed = () => {
     'https://player.vimeo.com/video/863538766?badge=0&autopause=0&player_id=0&app_id=58479'
   ];
 
-  // Select video based on current time (odd/even) using lazy state initialization
+  // Select video using true random 50/50 chance
   const [selectedVideoUrl] = useState(() => {
-    const currentTime = Date.now();
-    const isEven = currentTime % 2 === 0;
-    return isEven ? videoUrls[0] : videoUrls[1];
+    const randomChoice = Math.random() < 0.5;
+    return randomChoice ? videoUrls[0] : videoUrls[1];
   });
 
   // Extract video ID from URL for accessibility labelling
