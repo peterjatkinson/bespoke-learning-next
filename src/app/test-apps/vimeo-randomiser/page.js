@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 
 const VimeoVideoEmbed = () => {
   // Array of video URLs to randomly select from
@@ -9,11 +9,12 @@ const VimeoVideoEmbed = () => {
     'https://player.vimeo.com/video/863538766?badge=0&autopause=0&player_id=0&app_id=58479'
   ];
 
-  // Randomly select a video URL when component mounts
-  const selectedVideoUrl = useMemo(() => {
-    const randomIndex = Math.floor(Math.random() * videoUrls.length);
-    return videoUrls[randomIndex];
-  }, []);
+  // Select video based on current time (odd/even) using lazy state initialization
+  const [selectedVideoUrl] = useState(() => {
+    const currentTime = Date.now();
+    const isEven = currentTime % 2 === 0;
+    return isEven ? videoUrls[0] : videoUrls[1];
+  });
 
   // Extract video ID from URL for accessibility labelling
   const getVideoId = (url) => {
