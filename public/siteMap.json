@@ -43,8 +43,13 @@
     "katie-test",
     "marketing-dashboard",
     "module-feedback-increase",
+    "module-scores",
     "nps-processor",
     "server-side-database",
-    "social-media"
+    "social-media",
+    "testimonials-academics",
+    "testimonials-avatar",
+    "testimonials-redesign",
+    "testimonials-tools"
   ]
 }
