@@ -145,6 +145,11 @@ export default function LandingPage() {
               Testimonials Tools
             </a>
           </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/vimeo-randomiser" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Vimeo Randomiser
+            </a>
+          </li>
         </ul>
       </div>
     </main>
