@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 
 const VimeoVideoEmbed = () => {
   // Array of video URLs to randomly select from
@@ -9,11 +9,9 @@ const VimeoVideoEmbed = () => {
     'https://player.vimeo.com/video/863538766?badge=0&autopause=0&player_id=0&app_id=58479'
   ];
 
-  // Select video using true random 50/50 chance
-  const [selectedVideoUrl] = useState(() => {
-    const randomChoice = Math.random() < 0.5;
-    return randomChoice ? videoUrls[0] : videoUrls[1];
-  });
+  // Select video using true random 50/50 chance - calculated fresh on every component mount
+  const randomChoice = Math.random() < 0.5;
+  const selectedVideoUrl = randomChoice ? videoUrls[0] : videoUrls[1];
 
   // Extract video ID from URL for accessibility labelling
   const getVideoId = (url) => {
