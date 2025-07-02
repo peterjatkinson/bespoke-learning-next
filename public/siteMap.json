@@ -8,7 +8,8 @@
   "smo-imc": [
     "ai-awareness-quadrant",
     "diffusion-innovation",
-    "prompt-improver"
+    "prompt-improver",
+    "tv"
   ],
   "smo-mf": [
     "positioning-statement-creator"
