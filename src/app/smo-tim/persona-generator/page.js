@@ -11,6 +11,7 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 import jsPDF from "jspdf";
 
@@ -66,22 +67,21 @@ function addWrappedTextWithPagination(pdf, text, x, y, options) {
 }
 
 // Radar chart component for personality traits
+// Radar chart component for personality traits
 const PersonaRadarChart = ({ data }) => {
   // Added basic check for data validity
   if (!data || data.length === 0) return null;
 
   return (
-    <div className="flex justify-center">
-      {/* Responsive wrapper for smaller screens */}
-      <div className="w-full max-w-[500px]">
+    // This parent div now controls the size and aspect ratio of the chart.
+    // The chart will be at most 500px wide and will have a height of 400px.
+    <div className="w-full max-w-[560px] mx-auto" style={{ height: '400px' }}>
+      <ResponsiveContainer width="100%" height="100%">
         <RadarChart
-          cx="50%" // Center horizontally
-          cy="50%" // Center vertically
-          outerRadius="80%" // Use percentage for responsiveness
-          width={500} // Maintain aspect ratio with width/height
-          height={400}
+          cx="50%"
+          cy="50%"
+          outerRadius="80%" // This percentage now works responsively
           data={data}
-          className="w-full h-auto" // Tailwind classes for responsiveness
         >
           <PolarGrid />
           <PolarAngleAxis dataKey="trait" />
@@ -95,7 +95,7 @@ const PersonaRadarChart = ({ data }) => {
             fillOpacity={0.6}
           />
         </RadarChart>
-      </div>
+      </ResponsiveContainer>
     </div>
   );
 };
@@ -822,7 +822,7 @@ const ConsumerPersona = () => {
          {/* Display submission limit message */}
          {submissionCount !== null && submissionCount >= submissionLimit && (
              <p className="text-center mt-2 text-sm text-red-600">
-                Submission limit of {submissionLimit} reached. Please try again tomorrow.
+                Submission limit of {submissionLimit} reached.
              </p>
          )}
 
