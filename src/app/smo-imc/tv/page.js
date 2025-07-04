@@ -1,4 +1,5 @@
 
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Users, TrendingDown, DollarSign, Clock, Tv, Youtube, Zap, Eye, Target, Globe, Timer, Percent } from 'lucide-react';
 
