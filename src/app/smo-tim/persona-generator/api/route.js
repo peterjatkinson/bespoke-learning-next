@@ -1,55 +1,87 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 const openai = new OpenAI({
   apiKey: process.env.SMO_OPENAI_API_KEY,
 });
 
-// --- Corrected Zod Schema ---
-// Removed .min(0).max(100) from personalityRadar fields
-const PersonaSchema = z.object({
-  demographics: z.object({
-    name: z.string().describe("The persona's first name. Use 'USER_INPUT' as placeholder."),
-    age: z.string().describe("The persona's age range or specific age. Use 'USER_INPUT' as placeholder."),
-    occupation: z.string().describe("The persona's job title or role. Use 'USER_INPUT' as placeholder."),
-    incomeLevel: z.number().describe("Estimated annual income as a number, e.g., 45000."),
-    educationLevel: z.string().describe("Highest level of education achieved."),
-    location: z.string().describe("General location (e.g., city, region). Use 'USER_INPUT' as placeholder."),
-  }),
-  psychographics: z.object({
-    valuesAndBeliefs: z.string().describe("Core values, beliefs, and attitudes."),
-    lifestyle: z.string().describe("Hobbies, interests, daily routine, social habits."),
-    personalityTraits: z.string().describe("Key personality characteristics (e.g., introverted, analytical)."),
-    goalsAndAspirations: z.string().describe("Personal and professional goals."),
-  }),
-  painPointsAndChallenges: z.object({
-    primaryFrustrations: z.string().describe("Main problems or frustrations the persona faces relevant to the brand."),
-    underlyingCauses: z.string().describe("Root causes of these frustrations."),
-    impactOnBehavior: z.string().describe("How these challenges affect their decisions or behavior."),
-    opportunitiesForSolutions: z.string().describe("How the brand/product could potentially solve these issues."),
-  }),
-  purchasingBehavior: z.object({
-    buyingHabits: z.string().describe("Frequency, timing, and common types of purchases."),
-    purchasingMotivations: z.string().describe("Reasons behind purchase decisions (e.g., price, quality, status)."),
-    preferredCommunicationChannels: z.string().describe("How they prefer to receive marketing messages (e.g., email, social media)."),
-    preferredPurchasingChannels: z.string().describe("Where they prefer to buy (e.g., online, in-store)."),
-    roleInBuyingProcess: z.string().describe("Their influence in the decision-making process (e.g., decision-maker, influencer)."),
-  }),
-  quote: z.string().describe("A short, impactful quote representing the persona's perspective."),
-  scenario: z.string().describe("A brief narrative illustrating a typical situation or interaction related to the brand/problem."),
-  personalityRadar: z.object({
-    // REMOVED .min(0).max(100) from these fields
-    openness: z.number().describe("Score (0-100) for openness to experience."),
-    conscientiousness: z.number().describe("Score (0-100) for conscientiousness."),
-    extraversion: z.number().describe("Score (0-100) for extraversion."),
-    agreeableness: z.number().describe("Score (0-100) for agreeableness."),
-    neuroticism: z.number().describe("Score (0-100) for neuroticism (emotional stability inverse)."),
-  }),
-}).describe("A detailed consumer persona profile.");
+// --- Manually Defined JSON Schema with 'additionalProperties: false' ---
+const personaJsonSchema = {
+  type: "object",
+  properties: {
+    demographics: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "The persona's first name. Use 'USER_INPUT' as placeholder." },
+        age: { type: "string", description: "The persona's age range or specific age. Use 'USER_INPUT' as placeholder." },
+        occupation: { type: "string", description: "The persona's job title or role. Use 'USER_INPUT' as placeholder." },
+        incomeLevel: { type: "number", description: "Estimated annual income as a number, e.g., 45000." },
+        educationLevel: { type: "string", description: "Highest level of education achieved." },
+        location: { type: "string", description: "General location (e.g., city, region). Use 'USER_INPUT' as placeholder." },
+      },
+      required: ["name", "age", "occupation", "incomeLevel", "educationLevel", "location"],
+      // --- CORRECTION: Add additionalProperties: false to nested object ---
+      additionalProperties: false,
+    },
+    psychographics: {
+      type: "object",
+      properties: {
+        valuesAndBeliefs: { type: "string", description: "Core values, beliefs, and attitudes." },
+        lifestyle: { type: "string", description: "Hobbies, interests, daily routine, social habits." },
+        personalityTraits: { type: "string", description: "Key personality characteristics (e.g., introverted, analytical)." },
+        goalsAndAspirations: { type: "string", description: "Personal and professional goals." },
+      },
+      required: ["valuesAndBeliefs", "lifestyle", "personalityTraits", "goalsAndAspirations"],
+      // --- CORRECTION: Add additionalProperties: false to nested object ---
+      additionalProperties: false,
+    },
+    painPointsAndChallenges: {
+      type: "object",
+      properties: {
+        primaryFrustrations: { type: "string", description: "Main problems or frustrations the persona faces relevant to the brand." },
+        underlyingCauses: { type: "string", description: "Root causes of these frustrations." },
+        impactOnBehavior: { type: "string", description: "How these challenges affect their decisions or behavior." },
+        opportunitiesForSolutions: { type: "string", description: "How the brand/product could potentially solve these issues." },
+      },
+      required: ["primaryFrustrations", "underlyingCauses", "impactOnBehavior", "opportunitiesForSolutions"],
+      // --- CORRECTION: Add additionalProperties: false to nested object ---
+      additionalProperties: false,
+    },
+    purchasingBehavior: {
+      type: "object",
+      properties: {
+        buyingHabits: { type: "string", description: "Frequency, timing, and common types of purchases." },
+        purchasingMotivations: { type: "string", description: "Reasons behind purchase decisions (e.g., price, quality, status)." },
+        preferredCommunicationChannels: { type: "string", description: "How they prefer to receive marketing messages (e.g., email, social media)." },
+        preferredPurchasingChannels: { type: "string", description: "Where they prefer to buy (e.g., online, in-store)." },
+        roleInBuyingProcess: { type: "string", description: "Their influence in the decision-making process (e.g., decision-maker, influencer)." },
+      },
+      required: ["buyingHabits", "purchasingMotivations", "preferredCommunicationChannels", "preferredPurchasingChannels", "roleInBuyingProcess"],
+      // --- CORRECTION: Add additionalProperties: false to nested object ---
+      additionalProperties: false,
+    },
+    quote: { type: "string", description: "A short, impactful quote representing the persona's perspective." },
+    scenario: { type: "string", description: "A brief narrative illustrating a typical situation or interaction related to the brand/problem." },
+    personalityRadar: {
+      type: "object",
+      properties: {
+        openness: { type: "number", description: "Score (0-100) for openness to experience." },
+        conscientiousness: { type: "number", description: "Score (0-100) for conscientiousness." },
+        extraversion: { type: "number", description: "Score (0-100) for extraversion." },
+        agreeableness: { type: "number", description: "Score (0-100) for agreeableness." },
+        neuroticism: { type: "number", description: "Score (0-100) for neuroticism (emotional stability inverse)." },
+      },
+      required: ["openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"],
+      // --- CORRECTION: Add additionalProperties: false to nested object ---
+      additionalProperties: false,
+    },
+  },
+  required: ["demographics", "psychographics", "painPointsAndChallenges", "purchasingBehavior", "quote", "scenario", "personalityRadar"],
+  description: "A detailed consumer persona profile.",
+  // --- CORRECTION: Add additionalProperties: false to the root object ---
+  additionalProperties: false,
+};
 
-const jsonSchema = zodToJsonSchema(PersonaSchema, "persona");
 
 export async function POST(request) {
   try {
@@ -69,10 +101,8 @@ export async function POST(request) {
         return NextResponse.json({ error: "Missing required input fields", details: "Server validation failed: one or more inputs were empty." }, { status: 400 });
     }
 
-    // Extract first name for scenario generation
     const firstName = personName.split(' ')[0];
 
-    // --- Prepare Prompts ---
     const systemPrompt = `
 You are a marketing expert generating a structured consumer persona based on brand details and some user-provided demographics.
 Your goal is to create a realistic and insightful persona profile.
@@ -96,7 +126,7 @@ Generate a consumer persona based on the following details:
 - User-Provided Location Hint: ${personLocation}
 - User-Provided First Name: ${firstName}
 
-Remember to use "USER_INPUT" as placeholders for name, age, occupation, and location in the final JSON demographics, but use the provided hints to inform the rest of the persona's characteristics (psychographics, behaviors, etc.). 
+Remember to use "USER_INPUT" as placeholders for name, age, occupation, and location in the final JSON demographics, but use the provided hints to inform the rest of the persona's characteristics (psychographics, behaviors, etc.).
 
 
 IMPORTANT REQUIREMENTS:
@@ -116,7 +146,7 @@ IMPORTANT REQUIREMENTS:
                 type: "json_schema",
                 name: "persona",
                 strict: true,
-                schema: jsonSchema.definitions.persona
+                schema: personaJsonSchema
             }
         },
         temperature: 0.8,
@@ -130,7 +160,6 @@ IMPORTANT REQUIREMENTS:
       throw new Error("No valid response text received from OpenAI.");
     }
 
-    // Parse the JSON response text
     let personaData;
     try {
         personaData = JSON.parse(response.output_text);
@@ -190,7 +219,7 @@ IMPORTANT REQUIREMENTS:
           console.warn("DALL-E response did not contain a valid image URL. Response:", JSON.stringify(imageResponse, null, 2));
       }
     } catch (imageError) {
-      console.error("Error generating DALL·E image:", imageError);
+      console.error("Error generating DALL·E image:", imageError.message);
     }
 
     personaData.imageUrl = imageUrl;
@@ -215,7 +244,7 @@ IMPORTANT REQUIREMENTS:
     }
 
     const statusCode = error.status || 500;
-    const errorDetail = error.error?.message || error.message || "Unknown server error occurred";
+    const errorDetail = error.error?.message || "Unknown server error occurred";
 
     return NextResponse.json(
       {
