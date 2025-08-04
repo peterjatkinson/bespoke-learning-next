@@ -36,6 +36,11 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/claude-artifact-converter-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Claude Artifact Converter Test
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/claude-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Claude Test
             </a>
@@ -43,6 +48,11 @@ export default function LandingPage() {
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
             <a href="/test-apps/claude-test-two" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
               Claude Test Two
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/claudeapi-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Claudeapi Test
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
