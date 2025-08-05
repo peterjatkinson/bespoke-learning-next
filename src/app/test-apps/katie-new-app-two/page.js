@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import jsPDF from 'jspdf';
 
 const MarketIntelligenceScorecard = () => {
   // State for tracking active tab
@@ -125,47 +126,107 @@ const MarketIntelligenceScorecard = () => {
     setLiveMessage(`Switched to ${tabDisplayName} tab.`);
   };
 
-  // Handle download results
-  const handleDownloadResults = () => {
+  // Handle PDF download
+  const handleDownloadPDF = () => {
     const { generationTotal, disseminationTotal, responsivenessTotal } = calculateTotalScores();
+    const doc = new jsPDF();
+    let yPos = 20;
+    const margin = 20;
+
+    // --- Page 1: Summary ---
+    doc.setFontSize(20);
+    doc.text('Market Intelligence Assessment Results', margin, yPos);
+    yPos += 20;
+
+    doc.setFontSize(16);
+    doc.text('Overall Results', margin, yPos);
+    yPos += 10;
+
+    doc.setFontSize(12);
+    doc.text(`Assessment of market intelligence generation: ${generationTotal}/40`, margin, yPos);
+    yPos += 10;
+    doc.text(`Assessment of market intelligence dissemination: ${disseminationTotal}/40`, margin, yPos);
+    yPos += 10;
+    doc.text(`Assessment of responsiveness to market intelligence: ${responsivenessTotal}/40`, margin, yPos);
+    yPos += 20;
     
-    // Create a comprehensive text file with all scorecard results
-    let content = `MARKET INTELLIGENCE ASSESSMENT RESULTS\n\n`;
-    content += `Overall Results:\n`;
-    content += `Assessment of market intelligence generation: ${generationTotal}/40\n`;
-    content += `Assessment of market intelligence dissemination: ${disseminationTotal}/40\n`;
-    content += `Assessment of responsiveness to market intelligence: ${responsivenessTotal}/40\n\n`;
+    doc.setFontSize(10);
+    doc.text('Performance Levels:', margin, yPos);
+    yPos += 5;
+    doc.text('34–40 = High', margin, yPos);
+    yPos += 5;
+    doc.text('24–33 = Moderate', margin, yPos);
+    yPos += 5;
+    doc.text('8–23 = Low', margin, yPos);
     
-    content += `MARKET INTELLIGENCE GENERATION BREAKDOWN:\n`;
+    // --- Page 2: Generation Breakdown ---
+    doc.addPage();
+    yPos = 20;
+    doc.setFontSize(16);
+    doc.text('Market Intelligence Generation Breakdown', margin, yPos);
+    yPos += 10;
+
+    doc.setFontSize(12);
     generationStatements.forEach((statement, index) => {
-      content += `${index + 1}. ${statement}\n`;
-      content += `   Score: ${generationScores[index]}/5\n\n`;
+      const text = `${index + 1}. ${statement}`;
+      const score = generationScores[index];
+      const splitText = doc.splitTextToSize(text, 170);
+      doc.text(splitText, margin, yPos);
+      doc.text(`Score: ${score}/5`, 160, yPos);
+      yPos += (splitText.length * 5) + 10;
+      if (yPos > 280) { // Check for page overflow
+        doc.addPage();
+        yPos = 20;
+        doc.setFontSize(12);
+      }
     });
-    
-    content += `MARKET INTELLIGENCE DISSEMINATION BREAKDOWN:\n`;
+
+    // --- Page 3: Dissemination Breakdown ---
+    doc.addPage();
+    yPos = 20;
+    doc.setFontSize(16);
+    doc.text('Market Intelligence Dissemination Breakdown', margin, yPos);
+    yPos += 10;
+
+    doc.setFontSize(12);
     disseminationStatements.forEach((statement, index) => {
-      content += `${index + 1}. ${statement}\n`;
-      content += `   Score: ${disseminationScores[index]}/5\n\n`;
+      const text = `${index + 1}. ${statement}`;
+      const score = disseminationScores[index];
+      const splitText = doc.splitTextToSize(text, 170);
+      doc.text(splitText, margin, yPos);
+      doc.text(`Score: ${score}/5`, 160, yPos);
+      yPos += (splitText.length * 5) + 10;
+      if (yPos > 280) { // Check for page overflow
+        doc.addPage();
+        yPos = 20;
+        doc.setFontSize(12);
+      }
     });
-    
-    content += `RESPONSIVENESS TO MARKET INTELLIGENCE BREAKDOWN:\n`;
+
+    // --- Page 4: Responsiveness Breakdown ---
+    doc.addPage();
+    yPos = 20;
+    doc.setFontSize(16);
+    doc.text('Responsiveness to Market Intelligence Breakdown', margin, yPos);
+    yPos += 10;
+
+    doc.setFontSize(12);
     responsivenessStatements.forEach((statement, index) => {
-      content += `${index + 1}. ${statement}\n`;
-      content += `   Score: ${responsivenessScores[index]}/5\n\n`;
+      const text = `${index + 1}. ${statement}`;
+      const score = responsivenessScores[index];
+      const splitText = doc.splitTextToSize(text, 170);
+      doc.text(splitText, margin, yPos);
+      doc.text(`Score: ${score}/5`, 160, yPos);
+      yPos += (splitText.length * 5) + 10;
+      if (yPos > 280) { // Check for page overflow
+        doc.addPage();
+        yPos = 20;
+        doc.setFontSize(12);
+      }
     });
-    
-    // Create downloadable text file
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'market-intelligence-assessment-results.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    
-    setLiveMessage('Market intelligence assessment results downloaded as text file.');
+
+    doc.save('market-intelligence-assessment.pdf');
+    setLiveMessage('A PDF file of your assessment results has been generated and downloaded.');
   };
 
   // Get performance level based on score (adjusted for 8 statements max 40 points)
@@ -267,10 +328,10 @@ const MarketIntelligenceScorecard = () => {
             Switch to answers
           </button>
           <button
-            onClick={handleDownloadResults}
+            onClick={handleDownloadPDF}
             className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            Download results
+            Download PDF
           </button>
           <button
             onClick={handleReset}
