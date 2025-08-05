@@ -101,8 +101,13 @@ export default function LandingPage() {
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
-            <a href="/test-apps/katie-test" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
-              Katie Test
+            <a href="/test-apps/katie-new-app-one" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Katie New App One
+            </a>
+          </li>
+            <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="/test-apps/katie-new-app-two" className="text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              Katie New App Two
             </a>
           </li>
             <li className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow duration-200">
