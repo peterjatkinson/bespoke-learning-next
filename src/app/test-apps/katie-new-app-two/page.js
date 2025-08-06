@@ -129,104 +129,104 @@ const MarketIntelligenceScorecard = () => {
   // Handle PDF download
   const handleDownloadPDF = () => {
     const { generationTotal, disseminationTotal, responsivenessTotal } = calculateTotalScores();
+    
+    // Create new jsPDF instance
     const doc = new jsPDF();
-    let yPos = 20;
-    const margin = 20;
+    let y = 30; // Starting Y position
 
-    // --- Page 1: Summary ---
+    // Add title
     doc.setFontSize(20);
-    doc.text('Market Intelligence Assessment Results', margin, yPos);
-    yPos += 20;
+    doc.text('Market Intelligence Assessment Results', 20, y);
+    y += 20;
 
+    // Add overall scores
     doc.setFontSize(16);
-    doc.text('Overall Results', margin, yPos);
-    yPos += 10;
-
+    doc.text('Overall Results', 20, y);
+    y += 10;
     doc.setFontSize(12);
-    doc.text(`Assessment of market intelligence generation: ${generationTotal}/40`, margin, yPos);
-    yPos += 10;
-    doc.text(`Assessment of market intelligence dissemination: ${disseminationTotal}/40`, margin, yPos);
-    yPos += 10;
-    doc.text(`Assessment of responsiveness to market intelligence: ${responsivenessTotal}/40`, margin, yPos);
-    yPos += 20;
-    
-    doc.setFontSize(10);
-    doc.text('Performance Levels:', margin, yPos);
-    yPos += 5;
-    doc.text('34–40 = High', margin, yPos);
-    yPos += 5;
-    doc.text('24–33 = Moderate', margin, yPos);
-    yPos += 5;
-    doc.text('8–23 = Low', margin, yPos);
-    
-    // --- Page 2: Generation Breakdown ---
-    doc.addPage();
-    yPos = 20;
-    doc.setFontSize(16);
-    doc.text('Market Intelligence Generation Breakdown', margin, yPos);
-    yPos += 10;
+    doc.text(`Assessment of market intelligence generation: ${generationTotal}/40`, 20, y);
+    y += 10;
+    doc.text(`Assessment of market intelligence dissemination: ${disseminationTotal}/40`, 20, y);
+    y += 10;
+    doc.text(`Assessment of responsiveness to market intelligence: ${responsivenessTotal}/40`, 20, y);
+    y += 20;
 
+    // Helper function to add a new page if needed
+    const checkPageBreak = (currentY, minSpaceRequired) => {
+      // 280 is a safe lower margin for A4 size
+      if (currentY + minSpaceRequired > 280) {
+        doc.addPage();
+        return 20; // New Y position on the next page
+      }
+      return currentY;
+    };
+    
+    const lineHeight = 7;
+    const spaceAfterScore = 12;
+
+    // Add Market Intelligence Generation Breakdown
+    y = checkPageBreak(y, 10);
+    doc.setFontSize(16);
+    doc.text('MARKET INTELLIGENCE GENERATION BREAKDOWN:', 20, y);
+    y += 10;
     doc.setFontSize(12);
     generationStatements.forEach((statement, index) => {
-      const text = `${index + 1}. ${statement}`;
-      const score = generationScores[index];
-      const splitText = doc.splitTextToSize(text, 170);
-      doc.text(splitText, margin, yPos);
-      doc.text(`Score: ${score}/5`, 160, yPos);
-      yPos += (splitText.length * 5) + 10;
-      if (yPos > 280) { // Check for page overflow
-        doc.addPage();
-        yPos = 20;
-        doc.setFontSize(12);
-      }
+      // Use splitTextToSize to get the number of lines
+      const statementLines = doc.splitTextToSize(`${index + 1}. ${statement}`, 170);
+      const statementHeight = statementLines.length * lineHeight;
+      
+      // Check for page break before printing the full block
+      y = checkPageBreak(y, statementHeight + lineHeight + spaceAfterScore);
+
+      doc.text(statementLines, 20, y);
+      y += statementHeight;
+      
+      doc.text(`Score: ${generationScores[index]}/5`, 20, y);
+      y += lineHeight + spaceAfterScore;
     });
-
-    // --- Page 3: Dissemination Breakdown ---
-    doc.addPage();
-    yPos = 20;
+    
+    // Add Market Intelligence Dissemination Breakdown
+    y = checkPageBreak(y, 10);
     doc.setFontSize(16);
-    doc.text('Market Intelligence Dissemination Breakdown', margin, yPos);
-    yPos += 10;
-
+    doc.text('MARKET INTELLIGENCE DISSEMINATION BREAKDOWN:', 20, y);
+    y += 10;
     doc.setFontSize(12);
     disseminationStatements.forEach((statement, index) => {
-      const text = `${index + 1}. ${statement}`;
-      const score = disseminationScores[index];
-      const splitText = doc.splitTextToSize(text, 170);
-      doc.text(splitText, margin, yPos);
-      doc.text(`Score: ${score}/5`, 160, yPos);
-      yPos += (splitText.length * 5) + 10;
-      if (yPos > 280) { // Check for page overflow
-        doc.addPage();
-        yPos = 20;
-        doc.setFontSize(12);
-      }
+      const statementLines = doc.splitTextToSize(`${index + 1}. ${statement}`, 170);
+      const statementHeight = statementLines.length * lineHeight;
+      
+      y = checkPageBreak(y, statementHeight + lineHeight + spaceAfterScore);
+
+      doc.text(statementLines, 20, y);
+      y += statementHeight;
+
+      doc.text(`Score: ${disseminationScores[index]}/5`, 20, y);
+      y += lineHeight + spaceAfterScore;
     });
-
-    // --- Page 4: Responsiveness Breakdown ---
-    doc.addPage();
-    yPos = 20;
+    
+    // Add Responsiveness to Market Intelligence Breakdown
+    y = checkPageBreak(y, 10);
     doc.setFontSize(16);
-    doc.text('Responsiveness to Market Intelligence Breakdown', margin, yPos);
-    yPos += 10;
-
+    doc.text('RESPONSIVENESS TO MARKET INTELLIGENCE BREAKDOWN:', 20, y);
+    y += 10;
     doc.setFontSize(12);
     responsivenessStatements.forEach((statement, index) => {
-      const text = `${index + 1}. ${statement}`;
-      const score = responsivenessScores[index];
-      const splitText = doc.splitTextToSize(text, 170);
-      doc.text(splitText, margin, yPos);
-      doc.text(`Score: ${score}/5`, 160, yPos);
-      yPos += (splitText.length * 5) + 10;
-      if (yPos > 280) { // Check for page overflow
-        doc.addPage();
-        yPos = 20;
-        doc.setFontSize(12);
-      }
-    });
+      const statementLines = doc.splitTextToSize(`${index + 1}. ${statement}`, 170);
+      const statementHeight = statementLines.length * lineHeight;
+      
+      y = checkPageBreak(y, statementHeight + lineHeight + spaceAfterScore);
 
+      doc.text(statementLines, 20, y);
+      y += statementHeight;
+
+      doc.text(`Score: ${responsivenessScores[index]}/5`, 20, y);
+      y += lineHeight + spaceAfterScore;
+    });
+    
+    // Save the PDF
     doc.save('market-intelligence-assessment.pdf');
-    setLiveMessage('A PDF file of your assessment results has been generated and downloaded.');
+    
+    setLiveMessage('PDF download would be generated here. In your Next.js project, install jsPDF library to enable this feature.');
   };
 
   // Get performance level based on score (adjusted for 8 statements max 40 points)
