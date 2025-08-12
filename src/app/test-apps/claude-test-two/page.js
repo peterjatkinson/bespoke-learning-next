@@ -106,7 +106,7 @@ const WaterfallApp = () => {
             <table className="min-w-full text-sm text-white">
               <thead className="bg-slate-700 text-sky-200">
                 <tr>
-                  <th className="p-3 text-left">Waterfall Stage</th>
+                  <th className="p-3 text-left">Waterfall Stageeee</th>
                   <th className="p-3 text-right">LP</th>
                   <th className="p-3 text-right">GP</th>
                   <th className="p-3 text-right">Total</th>
