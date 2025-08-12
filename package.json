@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "predev": "node scripts/generateSiteMap.js",
+    "prebuild": "node scripts/generateSiteMap.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
