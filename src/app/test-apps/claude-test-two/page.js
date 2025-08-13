@@ -49,7 +49,7 @@ const WaterfallApp = () => {
     <div className="min-h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 font-sans">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wide drop-shadow-md">
-          Private Equity Waterfall Explorer
+          Private Equity Waterfall Explorer!
         </h1>
 
         <div className="flex flex-col lg:flex-row gap-6">
