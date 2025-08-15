@@ -392,7 +392,7 @@ const InteractiveNPVDemo = () => {
       <div className="mt-12 bg-gray-100 py-6 px-4">
         <div className="max-w-6xl mx-auto text-center text-sm text-gray-600">
           <p>NPV is a cornerstone of financial decision-making, helping businesses evaluate investments objectively.</p>
-          <p className="mt-2">Experiment with different values to see how changes affect project viability!</p>
+          <p className="mt-2">Experiment with different values to see how changes affect project viability!!</p>
         </div>
       </div>
     </div>
