@@ -13,7 +13,7 @@ const ChatMessage = ({ message }) => {
   if (role === 'user') {
     return (
       <div className="flex justify-end mb-4">
-        <div className="relative max-w-lg px-5 py-3 rounded-t-2xl rounded-bl-2xl shadow-lg border-2 border-black bg-[#00AEEF] text-white">
+        <div className="relative max-w-lg px-5 py-3 rounded-t-2xl rounded-bl-2xl shadow-lg border-2 border-black bg-[#0056B3] text-white">
           <p className="text-sm font-bold" style={{ whiteSpace: 'pre-wrap' }}>{content}</p>
         </div>
       </div>
