@@ -76,11 +76,14 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null); // Ref for the scrollable chat area
   const textareaRef = useRef(null);
 
+  // **FIX:** Changed scrolling logic to only affect the chat container
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
   // Effect to handle the auto-expanding textarea
@@ -126,9 +129,8 @@ export default function Home() {
   };
 
   return (
-    // **FIX:** Wrapped the component in a container to center it and set a fixed height for the chat window.
     <div className="w-full min-h-full bg-slate-100 font-sans antialiased flex items-center justify-center p-4">
-      <div className="flex flex-col h-[500px] w-full max-w-4xl bg-white border-4 border-black rounded-2xl shadow-lg overflow-hidden">
+      <div className="flex flex-col h-[600px] w-full max-w-4xl bg-white border-4 border-black rounded-2xl shadow-lg overflow-hidden">
         <header className="p-4 text-center shrink-0 border-b-4 border-black bg-white">
           <div className="flex justify-center items-center gap-3">
               <BookOpen className="w-8 h-8 text-[#ED1C24]" />
@@ -141,7 +143,8 @@ export default function Home() {
           </p>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6 space-y-6">
+        {/* **FIX:** Added ref to the main chat area */}
+        <main ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
           <div className="max-w-3xl mx-auto w-full">
             {messages.map((msg, index) => (
               <ChatMessage key={index} message={msg} />
@@ -157,7 +160,7 @@ export default function Home() {
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
+            {/* The messagesEndRef is no longer needed for scrolling */}
           </div>
         </main>
 
