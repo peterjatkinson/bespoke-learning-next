@@ -14,7 +14,6 @@ const ChatMessage = ({ message }) => {
     return (
       <div className="flex justify-end mb-4">
         <div className="relative max-w-lg px-5 py-3 rounded-t-2xl rounded-bl-2xl shadow-lg border-2 border-black bg-[#00AEEF] text-white">
-          {/* **FIX:** Changed font-semibold to font-bold for better readability */}
           <p className="text-sm font-bold" style={{ whiteSpace: 'pre-wrap' }}>{content}</p>
         </div>
       </div>
@@ -127,76 +126,76 @@ export default function Home() {
   };
 
   return (
-    // **FIX:** Changed background color and made height conditional to be compact on load
-    <div className={`flex flex-col ${messages.length > 0 ? 'h-screen' : 'h-auto min-h-screen'} bg-slate-100 font-sans antialiased`}>
-      <header className="p-4 text-center shrink-0 border-b-4 border-black bg-white">
-        <div className="flex justify-center items-center gap-3">
-            <BookOpen className="w-8 h-8 text-[#ED1C24]" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 tracking-tighter">
-              IMC Module Assistant
-            </h1>
-        </div>
-        <p className="mt-2 text-md text-gray-600">
-            Ask me anything about the Integrated Marketing Communications module!
-        </p>
-      </header>
+    // **FIX:** Wrapped the component in a container to center it and set a fixed height for the chat window.
+    <div className="w-full min-h-full bg-slate-100 font-sans antialiased flex items-center justify-center p-4">
+      <div className="flex flex-col h-[500px] w-full max-w-4xl bg-white border-4 border-black rounded-2xl shadow-lg overflow-hidden">
+        <header className="p-4 text-center shrink-0 border-b-4 border-black bg-white">
+          <div className="flex justify-center items-center gap-3">
+              <BookOpen className="w-8 h-8 text-[#ED1C24]" />
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 tracking-tighter">
+                IMC Module Assistant
+              </h1>
+          </div>
+          <p className="mt-2 text-md text-gray-600">
+              Ask me anything about the Integrated Marketing Communications module!
+          </p>
+        </header>
 
-      {/* **FIX:** Main content area only appears and takes up space after the first message */}
-      <main className={`flex-1 overflow-y-auto p-6 space-y-6 transition-opacity duration-500 ${messages.length > 0 ? 'opacity-100' : 'opacity-0 h-0 p-0'}`}>
-        <div className="max-w-3xl mx-auto w-full">
-          {messages.map((msg, index) => (
-            <ChatMessage key={index} message={msg} />
-          ))}
-          {isLoading && (
-            <div className="flex justify-start mb-4">
-              <div className="max-w-lg px-4 py-3 rounded-2xl shadow bg-white border-2 border-black">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-75"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-150"></div>
+        <main className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="max-w-3xl mx-auto w-full">
+            {messages.map((msg, index) => (
+              <ChatMessage key={index} message={msg} />
+            ))}
+            {isLoading && (
+              <div className="flex justify-start mb-4">
+                <div className="max-w-lg px-4 py-3 rounded-2xl shadow bg-white border-2 border-black">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-75"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-150"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-      </main>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        </main>
 
-      {/* **FIX:** Footer is pushed down by main content only when messages exist */}
-      <footer className={`p-4 shrink-0 bg-white/80 backdrop-blur-lg border-t-4 border-black ${messages.length === 0 ? 'mt-auto' : ''}`}>
-        <div className="max-w-3xl mx-auto">
-          <form onSubmit={handleSubmit} className="flex items-start space-x-3">
-            <div className="relative flex-1">
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask a question about the module..."
-                  className="w-full p-3 pr-4 border-2 border-black rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-[#D90081]/50 transition-all resize-none overflow-y-auto max-h-36 min-h-[50px]"
-                  rows="1"
-                  disabled={isLoading}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSubmit(e);
-                    }
-                  }}
-                />
-            </div>
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center p-3 rounded-full font-bold text-white bg-[#ED1C24] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 hover:bg-red-600 active:bg-red-700 hover:scale-105 active:scale-95"
-              disabled={isLoading}
-            >
-                {isLoading ? (
-                    <LoaderCircle className="w-6 h-6 animate-spin" />
-                ) : (
-                    <Send className="w-6 h-6" />
-                )}
-            </button>
-          </form>
-        </div>
-      </footer>
+        <footer className="p-4 shrink-0 bg-white/80 backdrop-blur-lg border-t-4 border-black">
+          <div className="max-w-3xl mx-auto">
+            <form onSubmit={handleSubmit} className="flex items-start space-x-3">
+              <div className="relative flex-1">
+                  <textarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Ask a question about the module..."
+                    className="w-full p-3 pr-4 border-2 border-black rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-[#D90081]/50 transition-all resize-none overflow-y-auto max-h-36 min-h-[50px]"
+                    rows="1"
+                    disabled={isLoading}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit(e);
+                      }
+                    }}
+                  />
+              </div>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center p-3 rounded-full font-bold text-white bg-[#ED1C24] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 hover:bg-red-600 active:bg-red-700 hover:scale-105 active:scale-95"
+                disabled={isLoading}
+              >
+                  {isLoading ? (
+                      <LoaderCircle className="w-6 h-6 animate-spin" />
+                  ) : (
+                      <Send className="w-6 h-6" />
+                  )}
+              </button>
+            </form>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
