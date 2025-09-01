@@ -79,25 +79,24 @@ export default function Home() {
   const chatContainerRef = useRef(null); // Ref for the scrollable chat area
   const textareaRef = useRef(null);
 
-  // **FIX:** Changed scrolling logic to only affect the chat container
+  // Scroll only the chat container to bottom when messages change
   useEffect(() => {
     if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // Effect to handle the auto-expanding textarea
-useEffect(() => {
-  const el = textareaRef.current;
-  if (!el) return;
+  // Auto-expanding textarea
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
 
-  const MAX_PX = 144; // 9rem (Tailwind 36) at 16px root font size
-  el.style.height = 'auto';
-  const newHeight = Math.min(el.scrollHeight, MAX_PX);
-  el.style.height = `${newHeight}px`;
-  el.style.overflowY = el.scrollHeight > MAX_PX ? 'auto' : 'hidden';
-}, [input]);
-
+    const MAX_PX = 144; // 9rem (Tailwind 36) at 16px root font size
+    el.style.height = 'auto';
+    const newHeight = Math.min(el.scrollHeight, MAX_PX);
+    el.style.height = `${newHeight}px`;
+    el.style.overflowY = el.scrollHeight > MAX_PX ? 'auto' : 'hidden';
+  }, [input]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,21 +133,25 @@ useEffect(() => {
 
   return (
     <div className="w-full min-h-full bg-slate-100 font-sans antialiased flex items-center justify-center p-4">
-      <div className="flex flex-col h-[700px] w-full max-w-4xl bg-white border-4 border-black rounded-2xl shadow-lg overflow-hidden">
+      {/* CHANGED: remove fixed height, use auto height with a max cap */}
+      <div className="flex flex-col h-auto max-h-[700px] w-full max-w-4xl bg-white border-4 border-black rounded-2xl shadow-lg overflow-hidden">
         <header className="p-4 text-center shrink-0 border-b-4 border-black bg-white">
           <div className="flex justify-center items-center gap-3">
-              <BookOpen className="w-8 h-8 text-[#ED1C24]" />
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 tracking-tighter">
-                IMC Module Assistant
-              </h1>
+            <BookOpen className="w-8 h-8 text-[#ED1C24]" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 tracking-tighter">
+              IMC Module Assistant
+            </h1>
           </div>
           <p className="mt-2 text-md text-gray-600">
-              Ask me anything about the Integrated Marketing Communications module!
+            Ask me anything about the Integrated Marketing Communications module!
           </p>
         </header>
 
-        {/* **FIX:** Added ref to the main chat area */}
-        <main ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
+        {/* CHANGED: ensure this area can shrink when content is small */}
+        <main
+          ref={chatContainerRef}
+          className="min-h-0 flex-1 overflow-y-auto p-6 space-y-6"
+        >
           <div className="max-w-3xl mx-auto w-full">
             {messages.map((msg, index) => (
               <ChatMessage key={index} message={msg} />
@@ -164,7 +167,6 @@ useEffect(() => {
                 </div>
               </div>
             )}
-            {/* The messagesEndRef is no longer needed for scrolling */}
           </div>
         </main>
 
@@ -172,33 +174,32 @@ useEffect(() => {
           <div className="max-w-3xl mx-auto">
             <form onSubmit={handleSubmit} className="flex items-start space-x-3">
               <div className="relative flex-1">
-                  <textarea
-  ref={textareaRef}
-  value={input}
-  onChange={(e) => setInput(e.target.value)}
-  placeholder="Ask a question about the module..."
-  className="w-full p-3 pr-4 border-2 border-black rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-[#D90081]/50 transition-all resize-none overflow-y-hidden max-h-36 min-h-[50px]"
-  rows="1"
-  disabled={isLoading}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  }}
-/>
-
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask a question about the module..."
+                  className="w-full p-3 pr-4 border-2 border-black rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-[#D90081]/50 transition-all resize-none overflow-y-hidden max-h-36 min-h-[50px]"
+                  rows="1"
+                  disabled={isLoading}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit(e);
+                    }
+                  }}
+                />
               </div>
               <button
                 type="submit"
                 className="inline-flex items-center justify-center p-3 rounded-full font-bold text-white bg-[#ED1C24] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 hover:bg-red-600 active:bg-red-700 hover:scale-105 active:scale-95"
                 disabled={isLoading}
               >
-                  {isLoading ? (
-                      <LoaderCircle className="w-6 h-6 animate-spin" />
-                  ) : (
-                      <Send className="w-6 h-6" />
-                  )}
+                {isLoading ? (
+                  <LoaderCircle className="w-6 h-6 animate-spin" />
+                ) : (
+                  <Send className="w-6 h-6" />
+                )}
               </button>
             </form>
           </div>
