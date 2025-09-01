@@ -225,12 +225,11 @@ export default function Home() {
 
   return (
     <div className="w-screen min-h-screen bg-slate-100 font-sans antialiased p-0 sm:p-4 sm:flex sm:items-center sm:justify-center">
-      <div
-        className="mx-0 sm:mx-auto flex flex-col h-auto max-h-[700px] w-full sm:max-w-4xl bg-white border-4 border-black rounded-none sm:rounded-2xl sm:shadow-lg overflow-hidden"
-        role="application"
-        aria-label="IMC Module Assistant"
-      >
-        <header className="p-4 sm:p-5 text-center shrink-0 border-b-4 border-black bg-white">
+ <div
+   className="mx-0 sm:mx-auto flex flex-col h-auto max-h-[700px] w-full sm:max-w-4xl bg-white border-4 border-black rounded-none sm:rounded-2xl sm:shadow-lg overflow-hidden"
+ >
+
+ <div className="p-4 sm:p-5 text-center shrink-0 border-b-4 border-black bg-white">
           <div className="flex justify-center items-center gap-3">
             <BookOpen className="w-7 h-7 sm:w-8 sm:h-8 text-[#ED1C24]" aria-hidden="true" focusable="false" />
             <h1 id="chat-title" className="text-2xl sm:text-4xl font-bold text-gray-800 tracking-tighter">
@@ -240,7 +239,7 @@ export default function Home() {
           <p className="mt-2 text-sm sm:text-md text-gray-600">
             Ask me anything about the Integrated Marketing Communications module!
           </p>
-        </header>
+        </div>
 
         {/* Live regions */}
         <div ref={liveAssertiveRef} className="sr-only" role="alert" aria-atomic="true" />
@@ -285,7 +284,7 @@ export default function Home() {
           </div>
         </main>
 
-        <footer className="p-3 sm:p-4 shrink-0 bg-white/80 backdrop-blur-lg border-t-4 border-black">
+        <div className="p-3 sm:p-4 shrink-0 bg-white/80 backdrop-blur-lg border-t-4 border-black">
           <form onSubmit={handleSubmit} className="relative">
             <textarea
               id="message-input"
@@ -328,7 +327,7 @@ export default function Home() {
               )}
             </button>
           </form>
-        </footer>
+        </div>
       </div>
     </div>
   );
