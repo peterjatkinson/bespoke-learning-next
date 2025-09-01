@@ -172,9 +172,7 @@ export default function Home() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask a question about the module..."
               aria-label="Message input"
-              // MOBILE: min height = ~2 lines of text (2*24px) + 24px padding = 72px
-              // DESKTOP: keep smaller starting height
-              className="w-full p-3 pr-14 sm:pr-16 border-2 border-black rounded-lg text-gray-800 placeholder-gray-500 leading-6 focus:outline-none focus:ring-4 focus:ring-[#D90081]/50 transition-all resize-none overflow-y-hidden max-h-36 min-h-[72px] sm:min-h-[50px]"
+              className="w-full p-3 pr-14 sm:pr-16 border-2 border-black rounded-lg text-gray-800 placeholder-gray-500 leading-6 focus:outline-none focus:ring-4 focus:ring-[#ED1C24] transition-all resize-none overflow-y-hidden max-h-36 min-h-[72px] sm:min-h-[50px]"
               rows={1}
               disabled={isLoading}
               onKeyDown={(e) => {
@@ -185,10 +183,11 @@ export default function Home() {
               }}
             />
 
-            {/* Slightly raised so it doesn't touch the textarea border */}
+            {/* Compact, raised, and now with a strong focus-visible ring */}
             <button
               type="submit"
-              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 -mt-1 inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full font-bold text-white bg-[#ED1C24] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed transition-transform duration-200 active:scale-95"
+              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 -mt-1 inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full font-bold text-white bg-[#ED1C24] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed transition-transform duration-200 active:scale-95
+                         focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ED1C24] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               disabled={isLoading}
               aria-label="Send message"
             >
