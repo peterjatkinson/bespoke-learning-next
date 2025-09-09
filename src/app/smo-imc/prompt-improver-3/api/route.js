@@ -64,15 +64,97 @@ const refinementSchema = {
   required: ["isSufficient", "revisedText", "chatResponse"],
 };
 
+// ## COMPOSITION STEP (rewrites from scratch, produces 1–4 clean sentences + tags) ##
+const composeSystemPrompt = `
+You are a "Prompt Synthesizer".
+INPUTS:
+- prompt type
+- elements with user text (some may be empty)
+- tag map (element -> tag name like <Subject>...</Subject>)
+
+TASK:
+Write a NEW prompt from scratch in 1–4 complete sentences that integrates ONLY non-empty elements.
+Then return it as "taggedPrompt" where EACH included element is wrapped in its tag exactly once.
+
+STRICT RULES:
+- Do NOT use quotation marks at all (no “ ” or " "); never quote style descriptors.
+- Start with the Subject; then naturally integrate Action, Scene, Ambiance, Style, Composition, etc.
+- Fragmentary inputs must be rewritten into grammatical phrases or clauses (e.g., "in the rain" -> "in the rain"; "sad" -> "conveying sadness").
+- Ensure EVERY tagged span is inside a sentence—never trailing after a period.
+- Do not duplicate element content outside its tag; each element appears once.
+- No labels or bullet points; no parentheticals naming elements.
+- Clean punctuation; no dangling commas or double periods.
+- End the whole prompt with terminal punctuation.
+
+Return JSON only.
+`;
+
+const composeSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    taggedPrompt: {
+      type: "string",
+      description: "Final prompt (1–4 sentences) with element spans wrapped in tags.",
+    },
+  },
+  required: ["taggedPrompt"],
+};
+
+// Helpers
+const toTagName = (name) =>
+  name
+    .replace(/[^A-Za-z0-9]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join("");
+
+const punctuationCleanup = (s) =>
+  s
+    .replace(/\s+,/g, ",")
+    .replace(/\s+\./g, ".")
+    .replace(/,\s*,/g, ", ")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([!?;:])/g, "$1")
+    .replace(/([!?;:])\s*\./g, "$1")
+    .trim();
+
+// remove double-quotes around phrases (but keep apostrophes like robot's)
+const stripDoubleQuotes = (s) => s.replace(/"([^"]*)"/g, "$1");
+
+// join orphan short fragments like "in the rain" / "sad" to previous sentence
+const fixDanglingFragments = (text) => {
+  const pieces = text.match(/[^.!?]+[.!?]/g) || [text];
+  const preps = /^(in|with|under|on|at|by|amid|amidst|during|while|as|like|featuring|within)\b/i;
+  const shortAdj = /^(sad|happy|gloomy|melancholic|moody|dark|bright|quiet|noisy|somber|solemn)\b/i;
+
+  const out = [];
+  for (let i = 0; i < pieces.length; i++) {
+    let s = pieces[i].trim();
+    const core = s.replace(/[.!?]+$/, "").trim();
+    const wordCount = core.split(/\s+/).filter(Boolean).length;
+
+    const looksFragment = (preps.test(core) && wordCount <= 6) || (shortAdj.test(core) && wordCount <= 3);
+    if (looksFragment && out.length) {
+      // merge into previous sentence
+      const prev = out.pop().replace(/[.!?]+$/, "");
+      s = `${prev}, ${core}.`;
+    }
+    out.push(s);
+  }
+  // Ensure terminal punctuation
+  return out
+    .map((s) => (/[.!?]$/.test(s) ? s : s + "."))
+    .join(" ")
+    .trim();
+};
 
 export async function POST(request) {
-  // ADDED: Log to show when the API is hit
   console.log("API Request Received");
   try {
     const body = await request.json();
-    const { action } = body; 
-
-    // ADDED: Log the action and body for debugging
+    const { action } = body;
     console.log(`Action: ${action}`, body);
 
     if (action === "analyze") {
@@ -104,10 +186,58 @@ export async function POST(request) {
       return NextResponse.json({ ...result, conversationId: response.conversation });
     }
 
-    return NextResponse.json({ error: "Invalid action specified." }, { status: 400 });
+    if (action === "compose") {
+      const { promptType, analysisBreakdown } = body;
 
+      const elementsForType = REQUIRED_ELEMENTS[promptType] || REQUIRED_ELEMENTS.image;
+      const tagMap = elementsForType.map((el) => ({ element: el, tag: toTagName(el) }));
+
+      const elementsWithText = Array.isArray(analysisBreakdown)
+        ? analysisBreakdown
+            .map(({ element, text }) => ({ element, text: (text || "").trim() }))
+            .filter((e) => elementsForType.includes(e.element))
+        : [];
+
+      // Use the larger model here for better prose quality & adherence to rules
+      const response = await openai.responses.create({
+        model: "gpt-4o",
+        input: [
+          { role: "system", content: composeSystemPrompt },
+          {
+            role: "user",
+            content:
+              `Prompt type: ${promptType}\n` +
+              `Tag map: ${JSON.stringify(tagMap)}\n` +
+              `Elements: ${JSON.stringify(elementsWithText)}`,
+          },
+        ],
+        text: { format: { type: "json_schema", name: "PromptCompose", schema: composeSchema, strict: true } },
+      });
+
+      const parsed = JSON.parse(response.output_text);
+      const tagged = (parsed.taggedPrompt || "").trim();
+
+      // Extract per-element exact spans, strip tags, then sanitize
+      const perElementTexts = {};
+      let refinedPrompt = tagged;
+
+      for (const { element, tag } of tagMap) {
+        const re = new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, "i");
+        const match = tagged.match(re);
+        const inner = match ? match[1].trim() : "";
+        perElementTexts[element] = stripDoubleQuotes(inner);
+        refinedPrompt = refinedPrompt.replace(new RegExp(`</?${tag}>`, "gi"), "");
+      }
+
+      refinedPrompt = stripDoubleQuotes(refinedPrompt);
+      refinedPrompt = punctuationCleanup(refinedPrompt);
+      refinedPrompt = fixDanglingFragments(refinedPrompt);
+
+      return NextResponse.json({ refinedPrompt, perElementTexts });
+    }
+
+    return NextResponse.json({ error: "Invalid action specified." }, { status: 400 });
   } catch (error) {
-    // ADDED: Log the full error on the server side
     console.error("Error in prompt-improver API:", error);
     const errorMessage = error instanceof OpenAI.APIError ? error.message : "An internal error occurred.";
     return NextResponse.json({ error: "Failed to get a response from the AI.", details: errorMessage }, { status: 500 });

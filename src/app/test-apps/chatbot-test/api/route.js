@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
-// This ensures the environment is compatible with streaming and tools if needed later.
 export const runtime = "nodejs";
 
-// Initialize the OpenAI client with the API key from environment variables
 const openai = new OpenAI({
   apiKey: process.env.SMO_OPENAI_API_KEY,
 });
 
-// The system prompt defines the assistant's role and instructions.
+// Full system prompt (will be logged on first turn)
 const systemPrompt = `You are an expert assistant for a university module on Integrated Marketing Communications (IMC).
 Your role is to answer student questions accurately and concisely based on the information provided in the module outline file.
 Use the file search tool to find the relevant information before answering.
@@ -18,86 +16,173 @@ Be helpful, clear, and academic in your tone. For example, if they ask about a c
 When you use information from the file, you MUST include a citation at the end of the sentence.
 Don't ever explicitly talk about the file search tool or the module outline file in your responses. Just provide the information as if you are an expert in IMC.`;
 
+// Small helper to keep some log lines readable
+function preview(text, max = 1000) {
+  if (typeof text !== "string") return text;
+  return text.length <= max ? text : `${text.slice(0, max)}… [truncated ${text.length - max} chars]`;
+}
+
+// Digest of file_search calls + citation annotations
+function logToolsAndCitationsDigest(response) {
+  try {
+    console.log("--- Tool & Citation Digest ---");
+
+    // Vector store IDs from the response config
+    const vsIds = (Array.isArray(response.tools) ? response.tools : [])
+      .filter((t) => t?.type === "file_search")
+      .flatMap((t) => Array.isArray(t.vector_store_ids) ? t.vector_store_ids : []);
+    console.log("vector_store_ids:", vsIds.length ? vsIds : "(none)");
+
+    // File-search queries
+    const outputs = Array.isArray(response.output) ? response.output : [];
+    const fsCalls = outputs.filter((o) => o?.type === "file_search_call");
+    if (fsCalls.length) {
+      fsCalls.forEach((call, i) => {
+        console.log(`file_search_call[${i}] queries:`, Array.isArray(call.queries) ? call.queries : "(none)");
+        if (Array.isArray(call.results)) {
+          console.log(`file_search_call[${i}] results count:`, call.results.length);
+        } else {
+          console.log(`file_search_call[${i}] results: (not provided)`);
+        }
+      });
+    } else {
+      console.log("file_search_call: (none)");
+    }
+
+    // Citations
+    const annotationList = [];
+    for (const item of outputs) {
+      if (item?.type === "message" && Array.isArray(item.content)) {
+        for (const c of item.content) {
+          if (c && Array.isArray(c.annotations)) annotationList.push(...c.annotations);
+        }
+      }
+    }
+    const citations = annotationList.filter((a) => a?.type === "file_citation");
+    if (citations.length) {
+      const byFile = new Map();
+      for (const cit of citations) {
+        const key = cit.filename || cit.file_id || "unknown";
+        if (!byFile.has(key)) byFile.set(key, []);
+        byFile.get(key).push(cit);
+      }
+      console.log("citations.total:", citations.length);
+      for (const [file, arr] of byFile.entries()) {
+        const indices = arr.map((a) => a.index).filter((n) => typeof n === "number").slice(0, 50);
+        console.log(` • ${file}: ${arr.length} cite(s); indices (first 50):`, indices);
+      }
+    } else {
+      console.log("citations: (none)");
+    }
+    console.log("------------------------------");
+  } catch (e) {
+    console.log("Tool & Citation Digest logging error:", e?.message || e);
+  }
+}
+
 export async function POST(req) {
   try {
     const body = await req.json();
-    // The client now sends a conversationId instead of the full chat history.
     let { message, conversationId } = body;
 
     if (!message) {
-      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
+
+    // Log what came from the frontend
+    console.log("Incoming frontend payload message:", preview(message));
 
     let inputMessages;
 
-    // If no conversationId is provided, create a new conversation.
     if (!conversationId) {
       console.log("Creating a new conversation...");
-      // **FIX:** The create method does not take any parameters.
       const conversation = await openai.conversations.create();
       conversationId = conversation.id;
       console.log("New conversation created with ID:", conversationId);
-      
-      // **FIX:** For a new conversation, include the system prompt with the first user message.
+
+      // First turn: include system prompt + user message
       inputMessages = [
         { role: "system", content: systemPrompt },
-        { role: "user", content: message }
+        { role: "user", content: message },
       ];
-
     } else {
       console.log("Using existing conversation with ID:", conversationId);
-      // For an existing conversation, just send the new user message.
+      // Follow-up turns: just the new user message
       inputMessages = [{ role: "user", content: message }];
     }
 
-    console.log("Sending request to OpenAI API...");
+    const hasSystem = inputMessages.some((m) => m.role === "system");
+    console.log("hasSystemPromptThisCall:", hasSystem);
 
-    // Call the Responses API using the conversation object.
-    const response = await openai.responses.create({
+    // >>> LOG THE EXACT REQUEST WE'RE ABOUT TO SEND (FULL / UNREDACTED) <<<
+    const requestPayload = {
       model: "gpt-4o-mini",
       input: inputMessages,
-      // Pass the conversation ID to maintain state on the server.
-      conversation: conversationId, 
+      conversation: conversationId,
       tools: [
         {
           type: "file_search",
           vector_store_ids: [process.env.IMC_VECTOR_STORE_ID],
         },
       ],
-      text: {
-        format: {
-          type: "text",
-        },
-      },
+      text: { format: { type: "text" } },
       max_output_tokens: 1024,
-    });
+    };
 
-    // Log the entire raw response from the API to the terminal for debugging.
-    console.log("--- OpenAI API Response ---");
+    console.log("--- OpenAI API Request (FULL) ---");
+    console.log(JSON.stringify(requestPayload, null, 2));
+    console.log("---------------------------------");
+
+    console.log("Sending request to OpenAI API...");
+
+    const response = await openai.responses.create(requestPayload);
+
+    // Compact summary
+    console.log("--- OpenAI API Response (summary) ---");
+    console.log("response.id:", response.id);
+    console.log("response.status:", response.status);
+    console.log("response.model:", response.model);
+    if (response.usage) {
+      console.log("usage.total_tokens:", response.usage.total_tokens);
+      console.log("usage.input_tokens:", response.usage.input_tokens);
+      console.log("usage.output_tokens:", response.usage.output_tokens);
+      if (response.usage?.input_tokens_details?.cached_tokens != null) {
+        console.log("usage.input_tokens_details.cached_tokens:", response.usage.input_tokens_details.cached_tokens);
+      }
+    }
+    console.log("output_text (preview):", preview(response.output_text));
+    console.log("-------------------------------------");
+
+    // Always log a digest of tools + citations
+    logToolsAndCitationsDigest(response);
+
+    // Full raw response (as you had before)
+    console.log("--- OpenAI API Response (FULL) ---");
     console.log(JSON.stringify(response, null, 2));
-    console.log("--------------------------");
+    console.log("----------------------------------");
 
-    // Extract the message text and the annotations array.
+    // Extract message + annotations for the client
     const responseText = response.output_text;
     const annotations = response.content?.[0]?.annotations || [];
 
     if (responseText) {
-      // Return the message, annotations, AND the conversationId to the client.
-      return NextResponse.json({ 
-        message: responseText, 
-        annotations: annotations, 
-        conversationId: conversationId 
+      return NextResponse.json({
+        message: responseText,
+        annotations,
+        conversationId,
       });
     } else {
       console.error("API response did not contain output_text.");
-      return NextResponse.json({ error: 'No response from assistant' }, { status: 500 });
+      return NextResponse.json({ error: "No response from assistant" }, { status: 500 });
     }
-
   } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json({
+    console.error("API Error:", error);
+    return NextResponse.json(
+      {
         error: "An error occurred in the API route.",
         details: error.message || "Unknown error",
-    }, { status: 500 });
+      },
+      { status: 500 }
+    );
   }
 }
