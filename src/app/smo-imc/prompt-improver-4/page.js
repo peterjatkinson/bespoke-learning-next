@@ -249,6 +249,7 @@ export default function PromptBuilder() {
     try {
       await navigator.clipboard.writeText(text);
       setCopyFeedback("Copied!");
+      announce("Prompt copied to clipboard");
       setTimeout(() => setCopyFeedback(""), 2000);
     } catch (error) {
       // Fallback for older browsers or when clipboard API fails
@@ -258,12 +259,27 @@ export default function PromptBuilder() {
         textArea.style.position = 'fixed';
         textArea.style.left = '-999999px';
         textArea.style.top = '-999999px';
+        textArea.style.opacity = '0';
+        textArea.style.pointerEvents = 'none';
+        textArea.setAttribute('readonly', '');
+        textArea.setAttribute('tabindex', '-1');
         document.body.appendChild(textArea);
-        textArea.focus();
+        
+        // Prevent focus from changing scroll position
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+        
         textArea.select();
         document.execCommand('copy');
+        
+        // Restore scroll position if it changed
+        if (document.documentElement.scrollTop !== scrollTop || document.body.scrollTop !== scrollTop) {
+          window.scrollTo(scrollLeft, scrollTop);
+        }
+        
         textArea.remove();
         setCopyFeedback("Copied!");
+        announce("Prompt copied to clipboard");
         setTimeout(() => setCopyFeedback(""), 2000);
       } catch (fallbackError) {
         setCopyFeedback("Copy failed");
