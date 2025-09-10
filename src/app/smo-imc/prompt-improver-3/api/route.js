@@ -11,16 +11,7 @@ const REQUIRED_ELEMENTS = {
   video: ["Subject", "Style", "Action", "Scene", "Ambiance", "Composition", "Camera Motion", "Shot Duration", "Pacing"],
 };
 
-// ## PROMPT & SCHEMA FOR THE INITIAL ANALYSIS STEP ##
-const analysisSystemPrompt = `
-You are a "Prompt Deconstructor". Your task is to analyze a user's full creative prompt.
-1.  Extract the text corresponding to each required element: ${REQUIRED_ELEMENTS.image.join(", ")}.
-2.  If an element is completely missing from the prompt, set its 'text' to an empty string.
-3.  For each element that IS present, provide a brief, constructive 'critique' (1 sentence) on how it could be more descriptive or evocative.
-4.  For any element that is MISSING, the 'critique' must be a question prompting the user for that specific information.
-5.  Set 'isMissing' to true only if the element is completely absent from the user's prompt.
-Your entire output must be a single JSON object.
-`;
+/* ---------------------- Schemas ---------------------- */
 
 const analysisSchema = {
   type: "object",
@@ -33,8 +24,8 @@ const analysisSchema = {
         additionalProperties: false,
         properties: {
           element: { type: "string" },
-          text: { type: "string", description: "The extracted text for this element from the user's prompt. Empty string if not found." },
-          critique: { type: "string", description: "Your constructive suggestion for improvement or a question if missing." },
+          text: { type: "string" },
+          critique: { type: "string" },
           isMissing: { type: "boolean" },
         },
         required: ["element", "text", "critique", "isMissing"],
@@ -44,64 +35,85 @@ const analysisSchema = {
   required: ["analysisBreakdown"],
 };
 
-// ## PROMPT & SCHEMA FOR THE REFINEMENT STEP ##
-const refinementSystemPrompt = `
-You are a "Prompt Coach". Your job is to evaluate a user's revised input for a single prompt element that was previously weak or missing.
-- You will be given the element and the user's new text.
-- Decide if the new text is a good, descriptive improvement.
-- Provide an encouraging, conversational chat response.
-- Your entire output must be a single JSON object.
-`;
-
 const refinementSchema = {
   type: "object",
   additionalProperties: false,
   properties: {
-    isSufficient: { type: "boolean", description: "Is the user's new input a good improvement?" },
-    revisedText: { type: "string", description: "Your slightly polished version of the user's new input." },
-    chatResponse: { type: "string", description: "Your conversational message to the user." },
+    isSufficient: { type: "boolean" },
+    revisedText: { type: "string" },
+    chatResponse: { type: "string" },
   },
   required: ["isSufficient", "revisedText", "chatResponse"],
 };
-
-// ## COMPOSITION STEP (rewrites from scratch, produces 1–4 clean sentences + tags) ##
-const composeSystemPrompt = `
-You are a "Prompt Synthesizer".
-INPUTS:
-- prompt type
-- elements with user text (some may be empty)
-- tag map (element -> tag name like <Subject>...</Subject>)
-
-TASK:
-Write a NEW prompt from scratch in 1–4 complete sentences that integrates ONLY non-empty elements.
-Then return it as "taggedPrompt" where EACH included element is wrapped in its tag exactly once.
-
-STRICT RULES:
-- Do NOT use quotation marks at all (no “ ” or " "); never quote style descriptors.
-- Start with the Subject; then naturally integrate Action, Scene, Ambiance, Style, Composition, etc.
-- Fragmentary inputs must be rewritten into grammatical phrases or clauses (e.g., "in the rain" -> "in the rain"; "sad" -> "conveying sadness").
-- Ensure EVERY tagged span is inside a sentence—never trailing after a period.
-- Do not duplicate element content outside its tag; each element appears once.
-- No labels or bullet points; no parentheticals naming elements.
-- Clean punctuation; no dangling commas or double periods.
-- End the whole prompt with terminal punctuation.
-
-Return JSON only.
-`;
 
 const composeSchema = {
   type: "object",
   additionalProperties: false,
   properties: {
-    taggedPrompt: {
-      type: "string",
-      description: "Final prompt (1–4 sentences) with element spans wrapped in tags.",
-    },
+    taggedPrompt: { type: "string" },
   },
   required: ["taggedPrompt"],
 };
 
-// Helpers
+/* ---------------------- Dynamic prompts by type ---------------------- */
+
+function analysisSystemPromptFor(promptType) {
+  const elems = (REQUIRED_ELEMENTS[promptType] || REQUIRED_ELEMENTS.image).join(", ");
+  return `
+You are a "Prompt Deconstructor". Analyze a user's full ${promptType} prompt.
+
+1) Extract the text for each element: ${elems}.
+2) If an element is missing, set its 'text' to "" and write a 1-sentence question asking for it.
+3) For present elements, write a 1-sentence constructive suggestion.
+4) Only set isMissing=true if the element is absent.
+
+Respond as a single JSON object.
+`.trim();
+}
+
+function composeSystemPromptFor(promptType) {
+  const isVideo = promptType === "video";
+  return `
+You are a "Prompt Synthesizer".
+
+INPUT:
+- elements with user text (some empty)
+- tag map (element -> tag like <Subject>…</Subject>)
+
+TASK:
+Write a NEW prompt from scratch in 1–4 complete sentences that integrates ONLY non-empty elements.
+Return it as "taggedPrompt" with each included element wrapped in its tag exactly once.
+
+STRICT RULES:
+- No quotation marks anywhere.
+- Start with the Subject, then integrate others naturally.
+- Rewrite fragments into grammatical phrases/clauses.
+- Every tagged span must be inside a sentence (never trailing).
+- No labels/bullets/parenthetical element names.
+- Clean punctuation; end with terminal punctuation.
+
+${isVideo ? `VIDEO EXTRAS:
+- "Camera Motion": natural clause (e.g., "with a slow dolly forward").
+- "Shot Duration": phrase like "a 5-second shot".
+- "Pacing": natural adverbs/phrases ("with brisk pacing", "lingers slowly").
+` : ""}
+
+Return JSON only.
+`.trim();
+}
+
+const refinementSystemPrompt = `
+You are a "Prompt Coach". You will be given an element and a user's new text.
+- Decide if the input is a good improvement (isSufficient).
+- Provide a short, encouraging chatResponse that ACKNOWLEDGES the update.
+- Do NOT ask for more changes to this element right now.
+- If you include ideas, phrase them as a brief "Later on, you may wish to…" tip.
+
+Return a single JSON object.
+`.trim();
+
+/* ---------------------- Helpers ---------------------- */
+
 const toTagName = (name) =>
   name
     .replace(/[^A-Za-z0-9]+/g, " ")
@@ -120,10 +132,9 @@ const punctuationCleanup = (s) =>
     .replace(/([!?;:])\s*\./g, "$1")
     .trim();
 
-// remove double-quotes around phrases (but keep apostrophes like robot's)
 const stripDoubleQuotes = (s) => s.replace(/"([^"]*)"/g, "$1");
 
-// join orphan short fragments like "in the rain" / "sad" to previous sentence
+// Join orphan short fragments to previous sentence (e.g., "in the rain", "sad")
 const fixDanglingFragments = (text) => {
   const pieces = text.match(/[^.!?]+[.!?]/g) || [text];
   const preps = /^(in|with|under|on|at|by|amid|amidst|during|while|as|like|featuring|within)\b/i;
@@ -133,22 +144,19 @@ const fixDanglingFragments = (text) => {
   for (let i = 0; i < pieces.length; i++) {
     let s = pieces[i].trim();
     const core = s.replace(/[.!?]+$/, "").trim();
-    const wordCount = core.split(/\s+/).filter(Boolean).length;
+    const words = core.split(/\s+/).filter(Boolean).length;
 
-    const looksFragment = (preps.test(core) && wordCount <= 6) || (shortAdj.test(core) && wordCount <= 3);
+    const looksFragment = (preps.test(core) && words <= 6) || (shortAdj.test(core) && words <= 3);
     if (looksFragment && out.length) {
-      // merge into previous sentence
       const prev = out.pop().replace(/[.!?]+$/, "");
       s = `${prev}, ${core}.`;
     }
     out.push(s);
   }
-  // Ensure terminal punctuation
-  return out
-    .map((s) => (/[.!?]$/.test(s) ? s : s + "."))
-    .join(" ")
-    .trim();
+  return out.map((s) => (/[.!?]$/.test(s) ? s : s + ".")).join(" ").trim();
 };
+
+/* ---------------------- Handler ---------------------- */
 
 export async function POST(request) {
   console.log("API Request Received");
@@ -162,7 +170,7 @@ export async function POST(request) {
       const response = await openai.responses.create({
         model: "gpt-4o",
         input: [
-          { role: "system", content: analysisSystemPrompt },
+          { role: "system", content: analysisSystemPromptFor(promptType) },
           { role: "user", content: `Please deconstruct this ${promptType} prompt: "${userPrompt}"` },
         ],
         text: { format: { type: "json_schema", name: "PromptAnalysis", schema: analysisSchema, strict: true } },
@@ -198,11 +206,10 @@ export async function POST(request) {
             .filter((e) => elementsForType.includes(e.element))
         : [];
 
-      // Use the larger model here for better prose quality & adherence to rules
       const response = await openai.responses.create({
-        model: "gpt-4o",
+        model: "gpt-4o", // better prose + rule adherence
         input: [
-          { role: "system", content: composeSystemPrompt },
+          { role: "system", content: composeSystemPromptFor(promptType) },
           {
             role: "user",
             content:
@@ -217,7 +224,7 @@ export async function POST(request) {
       const parsed = JSON.parse(response.output_text);
       const tagged = (parsed.taggedPrompt || "").trim();
 
-      // Extract per-element exact spans, strip tags, then sanitize
+      // Extract per-element spans, strip tags, sanitize
       const perElementTexts = {};
       let refinedPrompt = tagged;
 
