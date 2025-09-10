@@ -460,7 +460,7 @@ export default function PromptBuilder() {
             </form>
           </section>
 
-          <aside className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col h-[calc(100vh-160px)]" aria-labelledby="suggestions-heading">
+          <aside className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col h-[650px]" aria-labelledby="suggestions-heading">
             <h2 id="suggestions-heading" className="text-xl font-semibold mb-3">Initial suggestions for further enhancements</h2>
             <div ref={chatRef} className="flex-grow overflow-y-auto space-y-3">
               {firstSuggestions.length ? (
@@ -554,7 +554,7 @@ export default function PromptBuilder() {
             )}
           </div>
 
-          <div className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col h-[calc(100vh-160px)]">
+          <div className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col h-[650px]">
             <h2 className="text-xl font-semibold mb-3">Element reviews</h2>
             <div className="flex-grow overflow-y-auto space-y-2">
               {elementReviews.map((r, i) => (
