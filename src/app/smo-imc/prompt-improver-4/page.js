@@ -279,7 +279,7 @@ export default function PromptBuilder() {
      UI
      ========================= */
   return (
-    <div className="min-h-screen bg-slate-100 font-sans antialiased">
+    <div className="min-h-full bg-slate-100 font-sans antialiased">
       <header className="bg-white border-b-4 border-black p-4 sm:p-6">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 tracking-tight">Prompt builder</h1>
