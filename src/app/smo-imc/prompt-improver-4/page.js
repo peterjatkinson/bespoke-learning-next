@@ -90,9 +90,6 @@ export default function PromptBuilder() {
   const chatRef = useRef(null);
   const liveRegionRef = useRef(null);
   const statusRegionRef = useRef(null);
-  useEffect(() => {
-    chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
-  }, [firstSuggestions, secondSuggestions]);
 
   const activeElements = useMemo(
     () => (promptType === "video" ? VIDEO_ELEMENTS : IMAGE_ELEMENTS),
