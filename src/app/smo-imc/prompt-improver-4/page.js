@@ -53,16 +53,17 @@ const VIDEO_ELEMENTS = [
 ];
 
 const placeholders = {
-  Subject: "e.g., a weathered robot",
+  Subject: "e.g., a sleek running shoe on a pedestal",
   Style: "e.g., cinematic noir / watercolor / realistic",
-  Action: "e.g., trudging through a market",
-  Scene: "e.g., narrow alley at night",
-  Ambiance: "e.g., moody, rain-soaked streets",
-  Composition: "e.g., close-up, rule of thirds",
-  "Camera Motion": "e.g., slow dolly forward / handheld sway",
-  "Shot Duration": "e.g., 5-second shot",
-  Pacing: "e.g., brisk / lingering",
+  Action: "e.g., splashing through water, being laced up",
+  Scene: "e.g., urban rooftop at sunrise, studio with neon lights",
+  Ambiance: "e.g., energetic, vibrant",
+  Composition: "e.g., close-up with product centred, wide shot with logo",
+  "Camera Motion": "e.g., slow pan across product, quick zoom in",
+  "Shot Duration": "e.g., 3-second hero shot, 1-second cutaway",
+  Pacing: "e.g., fast-paced for excitement, slow for luxury",
 };
+
 
 const elementExplanations = {
   Subject: "The main focus of your video or image (e.g., 'A golden retriever puppy,' 'A majestic Hawaiian waterfall,' 'An elderly Caucasian sailor').",
