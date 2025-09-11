@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   AlertTriangle as AlertIcon,
   Check as CheckIcon,
+  Info as InfoIcon,
+  X as CloseIcon,
 } from "lucide-react";
 
 // Screen reader only styles
@@ -62,12 +64,29 @@ const placeholders = {
   Pacing: "e.g., brisk / lingering",
 };
 
+const elementExplanations = {
+  Subject: "The main focus of your video or image (e.g., 'A golden retriever puppy,' 'A majestic Hawaiian waterfall,' 'An elderly Caucasian sailor').",
+  Action: "What the subject is doing (e.g., 'swimming in the ocean,' 'running through a meadow,' 'rowing a wooden boat,' 'sitting upright in a 1980s kitchen').",
+  Composition: "How the scene is framed (e.g., 'wide shot,' 'low-angle,' 'aerial view,' 'close-up,' 'medium shot,' 'tracking shot,' 'panning shot,' 'dolly in').",
+  Scene: "The location or environment of the shot (e.g., 'busy street,' 'space,' 'beach,' 'lush tropical rainforest,' 'magical ice cave,' 'moonlit sky above a forest').",
+  "Camera Motion": "How the camera moves (e.g., 'panning,' 'zooming,' 'tracking,' 'gracefully moves,' 'floats gently').",
+  Ambiance: "How color and light contribute to the scene's mood (e.g., 'blue tones,' 'night,' 'foggy,' 'golden hour light,' 'dramatic shadows,' 'soft diffused lighting,' 'eerie green neon glow').",
+  Style: "The artistic style or vibe you want (e.g., 'cinematic,' 'retro,' 'cartoon,' 'photorealistic,' 'voxel art illustration,' 'minimalistic,' 'surreal,' 'vintage,' 'futuristic').",
+  "Shot Duration": "How long each individual shot lasts (e.g., '3-second quick cuts,' '10-second lingering shot,' 'brief 2-second glimpse,' 'extended 15-second take'). This helps control the pacing and rhythm of your video.",
+  Pacing: "The overall rhythm and speed of your video (e.g., 'fast-paced with quick transitions,' 'slow and contemplative,' 'building momentum,' 'steady rhythm'). This affects how viewers experience the flow and energy of your content."
+};
+
 export default function PromptBuilder() {
   // stages: collect -> built -> firstReviewed -> finalReviewed
   const [stage, setStage] = useState("collect");
   const [promptType, setPromptType] = useState(null);
   const [elements, setElements] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  // Modal state
+  const [activeModal, setActiveModal] = useState(null);
+  const modalRef = useRef(null);
+  const triggerRef = useRef(null);
 
   // Stage 1 output
   const [initialPrompt, setInitialPrompt] = useState("");
@@ -115,6 +134,7 @@ export default function PromptBuilder() {
     setPromptType(null);
     setElements({});
     setIsLoading(false);
+    setActiveModal(null);
 
     setInitialPrompt("");
     setFirstSuggestions([]);
@@ -127,6 +147,65 @@ export default function PromptBuilder() {
 
     setFinalResult(null);
     setErrorMessage("");
+  };
+
+  const openModal = (elementName) => {
+    triggerRef.current = document.activeElement;
+    setActiveModal(elementName);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    if (triggerRef.current) {
+      triggerRef.current.focus();
+      triggerRef.current = null;
+    }
+  };
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && activeModal) {
+        closeModal();
+      }
+    };
+
+    if (activeModal) {
+      document.addEventListener('keydown', handleEscape);
+      // Focus the modal when it opens
+      setTimeout(() => {
+        if (modalRef.current) {
+          modalRef.current.focus();
+        }
+      }, 0);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [activeModal]);
+
+  // Trap focus within modal
+  const handleModalKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      const focusableElements = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements?.[0];
+      const lastElement = focusableElements?.[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement?.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement?.focus();
+          e.preventDefault();
+        }
+      }
+    }
   };
 
   /* ---------------- Stage 1: Build from elements ---------------- */
@@ -366,7 +445,18 @@ export default function PromptBuilder() {
               <form onSubmit={handleBuild} className="space-y-3">
                 {(promptType === "video" ? VIDEO_ELEMENTS : IMAGE_ELEMENTS).map((el) => (
                   <div key={el} className="flex flex-col">
-                    <label className="text-sm font-medium text-gray-700 mb-1">{el}</label>
+                    <div className="flex items-center gap-2 mb-1">
+                      <label className="text-sm font-medium text-gray-700">{el}</label>
+                      <button
+                        type="button"
+                        onClick={() => openModal(el)}
+                        className="p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0056B3] focus:ring-offset-1 transition-colors"
+                        aria-label={`Learn more about ${el}`}
+                        title={`Learn more about ${el}`}
+                      >
+                        <InfoIcon size={14} className="text-gray-500" />
+                      </button>
+                    </div>
                     <input
                       className="p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                       placeholder={placeholders[el] || ""}
@@ -650,6 +740,58 @@ export default function PromptBuilder() {
             </p>
           </div>
         </main>
+      )}
+
+      {/* Modal */}
+      {activeModal && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={closeModal}
+            aria-hidden="true"
+          />
+          
+          {/* Modal */}
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+          >
+            <div 
+              ref={modalRef}
+              className="bg-white border-4 border-black rounded-2xl shadow-xl max-w-md w-full p-6"
+              onKeyDown={handleModalKeyDown}
+              tabIndex={-1}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <h3 id="modal-title" className="text-lg font-semibold text-gray-800">
+                  {activeModal}
+                </h3>
+                <button
+                  onClick={closeModal}
+                  className="p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0056B3] focus:ring-offset-1 transition-colors"
+                  aria-label="Close dialog"
+                >
+                  <CloseIcon size={20} className="text-gray-500" />
+                </button>
+              </div>
+              <p id="modal-description" className="text-sm text-gray-700 leading-relaxed">
+                {elementExplanations[activeModal] || "No explanation available for this element."}
+              </p>
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="px-4 py-2 bg-[#0056B3] hover:bg-[#0044A3] text-white font-semibold rounded-lg focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 transition-all duration-200 active:scale-95"
+                >
+                  Got it
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
