@@ -492,15 +492,34 @@ export default function PromptBuilder() {
             )}
           </section>
 
-          <aside className="bg-white border-4 border-black rounded-2xl shadow-lg p-6" aria-labelledby="tips-heading">
-            <h2 id="tips-heading" className="text-xl font-semibold mb-3">Tips</h2>
-            <ul className="text-sm text-gray-600 list-disc pl-5 space-y-1">
-              <li>You can leave some fields blank — the composer only uses what you provide.</li>
-              <li>Be concrete: places, lighting, mood, lens choices, etc.</li>
-              <li>For video, include duration and motion if you know them.</li>
-            </ul>
-          </aside>
-        </main>
+<aside className="bg-white border-4 border-black rounded-2xl shadow-lg p-6" aria-labelledby="tips-heading">
+  <h2 id="tips-heading" className="text-xl font-semibold mb-3">Tips</h2>
+  <ul className="text-sm text-gray-600 list-disc pl-5 space-y-2">
+    <li>
+      This tool helps you build clear, detailed prompts for marketing images and videos. Just fill in the fields you want to include.
+    </li>
+    <li>
+      In the <strong>Subject</strong> field, esure you describe your product or the person/people/object you want to be depicted in the image. 
+    </li>
+    <li>For <strong>Style</strong>, you may wish to refer to your company/brand colours or other bran design faeturesm as well as the artistic style you want for the image more generally.</li>
+    <li>
+      Use the <strong>Action</strong> and <strong>Scene</strong> fields to set the context and mood. Think about what’s happening and where.
+    </li>
+    <li>
+      <strong>Ambiance</strong> and <strong>Composition</strong> help control lighting, atmosphere and how the product is framed.
+    </li>
+    <li>
+      
+      For video prompts, you can also add <strong>Camera Motion</strong>, <strong>Shot Duration</strong> and <strong>Pacing</strong> to guide the energy and flow.
+    </li>
+    <li>
+      You can leave some fields blank. The prompt builder will only use what you provide.
+    </li>
+    <li>
+      Try different combinations and levels of detail to see what works best for your campaign.
+    </li>
+  </ul>
+</aside>        </main>
       )}
 
       {/* Stage: Built (Initial Prompt + first suggestions + user's first revision) */}
@@ -748,14 +767,14 @@ export default function PromptBuilder() {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 backdrop-blur-sm z-40"
             onClick={closeModal}
             aria-hidden="true"
           />
           
           {/* Modal */}
           <div 
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
@@ -763,7 +782,7 @@ export default function PromptBuilder() {
           >
             <div 
               ref={modalRef}
-              className="bg-white border-4 border-black rounded-2xl shadow-xl max-w-md w-full p-6"
+              className="bg-white border-4 border-black rounded-2xl shadow-xl max-w-md w-full p-6 pointer-events-auto"
               onKeyDown={handleModalKeyDown}
               tabIndex={-1}
             >
