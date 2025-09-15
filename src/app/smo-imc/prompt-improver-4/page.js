@@ -306,7 +306,7 @@ export default function PromptBuilder() {
       const res = await fetch(API_PATH, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "finalReview", revisedPrompt: secondRevision }),
+        body: JSON.stringify({ action: "finalReview", revisedPrompt: secondRevision, promptType }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
