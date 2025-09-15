@@ -501,7 +501,7 @@ export default function PromptBuilder() {
     <li>
       In the <strong>Subject</strong> field, esure you describe your product or the person/people/object you want to be depicted in the image. 
     </li>
-    <li>For <strong>Style</strong>, you may wish to refer to your company/brand colours or other bran design faeturesm as well as the artistic style you want for the image more generally.</li>
+    <li>For <strong>Style</strong>, you may wish to refer to your company/brand colours or other brand design features, as well as the artistic style you want for the image more generally.</li>
     <li>
       Use the <strong>Action</strong> and <strong>Scene</strong> fields to set the context and mood. Think about what’s happening and where.
     </li>
