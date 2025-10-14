@@ -303,6 +303,21 @@ export default function QuadrantApp() {
   );
 }
 
+// --- Helper function to group companies by coordinates ---
+const groupCompaniesByCoordinates = (companies) => {
+  const groups = {};
+
+  companies.forEach((company) => {
+    const key = `${company.data.x},${company.data.y}`;
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(company);
+  });
+
+  return groups;
+};
+
 // --- Visual View ---
 const VisualView = ({
   companies,
@@ -440,22 +455,44 @@ const VisualView = ({
                 </div>
               ) : (
                 <>
-                  {companies.map((c) => (
-                    <div
-                      key={c.id}
-                      className="absolute group"
-                      style={{
-                        left: `${c.data.x}%`,
-                        bottom: `${c.data.y}%`,
-                        transform: 'translate(-50%, 50%)',
-                      }}
-                    >
-                      <div className="w-3 h-3 bg-red-800 rounded-full border-2 border-white shadow-lg"></div>
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-2 py-1 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        {c.data.name} ({c.data.x}, {c.data.y})
-                      </span>
-                    </div>
-                  ))}
+                  {Object.values(groupCompaniesByCoordinates(companies)).map((group) => {
+                    const firstCompany = group[0];
+                    const isMultiple = group.length > 1;
+
+                    return (
+                      <div
+                        key={`${firstCompany.data.x}-${firstCompany.data.y}`}
+                        className="absolute group"
+                        style={{
+                          left: `${firstCompany.data.x}%`,
+                          bottom: `${firstCompany.data.y}%`,
+                          transform: 'translate(-50%, 50%)',
+                        }}
+                      >
+                        <div className={`w-3 h-3 bg-red-800 rounded-full border-2 border-white shadow-lg ${isMultiple ? 'ring-2 ring-red-800 ring-offset-1' : ''}`}></div>
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                          <div className="bg-gray-800 text-white text-xs rounded-md px-2 py-1 w-max max-w-xs">
+                            {isMultiple ? (
+                              <div>
+                                <div className="font-semibold text-center mb-1">
+                                  {group.length} companies at ({firstCompany.data.x}, {firstCompany.data.y})
+                                </div>
+                                <div className="space-y-1">
+                                  {group.map((company, index) => (
+                                    <div key={company.id} className="text-center">
+                                      {company.data.name}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : (
+                              `${firstCompany.data.name} (${firstCompany.data.x}, ${firstCompany.data.y})`
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                   {pendingCompany && !hasSubmitted && (
                     <div
                       className="absolute"
