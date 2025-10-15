@@ -58,8 +58,11 @@ export default function QuadrantApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [submittedCompanyDbId, setSubmittedCompanyDbId] = useState(null);
+  const [ariaLiveMessage, setAriaLiveMessage] = useState("");
 
   const quadrantRef = useRef(null);
+  const companyListsRef = useRef(null);
+  const addCompanyHeadingRef = useRef(null);
   const API_ENDPOINT = '/smo-imc/ai-awareness-quadrant-2/api';
 
   useEffect(() => {
@@ -124,7 +127,7 @@ export default function QuadrantApp() {
     setIsReadyToPlace(false);
   };
 
-  const saveCompany = async (companyToSave) => {
+  const saveCompany = async (companyToSave, fromAccessibleView = false) => {
     if (!companyToSave) return;
     if (hasSubmitted) {
       setStatus({ message: "You have already submitted a company. Delete it to add another.", type: "error" });
@@ -133,23 +136,31 @@ export default function QuadrantApp() {
       return;
     }
     setStatus({ message: "Saving...", type: "info" });
+    setAriaLiveMessage("Saving");
     try {
       const res = await fetch(API_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ app_id: "QuadrantApp", data: companyToSave }),
       });
-      
-      const saveData = await res.json(); 
+
+      const saveData = await res.json();
 
       if (!res.ok) {
         let errorMsg = "Failed to save data.";
-        errorMsg = saveData.error || (await res.text()) || errorMsg; 
+        errorMsg = saveData.error || (await res.text()) || errorMsg;
         throw new Error(errorMsg);
       }
-      
-      const newCompanyId = saveData.id; 
+
+      const newCompanyId = saveData.id;
       setStatus({ message: "Company saved successfully! You can delete it to submit another.", type: "success" });
+
+      // Clear previous message first, then announce "Saved" to ensure it's heard
+      setAriaLiveMessage("");
+      setTimeout(() => {
+        setAriaLiveMessage("Saved");
+      }, 50);
+
       setPendingCompany(null);
       setCompanyName("");
       setIsReadyToPlace(false);
@@ -159,11 +170,25 @@ export default function QuadrantApp() {
       }
       setSubmittedCompanyDbId(newCompanyId);
       setHasSubmitted(true);
-      fetchCompanies(); 
+      await fetchCompanies();
+
+      // Focus management for accessibility - delay to allow announcement to be heard
+      setTimeout(() => {
+        if (fromAccessibleView && companyListsRef.current) {
+          companyListsRef.current.focus();
+        } else if (!fromAccessibleView && quadrantRef.current) {
+          quadrantRef.current.focus();
+        }
+        // Clear the aria live message after focus is moved
+        setTimeout(() => {
+          setAriaLiveMessage("");
+        }, 1000);
+      }, 300);
 
     } catch (error) {
       console.error("Save error:", error);
       setStatus({ message: `Save failed: ${error.message} (This is expected in preview). You can try again.`, type: "error" });
+      setAriaLiveMessage("Save failed");
       setCompanies(prev => [...prev, { id: `mock_${Date.now()}`, data: companyToSave }]);
       setPendingCompany(null);
       setCompanyName("");
@@ -178,6 +203,7 @@ export default function QuadrantApp() {
     }
 
     setStatus({ message: "Deleting your submission...", type: "info" });
+    setAriaLiveMessage("Deleting");
     try {
       const res = await fetch(API_ENDPOINT, {
         method: "DELETE",
@@ -197,6 +223,13 @@ export default function QuadrantApp() {
       }
 
       setStatus({ message: "Submission deleted. You can now add a new company.", type: "success" });
+
+      // Clear previous message first, then announce "Deleted" to ensure it's heard
+      setAriaLiveMessage("");
+      setTimeout(() => {
+        setAriaLiveMessage("Deleted");
+      }, 50);
+
       if (typeof window !== 'undefined') {
         localStorage.removeItem(SUBMITTED_COMPANY_ID_STORAGE_KEY);
       }
@@ -206,9 +239,21 @@ export default function QuadrantApp() {
       setPendingCompany(null);
       setIsReadyToPlace(false);
       fetchCompanies();
+
+      // Focus management - move focus to "Add a company" heading after announcement
+      setTimeout(() => {
+        if (addCompanyHeadingRef.current) {
+          addCompanyHeadingRef.current.focus();
+        }
+        // Clear the aria live message after focus is moved
+        setTimeout(() => {
+          setAriaLiveMessage("");
+        }, 1000);
+      }, 300);
     } catch (error) {
       console.error("Delete error:", error);
       setStatus({ message: `Delete failed: ${error.message}. Please try again.`, type: "error" });
+      setAriaLiveMessage("Delete failed");
     }
   };
 
@@ -223,6 +268,9 @@ export default function QuadrantApp() {
 
   return (
     <div className="min-h-full bg-slate-100 font-sans antialiased">
+      <div aria-live="assertive" aria-atomic="true" className="sr-only">
+        {ariaLiveMessage}
+      </div>
       <header className="bg-white border-b-4 border-black p-4 sm:p-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -279,6 +327,8 @@ export default function QuadrantApp() {
             onSave={saveCompany}
             isLoading={isLoading}
             hasSubmitted={hasSubmitted}
+            companyListsRef={companyListsRef}
+            addCompanyHeadingRef={addCompanyHeadingRef}
           />
         ) : (
           <VisualView
@@ -296,6 +346,7 @@ export default function QuadrantApp() {
             isLoading={isLoading}
             hasSubmitted={hasSubmitted}
             setStatus={setStatus}
+            addCompanyHeadingRef={addCompanyHeadingRef}
           />
         )}
       </div>
@@ -334,12 +385,42 @@ const VisualView = ({
   isLoading,
   hasSubmitted,
   setStatus,
+  addCompanyHeadingRef,
 }) => {
   const [hoveredTooltip, setHoveredTooltip] = useState(null);
+  const [focusedDotIndex, setFocusedDotIndex] = useState(-1);
+
+  const companyGroups = Object.values(groupCompaniesByCoordinates(companies));
+
+  const handleDotKeyDown = (e) => {
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        setFocusedDotIndex((prev) => (prev + 1) % companyGroups.length);
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        setFocusedDotIndex((prev) => (prev - 1 + companyGroups.length) % companyGroups.length);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setFocusedDotIndex((prev) => (prev + 1) % companyGroups.length);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setFocusedDotIndex((prev) => (prev - 1 + companyGroups.length) % companyGroups.length);
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setFocusedDotIndex(-1);
+        break;
+    }
+  };
+
   return (
     <div className="grid custom-grid-cols-1 custom-lg:grid-cols-3 gap-8">
       <div className="custom-col-span-1 custom-lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
-        <h2 className="text-xl font-semibold mb-4">Add a company</h2>
+        <h2 className="text-xl font-semibold mb-4" ref={addCompanyHeadingRef} tabIndex={-1}>Add a company</h2>
         {hasSubmitted ? (
           <div className="p-3 bg-blue-100 text-blue-800 rounded-md text-sm border border-blue-200">
             You have already submitted a company. To add a new one, please delete your existing submission first (button above the chart/list area).
@@ -432,7 +513,7 @@ const VisualView = ({
       
       <div className="custom-col-span-1 custom-lg:col-span-2 flex items-center justify-center">
         <div className="w-full max-w-2xl mx-auto p-8 sm:p-10 relative flex justify-center">
-          <span className="absolute top-1/2 -left-24 -translate-y-1/2 -rotate-90 text-sm font-medium text-gray-600 whitespace-nowrap">
+          <span className="absolute top-1/2 -left-24 -translate-y-1/2 -rotate-90 text-sm font-medium text-gray-600 whitespace-nowrap" aria-hidden="true">
             Consumer brand awareness →
           </span>
           <div className="relative w-full aspect-square bg-white rounded-2xl shadow-lg border-1 border-black">
@@ -442,6 +523,8 @@ const VisualView = ({
                 isReadyToPlace && !pendingCompany && !hasSubmitted ? 'cursor-crosshair' : (hasSubmitted ? 'cursor-not-allowed' : 'cursor-default')
               }`}
               onClick={isReadyToPlace && !pendingCompany && !hasSubmitted ? handleQuadrantClick : undefined}
+              tabIndex={-1}
+              aria-label="Brand awareness quadrant chart"
             >
               <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-tl-lg flex items-center justify-center p-2"><span className="font-bold   text-center">High-street heroes</span></div>
               <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-tr-lg flex items-center justify-center p-2"><span className="font-bold  text-center">Cyborgs</span></div>
@@ -456,15 +539,21 @@ const VisualView = ({
                 </div>
               ) : (
                 <>
-                  {Object.values(groupCompaniesByCoordinates(companies)).map((group) => {
+                  {companyGroups.map((group, index) => {
                     const firstCompany = group[0];
                     const isMultiple = group.length > 1;
                     const groupKey = `${firstCompany.data.x}-${firstCompany.data.y}`;
+                    const quadrant = getQuadrant(firstCompany.data.x, firstCompany.data.y);
+                    const isFocused = focusedDotIndex === index;
+
+                    const ariaLabel = isMultiple
+                      ? `${group.length} companies at coordinates ${firstCompany.data.x}, ${firstCompany.data.y} in ${quadrant} quadrant: ${group.map(c => c.data.name).join(', ')}`
+                      : `${firstCompany.data.name} at coordinates ${firstCompany.data.x}, ${firstCompany.data.y} in ${quadrant} quadrant`;
 
                     return (
                       <div
                         key={groupKey}
-                        className="absolute cursor-default"
+                        className={`absolute cursor-default ${isFocused ? 'ring-2 ring-blue-500 ring-offset-2 rounded-full' : ''}`}
                         style={{
                           left: `${firstCompany.data.x}%`,
                           bottom: `${firstCompany.data.y}%`,
@@ -489,6 +578,35 @@ const VisualView = ({
                           ) : `${firstCompany.data.name} (${firstCompany.data.x}, ${firstCompany.data.y})`
                         })}
                         onMouseLeave={() => setHoveredTooltip(null)}
+                        onFocus={() => {
+                          setFocusedDotIndex(index);
+                          setHoveredTooltip({
+                            x: firstCompany.data.x,
+                            y: firstCompany.data.y,
+                            content: isMultiple ? (
+                              <div>
+                                <div className="font-semibold text-center mb-1">
+                                  {group.length} companies at ({firstCompany.data.x}, {firstCompany.data.y})
+                                </div>
+                                <div className="space-y-1">
+                                  {group.map((company) => (
+                                    <div key={company.id} className="text-center">
+                                      {company.data.name}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : `${firstCompany.data.name} (${firstCompany.data.x}, ${firstCompany.data.y})`
+                          });
+                        }}
+                        onBlur={() => {
+                          setFocusedDotIndex(-1);
+                          setHoveredTooltip(null);
+                        }}
+                        onKeyDown={(e) => handleDotKeyDown(e)}
+                        tabIndex={0}
+                        role="img"
+                        aria-label={ariaLabel}
                       >
                         <div className={`w-3 h-3 bg-red-800 rounded-full border-2 border-white shadow-lg ${isMultiple ? 'ring-2 ring-red-800 ring-offset-1' : ''}`}></div>
                       </div>
@@ -512,12 +630,12 @@ const VisualView = ({
                 </>
               )}
 
-              <span className="absolute -bottom-5 left-0 -translate-x-1/2 text-xs text-gray-500">0</span>
-              <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-gray-500">50</span>
-              <span className="absolute -bottom-5 right-0 translate-x-1/2 text-xs text-gray-500">100</span>
-              <span className="absolute -left-4 bottom-0 translate-y-1/2 text-xs text-gray-500">0</span>
-              <span className="absolute -left-4 bottom-1/2 translate-y-1/2 text-xs text-gray-500">50</span>
-              <span className="absolute -left-4 top-0 -translate-y-1/2 text-xs text-gray-500">100</span>
+              <span className="absolute -bottom-5 left-0 -translate-x-1/2 text-xs text-gray-500" aria-hidden="true">0</span>
+              <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
+              <span className="absolute -bottom-5 right-0 translate-x-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
+              <span className="absolute -left-4 bottom-0 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">0</span>
+              <span className="absolute -left-4 bottom-1/2 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
+              <span className="absolute -left-4 top-0 -translate-y-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
 
               {/* Separate tooltip container with highest z-index */}
               {hoveredTooltip && (
@@ -539,7 +657,7 @@ const VisualView = ({
               )}
             </div>
           </div>
-          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 pt-4">
+          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 pt-4" aria-hidden="true">
             AI brand awareness →
           </span>
         </div>
@@ -549,7 +667,7 @@ const VisualView = ({
 };
 
 // --- Accessible View ---
-const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted }) => {
+const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted, companyListsRef, addCompanyHeadingRef }) => {
   const [name, setName] = useState("");
   const [x, setX] = useState(50);
   const [y, setY] = useState(50);
@@ -565,9 +683,9 @@ const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (hasSubmitted) return;
-    if (!name.trim()) return; 
-    onSave({ name, x: parseInt(x, 10), y: parseInt(y, 10) });
-    if(!hasSubmitted) { 
+    if (!name.trim()) return;
+    onSave({ name, x: parseInt(x, 10), y: parseInt(y, 10) }, true);
+    if(!hasSubmitted) {
         setName("");
         setX(50);
         setY(50);
@@ -584,7 +702,7 @@ const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted }) => {
   return (
     <div className="grid custom-grid-cols-1 custom-lg:grid-cols-3 gap-8">
       <div className="custom-col-span-1 custom-lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
-        <h2 className="text-xl font-semibold mb-4">Add a company</h2>
+        <h2 className="text-xl font-semibold mb-4" ref={addCompanyHeadingRef} tabIndex={-1}>Add a company</h2>
         {hasSubmitted ? (
           <div className="p-3 bg-blue-100 text-blue-800 rounded-md text-sm border border-blue-200">
             You have already submitted a company. To add a new one, please delete your existing submission first (button above the chart/list area).
@@ -654,7 +772,7 @@ const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted }) => {
       </div>
 
       <div className="custom-col-span-1 custom-lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
-        <h2 className="text-xl font-semibold mb-4">Company lists by quadrant</h2>
+        <h2 className="text-xl font-semibold mb-4" ref={companyListsRef} tabIndex={-1}>Company lists by quadrant</h2>
         {isLoading ? (
           <p className="text-gray-600">Loading lists...</p>
         ) : (
