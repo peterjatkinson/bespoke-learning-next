@@ -282,7 +282,16 @@ export default function QuadrantApp() {
             </p>
           </div>
           <button
-            onClick={() => setIsAccessibleView(!isAccessibleView)}
+            onClick={() => {
+              const newView = !isAccessibleView;
+              setIsAccessibleView(newView);
+              // Announce view change to screen readers
+              if (newView) {
+                setAriaLiveMessage("Switched to accessible view; click again to switch to quadrant view");
+              } else {
+                setAriaLiveMessage("Switched to quadrant view; click again to switch to accessible view");
+              }
+            }}
             className="px-4 py-2 text-sm font-semibold bg-gray-200 hover:bg-gray-300 border-2 border-gray-400 rounded-lg flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-400 focus:ring-offset-2 active:scale-95"
           >
             {isAccessibleView ? <Eye size={18} /> : <List size={18} />}
