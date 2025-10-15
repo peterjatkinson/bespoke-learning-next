@@ -335,6 +335,7 @@ const VisualView = ({
   hasSubmitted,
   setStatus,
 }) => {
+  const [hoveredTooltip, setHoveredTooltip] = useState(null);
   return (
     <div className="grid custom-grid-cols-1 custom-lg:grid-cols-3 gap-8">
       <div className="custom-col-span-1 custom-lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
@@ -458,38 +459,38 @@ const VisualView = ({
                   {Object.values(groupCompaniesByCoordinates(companies)).map((group) => {
                     const firstCompany = group[0];
                     const isMultiple = group.length > 1;
+                    const groupKey = `${firstCompany.data.x}-${firstCompany.data.y}`;
 
                     return (
                       <div
-                        key={`${firstCompany.data.x}-${firstCompany.data.y}`}
-                        className="absolute group"
+                        key={groupKey}
+                        className="absolute cursor-default"
                         style={{
                           left: `${firstCompany.data.x}%`,
                           bottom: `${firstCompany.data.y}%`,
                           transform: 'translate(-50%, 50%)',
                         }}
+                        onMouseEnter={() => setHoveredTooltip({
+                          x: firstCompany.data.x,
+                          y: firstCompany.data.y,
+                          content: isMultiple ? (
+                            <div>
+                              <div className="font-semibold text-center mb-1">
+                                {group.length} companies at ({firstCompany.data.x}, {firstCompany.data.y})
+                              </div>
+                              <div className="space-y-1">
+                                {group.map((company) => (
+                                  <div key={company.id} className="text-center">
+                                    {company.data.name}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ) : `${firstCompany.data.name} (${firstCompany.data.x}, ${firstCompany.data.y})`
+                        })}
+                        onMouseLeave={() => setHoveredTooltip(null)}
                       >
                         <div className={`w-3 h-3 bg-red-800 rounded-full border-2 border-white shadow-lg ${isMultiple ? 'ring-2 ring-red-800 ring-offset-1' : ''}`}></div>
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                          <div className="bg-gray-800 text-white text-xs rounded-md px-2 py-1 w-max max-w-xs">
-                            {isMultiple ? (
-                              <div>
-                                <div className="font-semibold text-center mb-1">
-                                  {group.length} companies at ({firstCompany.data.x}, {firstCompany.data.y})
-                                </div>
-                                <div className="space-y-1">
-                                  {group.map((company, index) => (
-                                    <div key={company.id} className="text-center">
-                                      {company.data.name}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ) : (
-                              `${firstCompany.data.name} (${firstCompany.data.x}, ${firstCompany.data.y})`
-                            )}
-                          </div>
-                        </div>
                       </div>
                     );
                   })}
@@ -517,6 +518,25 @@ const VisualView = ({
               <span className="absolute -left-4 bottom-0 translate-y-1/2 text-xs text-gray-500">0</span>
               <span className="absolute -left-4 bottom-1/2 translate-y-1/2 text-xs text-gray-500">50</span>
               <span className="absolute -left-4 top-0 -translate-y-1/2 text-xs text-gray-500">100</span>
+
+              {/* Separate tooltip container with highest z-index */}
+              {hoveredTooltip && (
+                <div
+                  className="absolute cursor-default"
+                  style={{
+                    left: `${hoveredTooltip.x}%`,
+                    bottom: `${hoveredTooltip.y}%`,
+                    transform: 'translate(-50%, calc(50% + 20px))',
+                    zIndex: 99999
+                  }}
+                  onMouseEnter={() => setHoveredTooltip(hoveredTooltip)}
+                  onMouseLeave={() => setHoveredTooltip(null)}
+                >
+                  <div className="bg-gray-800 text-white text-xs rounded-md px-2 py-1 w-max max-w-xs shadow-2xl border border-gray-600">
+                    {hoveredTooltip.content}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 pt-4">
