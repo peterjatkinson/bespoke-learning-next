@@ -110,6 +110,10 @@ export default function PromptBuilder() {
   const chatRef = useRef(null);
   const liveRegionRef = useRef(null);
   const statusRegionRef = useRef(null);
+  const loadingIntervalRef = useRef(null);
+  const initialPromptHeadingRef = useRef(null);
+  const polishedDraftHeadingRef = useRef(null);
+  const finalPromptHeadingRef = useRef(null);
 
   const activeElements = useMemo(
     () => (promptType === "video" ? VIDEO_ELEMENTS : IMAGE_ELEMENTS),
@@ -118,19 +122,47 @@ export default function PromptBuilder() {
 
   const handleElementChange = (el, value) => setElements((prev) => ({ ...prev, [el]: value }));
 
-  // Screen reader announcement helper
-  const announce = (message, type = 'polite') => {
+  // Helper: create new div each time to force VoiceOver to read it
+  const announce = (message, type = 'polite', callback = null) => {
     const region = type === 'assertive' ? liveRegionRef : statusRegionRef;
+
     if (region.current) {
-      region.current.textContent = message;
-      // Clear after a delay to avoid repetitive announcements
+      const node = document.createElement('div');
+      node.textContent = message;
+      region.current.appendChild(node);
+
+      // Clean up to avoid DOM clutter
       setTimeout(() => {
-        if (region.current) region.current.textContent = '';
+        if (region.current && node.parentNode) {
+          region.current.removeChild(node);
+        }
+        if (callback) callback();
       }, 1000);
     }
   };
 
+  // Repeating announcement for loading states
+  const startLoadingAnnouncements = (message) => {
+    if (loadingIntervalRef.current) {
+      clearInterval(loadingIntervalRef.current);
+    }
+
+    announce(message, "assertive");
+
+    loadingIntervalRef.current = setInterval(() => {
+      announce(message, "assertive");
+    }, 5000);
+  };
+
+  const stopLoadingAnnouncements = () => {
+    if (loadingIntervalRef.current) {
+      clearInterval(loadingIntervalRef.current);
+      loadingIntervalRef.current = null;
+    }
+  };
+
   const handleStartOver = () => {
+    stopLoadingAnnouncements();
     setStage("collect");
     setPromptType(null);
     setElements({});
@@ -148,6 +180,8 @@ export default function PromptBuilder() {
 
     setFinalResult(null);
     setErrorMessage("");
+
+    announce("Form reset", "assertive");
   };
 
   const openModal = (elementName) => {
@@ -186,6 +220,13 @@ export default function PromptBuilder() {
     };
   }, [activeModal]);
 
+  // Cleanup loading announcements on unmount
+  useEffect(() => {
+    return () => {
+      stopLoadingAnnouncements();
+    };
+  }, []);
+
   // Trap focus within modal
   const handleModalKeyDown = (e) => {
     if (e.key === 'Tab') {
@@ -216,7 +257,7 @@ export default function PromptBuilder() {
     setIsLoading(true);
     setErrorMessage("");
     setLoadingMessage("Building your initial prompt...");
-    announce("Building your initial prompt, please wait.", "assertive");
+    startLoadingAnnouncements("Building your initial prompt, please wait.");
 
     try {
       const res = await fetch(API_PATH, {
@@ -233,11 +274,17 @@ export default function PromptBuilder() {
       setFirstRevision(data.initialPrompt);
       setFirstSuggestions(Array.isArray(data.suggestions) ? data.suggestions : []);
       setStage("built");
-      announce("Initial prompt created! Review the suggestions and make your edits.", "polite");
+      announce("Initial prompt created!", "polite", () => {
+        // Focus the initial prompt heading after the announcement finishes
+        if (initialPromptHeadingRef.current) {
+          initialPromptHeadingRef.current.focus();
+        }
+      });
     } catch (err) {
       setErrorMessage(err.message);
       announce(`Error: ${err.message}`, "assertive");
     } finally {
+      stopLoadingAnnouncements();
       setIsLoading(false);
       setLoadingMessage("");
     }
@@ -250,7 +297,7 @@ export default function PromptBuilder() {
     setIsLoading(true);
     setErrorMessage("");
     setLoadingMessage("Reviewing your prompt...");
-    announce("Reviewing your prompt, please wait.", "assertive");
+    startLoadingAnnouncements("Reviewing your prompt, please wait.");
 
     try {
       const res = await fetch(API_PATH, {
@@ -283,11 +330,17 @@ export default function PromptBuilder() {
       }
 
       setStage("firstReviewed");
-      announce("First review complete! Check the element feedback and suggestions.", "polite");
+      announce("First review complete!", "polite", () => {
+        // Focus the polished draft heading after the announcement finishes
+        if (polishedDraftHeadingRef.current) {
+          polishedDraftHeadingRef.current.focus();
+        }
+      });
     } catch (err) {
       setErrorMessage(err.message);
       announce(`Error: ${err.message}`, "assertive");
     } finally {
+      stopLoadingAnnouncements();
       setIsLoading(false);
       setLoadingMessage("");
     }
@@ -300,7 +353,7 @@ export default function PromptBuilder() {
     setIsLoading(true);
     setErrorMessage("");
     setLoadingMessage("Performing final review...");
-    announce("Performing final review of your prompt.", "assertive");
+    startLoadingAnnouncements("Performing final review of your prompt, please wait.");
 
     try {
       const res = await fetch(API_PATH, {
@@ -315,11 +368,17 @@ export default function PromptBuilder() {
       const data = await res.json();
       setFinalResult(data);
       setStage("finalReviewed");
-      announce("Final review complete! Your prompt is ready with final recommendations.", "polite");
+      announce("Final review complete!", "polite", () => {
+        // Focus the final prompt heading after the announcement finishes
+        if (finalPromptHeadingRef.current) {
+          finalPromptHeadingRef.current.focus();
+        }
+      });
     } catch (err) {
       setErrorMessage(err.message);
       announce(`Error: ${err.message}`, "assertive");
     } finally {
+      stopLoadingAnnouncements();
       setIsLoading(false);
       setLoadingMessage("");
     }
@@ -386,20 +445,25 @@ export default function PromptBuilder() {
       </header>
 
       {/* Screen reader live regions */}
-      <div 
-        ref={liveRegionRef} 
+      <div
+        ref={liveRegionRef}
         style={srOnlyStyles}
-        role="alert" 
-        aria-atomic="true"
+        role="alert"
+        aria-atomic="false"
         aria-live="assertive"
-      />
-      <div 
-        ref={statusRegionRef} 
+        aria-relevant="additions"
+      >
+        {/* announcements injected here */}
+      </div>
+      <div
+        ref={statusRegionRef}
         style={srOnlyStyles}
-        role="status" 
-        aria-atomic="true" 
+        role="status"
+        aria-atomic="true"
         aria-live="polite"
-      />
+      >
+        {/* polite updates */}
+      </div>
 
       {/* Stage: Collect */}
       {stage === "collect" && (
@@ -499,7 +563,7 @@ export default function PromptBuilder() {
       This tool helps you build clear, detailed prompts for marketing images and videos. Just fill in the fields you want to include.
     </li>
     <li>
-      In the <strong>Subject</strong> field, esure you describe your product or the person/people/object you want to be depicted in the image. 
+      In the <strong>Subject</strong> field, ensure you describe your product or the person/people/object you want to be depicted in the image. 
     </li>
     <li>For <strong>Style</strong>, you may wish to refer to your company/brand colours or other brand design features, as well as the artistic style you want for the image more generally.</li>
     <li>
@@ -531,7 +595,14 @@ export default function PromptBuilder() {
         >
           <h1 id="built-heading" style={srOnlyStyles}>Review and refine your prompt</h1>
           <section className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col gap-4" aria-labelledby="initial-prompt-heading">
-            <h2 id="initial-prompt-heading" className="text-xl font-semibold">Initial prompt suggestion</h2>
+            <h2
+              id="initial-prompt-heading"
+              ref={initialPromptHeadingRef}
+              className="text-xl font-semibold"
+              tabIndex={-1}
+            >
+              Initial prompt suggestion
+            </h2>
             <div className="relative">
               <p className="p-4 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
                 {initialPrompt}
@@ -569,7 +640,7 @@ export default function PromptBuilder() {
                   type="submit"
                   disabled={!firstRevision.trim() || isLoading}
                   className="px-6 py-3 rounded-lg text-white font-bold bg-[#0056B3] hover:bg-[#0044A3] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 active:scale-95 shadow-md"
-                  aria-label="Submit your revision for first AI review"
+                  aria-label="Submit your revision for first review"
                 >
                   {isLoading ? (
                     <>
@@ -588,17 +659,19 @@ export default function PromptBuilder() {
 
           <aside className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col h-[650px]" aria-labelledby="suggestions-heading">
             <h2 id="suggestions-heading" className="text-xl font-semibold mb-3">Initial suggestions for further enhancements</h2>
-            <div ref={chatRef} className="flex-grow overflow-y-auto space-y-3">
+            <div ref={chatRef} className="flex-grow overflow-y-auto">
               {firstSuggestions.length ? (
                 <>
-                  <div className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm">
+                  <div className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm mb-3">
                     Optional ideas to add richer detail before your first review.
                   </div>
-                  {firstSuggestions.map((s, i) => (
-                    <div key={i} className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm">
-                      <ReactMarkdown>{`**${s.element}**\n\n${s.suggestion}`}</ReactMarkdown>
-                    </div>
-                  ))}
+                  <ul className="space-y-3" aria-label="Enhancement suggestions">
+                    {firstSuggestions.map((s, i) => (
+                      <li key={i} className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm">
+                        <ReactMarkdown>{`**${s.element}**\n\n${s.suggestion}`}</ReactMarkdown>
+                      </li>
+                    ))}
+                  </ul>
                 </>
               ) : (
                 <div className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm">
@@ -614,7 +687,13 @@ export default function PromptBuilder() {
       {stage === "firstReviewed" && (
         <main className="max-w-6xl mx-auto p-4 sm:p-6 grid md:grid-cols-2 gap-6">
           <div className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col gap-4">
-            <h2 className="text-xl font-semibold">Polished Draft (after first review)</h2>
+            <h2
+              ref={polishedDraftHeadingRef}
+              className="text-xl font-semibold"
+              tabIndex={-1}
+            >
+              Polished draft (after first review)
+            </h2>
             <div className="relative">
               <p className="p-4 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
                 {polishedDraft}
@@ -655,7 +734,7 @@ export default function PromptBuilder() {
                       type="submit"
                       disabled={!secondRevision.trim() || isLoading}
                       className="px-6 py-3 rounded-lg text-white font-bold bg-[#0056B3] hover:bg-[#0044A3] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 active:scale-95 shadow-md"
-                      aria-label="Submit your final edits for AI review"
+                      aria-label="Submit your final edits for review"
                     >
                       {isLoading ? (
                         <>
@@ -682,36 +761,40 @@ export default function PromptBuilder() {
 
           <div className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col h-[650px]">
             <h2 className="text-xl font-semibold mb-3">Element reviews</h2>
-            <div className="flex-grow overflow-y-auto space-y-2">
-              {elementReviews.map((r, i) => (
-                <div
-                  key={i}
-                  className={`p-3 rounded-lg border ${
-                    r.isSufficient ? "border-green-300 bg-green-50" : "border-amber-300 bg-amber-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-2 font-semibold text-gray-800">
-                    {r.isSufficient ? (
-                      <CheckIcon className="text-green-600" size={18} />
-                    ) : (
-                      <AlertIcon className="text-amber-500" size={18} />
-                    )}
-                    {r.element}
-                  </div>
-                  <p className="text-xs text-gray-700 mt-1 pl-7">{r.note}</p>
-                </div>
-              ))}
+            <div className="flex-grow overflow-y-auto">
+              <ul className="space-y-2" aria-label="Element review status">
+                {elementReviews.map((r, i) => (
+                  <li
+                    key={i}
+                    className={`p-3 rounded-lg border ${
+                      r.isSufficient ? "border-green-300 bg-green-50" : "border-amber-300 bg-amber-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 font-semibold text-gray-800">
+                      {r.isSufficient ? (
+                        <CheckIcon className="text-green-600" size={18} />
+                      ) : (
+                        <AlertIcon className="text-amber-500" size={18} />
+                      )}
+                      {r.element}
+                    </div>
+                    <p className="text-xs text-gray-700 mt-1 pl-7">{r.note}</p>
+                  </li>
+                ))}
+              </ul>
 
               <div className="mt-3">
                 <h3 className="text-sm font-semibold text-gray-700 mb-2">Targeted Suggestions</h3>
                 {secondSuggestions.length ? (
-                  secondSuggestions.map((s, i) => (
-                    <div key={i} className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm mb-2">
-                      <ReactMarkdown>{`**${s.element}**\n\n${s.suggestion}`}</ReactMarkdown>
-                    </div>
-                  ))
+                  <ul className="space-y-2" aria-label="Targeted suggestions for improvement">
+                    {secondSuggestions.map((s, i) => (
+                      <li key={i} className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm">
+                        <ReactMarkdown>{`**${s.element}**\n\n${s.suggestion}`}</ReactMarkdown>
+                      </li>
+                    ))}
+                  </ul>
                 ) : (
-                  <p className="text-sm text-gray-600">No additional suggestions — you’re good to go.</p>
+                  <p className="text-sm text-gray-600">No additional suggestions — you're good to go.</p>
                 )}
               </div>
             </div>
@@ -723,8 +806,12 @@ export default function PromptBuilder() {
       {stage === "finalReviewed" && (
         <main className="max-w-6xl mx-auto p-4 sm:p-6 grid md:grid-cols-2 gap-6">
           <div className="bg-white border-4 border-black rounded-2xl shadow-lg p-6 flex flex-col gap-4">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              Final Prompt {finalResult?.isReady && <CheckCircle2 className="text-green-600" size={20} />}
+            <h2
+              ref={finalPromptHeadingRef}
+              className="text-xl font-semibold flex items-center gap-2"
+              tabIndex={-1}
+            >
+              Final prompt {finalResult?.isReady && <CheckCircle2 className="text-green-600" size={20} />}
             </h2>
             <div className="relative">
               <p className="p-4 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
@@ -756,7 +843,7 @@ export default function PromptBuilder() {
               </p>
             </div>
             <p className="text-xs text-gray-500">
-              This session is complete. Use "Start Over" to begin a new prompt.
+              This session is complete. Click "Start over" to begin a new prompt.
             </p>
           </div>
         </main>
