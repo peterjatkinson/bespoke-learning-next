@@ -510,7 +510,7 @@ export default function PromptBuilder() {
             </div>
 
             <h2 className="text-xl font-semibold mt-6 mb-3">2) Fill Elements</h2>
-            {!promptType && <p className="text-sm text-gray-500">Pick image or video to see the relevant fields.</p>}
+            {!promptType && <p className="text-sm text-gray-600">Pick image or video to see the relevant fields.</p>}
             {promptType && (
               <form onSubmit={handleBuild} className="space-y-3">
                 {(promptType === "video" ? VIDEO_ELEMENTS : IMAGE_ELEMENTS).map((el) => (
@@ -851,7 +851,7 @@ export default function PromptBuilder() {
                 {finalResult?.finalNotes || "Analysis in progress..."}
               </p>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-600">
               This session is complete. Click "Start over" to begin a new prompt.
             </p>
           </div>
