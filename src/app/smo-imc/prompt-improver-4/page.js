@@ -852,7 +852,7 @@ export default function PromptBuilder() {
               </p>
             </div>
             <p className="text-xs text-gray-600">
-              This session is complete. Click "Start over" to begin a new prompt.
+              This session is complete. Click 'Start over' to begin a new prompt.
             </p>
           </div>
         </main>
