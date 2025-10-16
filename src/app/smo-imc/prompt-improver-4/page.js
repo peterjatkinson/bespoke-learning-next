@@ -53,28 +53,28 @@ const VIDEO_ELEMENTS = [
 ];
 
 const placeholders = {
-  Subject: "e.g., a sleek running shoe on a pedestal",
-  Style: "e.g., cinematic noir / watercolor / realistic",
-  Action: "e.g., splashing through water, being laced up",
-  Scene: "e.g., urban rooftop at sunrise, studio with neon lights",
-  Ambiance: "e.g., energetic, vibrant",
-  Composition: "e.g., close-up with product centred, wide shot with logo",
-  "Camera Motion": "e.g., slow pan across product, quick zoom in",
-  "Shot Duration": "e.g., 3-second hero shot, 1-second cutaway",
-  Pacing: "e.g., fast-paced for excitement, slow for luxury",
+  Subject: "e.g. a sleek running shoe on a pedestal",
+  Style: "e.g. cinematic noir / watercolor / realistic",
+  Action: "e.g. splashing through water, being laced up",
+  Scene: "e.g. urban rooftop at sunrise, studio with neon lights",
+  Ambiance: "e.g. energetic, vibrant",
+  Composition: "e.g. close-up with product centred, wide shot with logo",
+  "Camera Motion": "e.g. slow pan across product, quick zoom in",
+  "Shot Duration": "e.g. 3-second hero shot, 1-second cutaway",
+  Pacing: "e.g. fast-paced for excitement, slow for luxury",
 };
 
 
 const elementExplanations = {
-  Subject: "The main focus of your video or image (e.g., 'A golden retriever puppy,' 'A majestic Hawaiian waterfall,' 'An elderly Caucasian sailor').",
-  Action: "What the subject is doing (e.g., 'swimming in the ocean,' 'running through a meadow,' 'rowing a wooden boat,' 'sitting upright in a 1980s kitchen').",
-  Composition: "How the scene is framed (e.g., 'wide shot,' 'low-angle,' 'aerial view,' 'close-up,' 'medium shot,' 'tracking shot,' 'panning shot,' 'dolly in').",
-  Scene: "The location or environment of the shot (e.g., 'busy street,' 'space,' 'beach,' 'lush tropical rainforest,' 'magical ice cave,' 'moonlit sky above a forest').",
-  "Camera Motion": "How the camera moves (e.g., 'panning,' 'zooming,' 'tracking,' 'gracefully moves,' 'floats gently').",
-  Ambiance: "How color and light contribute to the scene's mood (e.g., 'blue tones,' 'night,' 'foggy,' 'golden hour light,' 'dramatic shadows,' 'soft diffused lighting,' 'eerie green neon glow').",
-  Style: "The artistic style or vibe you want (e.g., 'cinematic,' 'retro,' 'cartoon,' 'photorealistic,' 'voxel art illustration,' 'minimalistic,' 'surreal,' 'vintage,' 'futuristic').",
-  "Shot Duration": "How long each individual shot lasts (e.g., '3-second quick cuts,' '10-second lingering shot,' 'brief 2-second glimpse,' 'extended 15-second take'). This helps control the pacing and rhythm of your video.",
-  Pacing: "The overall rhythm and speed of your video (e.g., 'fast-paced with quick transitions,' 'slow and contemplative,' 'building momentum,' 'steady rhythm'). This affects how viewers experience the flow and energy of your content."
+  Subject: "The main focus of your video or image (e.g. 'A golden retriever puppy,' 'A majestic Hawaiian waterfall,' 'An elderly Caucasian sailor').",
+  Action: "What the subject is doing (e.g. 'swimming in the ocean,' 'running through a meadow,' 'rowing a wooden boat,' 'sitting upright in a 1980s kitchen').",
+  Composition: "How the scene is framed (e.g. 'wide shot,' 'low-angle,' 'aerial view,' 'close-up,' 'medium shot,' 'tracking shot,' 'panning shot,' 'dolly in').",
+  Scene: "The location or environment of the shot (e.g. 'busy street,' 'space,' 'beach,' 'lush tropical rainforest,' 'magical ice cave,' 'moonlit sky above a forest').",
+  "Camera Motion": "How the camera moves (e.g. 'panning,' 'zooming,' 'tracking,' 'gracefully moves,' 'floats gently').",
+  Ambiance: "How color and light contribute to the scene's mood (e.g. 'blue tones,' 'night,' 'foggy,' 'golden hour light,' 'dramatic shadows,' 'soft diffused lighting,' 'eerie green neon glow').",
+  Style: "The artistic style or vibe you want (e.g. 'cinematic,' 'retro,' 'cartoon,' 'photorealistic,' 'voxel art illustration,' 'minimalistic,' 'surreal,' 'vintage,' 'futuristic').",
+  "Shot Duration": "How long each individual shot lasts (e.g. '3-second quick cuts,' '10-second lingering shot,' 'brief 2-second glimpse,' 'extended 15-second take'). This helps control the pacing and rhythm of your video.",
+  Pacing: "The overall rhythm and speed of your video (e.g. 'fast-paced with quick transitions,' 'slow and contemplative,' 'building momentum,' 'steady rhythm'). This affects how viewers experience the flow and energy of your content."
 };
 
 export default function PromptBuilder() {
@@ -251,9 +251,14 @@ export default function PromptBuilder() {
   };
 
   /* ---------------- Stage 1: Build from elements ---------------- */
+  // Check if at least one field has content
+  const hasAnyContent = () => {
+    return Object.values(elements).some(value => value && value.trim().length > 0);
+  };
+
   const handleBuild = async (e) => {
     e.preventDefault();
-    if (!promptType) return;
+    if (!promptType || !hasAnyContent()) return;
     setIsLoading(true);
     setErrorMessage("");
     setLoadingMessage("Building your initial prompt...");
@@ -307,7 +312,7 @@ export default function PromptBuilder() {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.details || err.error || "First review failed.");
+        throw new Error(err.details || err.error || "Review failed.");
       }
       const data = await res.json();
 
@@ -330,7 +335,7 @@ export default function PromptBuilder() {
       }
 
       setStage("firstReviewed");
-      announce("First review complete!", "polite", () => {
+      announce("Review complete!", "polite", () => {
         // Focus the polished draft heading after the announcement finishes
         if (polishedDraftHeadingRef.current) {
           polishedDraftHeadingRef.current.focus();
@@ -536,8 +541,8 @@ export default function PromptBuilder() {
                 <div className="flex justify-end pt-2">
                   <button
                     type="submit"
-                    disabled={!promptType || isLoading}
-                    className="px-6 py-3 rounded-lg text-white font-bold bg-[#0056B3] hover:bg-[#0044A3] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 active:scale-95 shadow-md"
+                    disabled={!promptType || !hasAnyContent() || isLoading}
+                    className="px-6 py-3 rounded-lg text-white font-bold bg-[#0056B3] border-2 border-black flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 shadow-md enabled:hover:bg-[#0044A3] enabled:active:scale-95 disabled:bg-gray-400 disabled:cursor-default disabled:pointer-events-none disabled:transform-none disabled:shadow-none"
                     aria-label="Build initial prompt from your inputs"
                   >
                     {isLoading ? (
@@ -577,7 +582,7 @@ export default function PromptBuilder() {
       For video prompts, you can also add <strong>Camera Motion</strong>, <strong>Shot Duration</strong> and <strong>Pacing</strong> to guide the energy and flow.
     </li>
     <li>
-      You can leave some fields blank. The prompt builder will only use what you provide.
+      You can leave some fields blank, but you must fill in at least one field to build an initial prompt. The prompt builder will only use what you provide.
     </li>
     <li>
       Try different combinations and levels of detail to see what works best for your campaign.
@@ -604,7 +609,7 @@ export default function PromptBuilder() {
               Initial prompt suggestion
             </h2>
             <div className="relative">
-              <p className="p-4 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
+              <p className="p-4 pr-12 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
                 {initialPrompt}
               </p>
               <div className="absolute top-2 right-2 flex items-center gap-2">
@@ -624,23 +629,23 @@ export default function PromptBuilder() {
               </div>
             </div>
 
-            <h3 className="text-sm font-semibold text-gray-700">Your first revision</h3>
+            <h3 className="text-sm font-semibold text-gray-700">Your revision</h3>
             <form onSubmit={handleFirstReview} className="space-y-3">
               <textarea
                 value={firstRevision}
                 onChange={(e) => setFirstRevision(e.target.value)}
                 rows={6}
                 className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
-                placeholder="Make edits, add detail, then submit for a first review."
+                placeholder="Make edits, add detail, then submit for review."
                 disabled={isLoading}
-                aria-label="Edit your prompt before first review"
+                aria-label="Edit your prompt before review"
               />
               <div className="flex justify-end">
                 <button
                   type="submit"
                   disabled={!firstRevision.trim() || isLoading}
                   className="px-6 py-3 rounded-lg text-white font-bold bg-[#0056B3] hover:bg-[#0044A3] border-2 border-black disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 active:scale-95 shadow-md"
-                  aria-label="Submit your revision for first review"
+                  aria-label="Submit your revision for review"
                 >
                   {isLoading ? (
                     <>
@@ -650,7 +655,7 @@ export default function PromptBuilder() {
                   ) : (
                     <SendIcon size={18} />
                   )} 
-                  Submit for first review
+                  Submit for review
                 </button>
               </div>
               {errorMessage && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
@@ -663,7 +668,7 @@ export default function PromptBuilder() {
               {firstSuggestions.length ? (
                 <>
                   <div className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm mb-3">
-                    Optional ideas to add richer detail before your first review.
+                    Optional ideas to add richer detail before your AI review.
                   </div>
                   <ul className="space-y-3" aria-label="Enhancement suggestions">
                     {firstSuggestions.map((s, i) => (
@@ -675,7 +680,7 @@ export default function PromptBuilder() {
                 </>
               ) : (
                 <div className="bg-gray-100 rounded-xl p-3 text-gray-800 text-sm">
-                  Nice work — this already reads strong. Submit for first review when ready.
+                  Nice work — this already reads strong. Submit for review when ready.
                 </div>
               )}
             </div>
@@ -692,10 +697,10 @@ export default function PromptBuilder() {
               className="text-xl font-semibold"
               tabIndex={-1}
             >
-              Polished draft (after first review)
+              Current draft (after review)
             </h2>
             <div className="relative">
-              <p className="p-4 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
+              <p className="p-4 pr-12 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
                 {polishedDraft}
               </p>
               <div className="absolute top-2 right-2 flex items-center gap-2">
@@ -703,7 +708,7 @@ export default function PromptBuilder() {
                   title="Copy to clipboard"
                   onClick={() => handleCopy(polishedDraft)}
                   className="p-1.5 bg-gray-200 hover:bg-gray-300 rounded text-gray-600 transition-colors"
-                  aria-label="Copy polished prompt to clipboard"
+                  aria-label="Copy prompt to clipboard"
                 >
                   <CopyIcon size={16} />
                 </button>
@@ -814,7 +819,7 @@ export default function PromptBuilder() {
               Final prompt {finalResult?.isReady && <CheckCircle2 className="text-green-600" size={20} />}
             </h2>
             <div className="relative">
-              <p className="p-4 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
+              <p className="p-4 pr-12 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 whitespace-pre-wrap min-h-[120px]">
                 {finalResult?.polishedPrompt || secondRevision || polishedDraft}
               </p>
               <div className="absolute top-2 right-2 flex items-center gap-2">
@@ -837,9 +842,13 @@ export default function PromptBuilder() {
 
           <div className="bg-white border-4 border-black rounded-2xl shadow-lg p-6">
             <h2 className="text-xl font-semibold mb-3">Final recommendations</h2>
-            <div className="p-4 bg-blue-50 border-2 border-[#0056B3] rounded-lg mb-4">
+            <div className={`p-4 rounded-lg mb-4 border-2 ${
+              finalResult?.isReady
+                ? "bg-green-50 border-green-300"
+                : "bg-amber-50 border-amber-300"
+            }`}>
               <p className="text-sm text-gray-800 whitespace-pre-wrap">
-                {finalResult?.finalNotes || "Your prompt looks great! Here are some final tips: Try experimenting with different style keywords, adjust the level of detail based on your specific use case, and don't hesitate to iterate further if needed."}
+                {finalResult?.finalNotes || "Analysis in progress..."}
               </p>
             </div>
             <p className="text-xs text-gray-500">
