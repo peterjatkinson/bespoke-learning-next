@@ -47,8 +47,8 @@ const VIDEO_ELEMENTS = [
   "Scene",
   "Ambiance",
   "Composition",
-  "Camera Motion",
-  "Shot Duration",
+  "Camera motion",
+  "Shot duration",
   "Pacing",
 ];
 
@@ -59,8 +59,8 @@ const placeholders = {
   Scene: "e.g. urban rooftop at sunrise, studio with neon lights",
   Ambiance: "e.g. energetic, vibrant",
   Composition: "e.g. close-up with product centred, wide shot with logo",
-  "Camera Motion": "e.g. slow pan across product, quick zoom in",
-  "Shot Duration": "e.g. 3-second hero shot, 1-second cutaway",
+  "Camera motion": "e.g. slow pan across product, quick zoom in",
+  "Shot duration": "e.g. 3-second hero shot, 1-second cutaway",
   Pacing: "e.g. fast-paced for excitement, slow for luxury",
 };
 
@@ -70,10 +70,10 @@ const elementExplanations = {
   Action: "What the subject is doing (e.g. 'swimming in the ocean,' 'running through a meadow,' 'rowing a wooden boat,' 'sitting upright in a 1980s kitchen').",
   Composition: "How the scene is framed (e.g. 'wide shot,' 'low-angle,' 'aerial view,' 'close-up,' 'medium shot,' 'tracking shot,' 'panning shot,' 'dolly in').",
   Scene: "The location or environment of the shot (e.g. 'busy street,' 'space,' 'beach,' 'lush tropical rainforest,' 'magical ice cave,' 'moonlit sky above a forest').",
-  "Camera Motion": "How the camera moves (e.g. 'panning,' 'zooming,' 'tracking,' 'gracefully moves,' 'floats gently').",
+  "Camera motion": "How the camera moves (e.g. 'panning,' 'zooming,' 'tracking,' 'gracefully moves,' 'floats gently').",
   Ambiance: "How color and light contribute to the scene's mood (e.g. 'blue tones,' 'night,' 'foggy,' 'golden hour light,' 'dramatic shadows,' 'soft diffused lighting,' 'eerie green neon glow').",
   Style: "The artistic style or vibe you want (e.g. 'cinematic,' 'retro,' 'cartoon,' 'photorealistic,' 'voxel art illustration,' 'minimalistic,' 'surreal,' 'vintage,' 'futuristic').",
-  "Shot Duration": "How long each individual shot lasts (e.g. '3-second quick cuts,' '10-second lingering shot,' 'brief 2-second glimpse,' 'extended 15-second take'). This helps control the pacing and rhythm of your video.",
+  "Shot duration": "How long each individual shot lasts (e.g. '3-second quick cuts,' '10-second lingering shot,' 'brief 2-second glimpse,' 'extended 15-second take'). This helps control the pacing and rhythm of your video.",
   Pacing: "The overall rhythm and speed of your video (e.g. 'fast-paced with quick transitions,' 'slow and contemplative,' 'building momentum,' 'steady rhythm'). This affects how viewers experience the flow and energy of your content."
 };
 
@@ -579,7 +579,7 @@ export default function PromptBuilder() {
     </li>
     <li>
       
-      For video prompts, you can also add <strong>Camera Motion</strong>, <strong>Shot Duration</strong> and <strong>Pacing</strong> to guide the energy and flow.
+      For video prompts, you can also add <strong>Camera motion</strong>, <strong>Shot duration</strong> and <strong>Pacing</strong> to guide the energy and flow.
     </li>
     <li>
       You can leave some fields blank, but you must fill in at least one field to build an initial prompt. The prompt builder will only use what you provide.
