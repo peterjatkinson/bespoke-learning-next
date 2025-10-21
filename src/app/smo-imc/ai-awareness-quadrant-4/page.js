@@ -432,11 +432,18 @@ const VisualView = ({
       const rect = quadrantRef.current.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = 100 - (((e.clientY - rect.top) / rect.height) * 100);
+
+      // Check if tooltip will wrap to two lines (near right edge of screen)
+      const tooltipText = `AI: ${Math.round(x)}, Consumer: ${Math.round(y)}`;
+      const tooltipWidth = tooltipText.length * 7; // Rough estimate of text width
+      const willWrap = e.clientX + tooltipWidth > window.innerWidth;
+
       setCoordinateTooltip({
         x: Math.round(x),
         y: Math.round(y),
         mouseX: e.clientX,
-        mouseY: e.clientY
+        mouseY: e.clientY,
+        willWrap: willWrap
       });
     }
   };
@@ -687,6 +694,9 @@ const VisualView = ({
               )}
             </div>
           </div>
+          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 pt-4" aria-hidden="true">
+            AI brand awareness →
+          </span>
         </div>
       </div>
 
@@ -695,8 +705,8 @@ const VisualView = ({
         <div
           className="fixed cursor-default pointer-events-none"
           style={{
-            left: coordinateTooltip.mouseX + 10,
-            top: coordinateTooltip.mouseY - 25,
+            left: coordinateTooltip.mouseX - 50,
+            top: coordinateTooltip.mouseY - (coordinateTooltip.willWrap ? 50 : 35),
             zIndex: 99999
           }}
         >
