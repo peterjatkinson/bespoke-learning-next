@@ -17,8 +17,8 @@ const SUBMITTED_COMPANY_ID_STORAGE_KEY = 'quadrantAppSubmittedCompanyId';
 // --- Reusable Quadrant Information Component ---
 const QuadrantInfo = ({ viewType = "visual" }) => {
   const description = viewType === "visual"
-    ? `The quadrant positions brands by AI discoverability versus traditional consumer recognition, helping to identify strategic marketing gaps and opportunities. Hover over each of the dots that you and other students have added to the quadrant to see the company name and score for consumer and AI brand awareness.`
-    : `The quadrant positions brands by AI discoverability versus traditional consumer recognition, helping to identify strategic marketing gaps and opportunities. Refer to the company lists to see where various brands are positioned.`;
+    ? `The quadrant positions brands by AI discoverability versus traditional consumer recognition. Hover over each of the dots that you and other students have added to the quadrant to see the company name and score for consumer and AI brand awareness.`
+    : `The quadrant positions brands by AI discoverability versus traditional consumer recognition. Refer to the company lists to see where various brands are positioned.`;
 
   return (
     <div className="mt-6 pt-6 border-t border-gray-200 text-sm">
@@ -28,7 +28,7 @@ const QuadrantInfo = ({ viewType = "visual" }) => {
       </div>
       <div className="mt-4 text-gray-900 flex items-start gap-2">
         <Bot size={28} className="flex-shrink-0 text-gray-500" />
-        <span>Cyborg companies have strong brand awareness both with consumers and with LLMs.</span>
+        <span>Cyborg companies have strong brand awareness with both consumers and LLMs.</span>
       </div>
       <div className="mt-4 text-gray-900 flex items-start gap-2">
         <Sparkles size={28} className="flex-shrink-0 text-gray-500" />
@@ -709,8 +709,8 @@ const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted, companyLis
   };
 
   return (
-    <div className="grid custom-grid-cols-1 custom-lg:grid-cols-3 gap-8">
-      <div className="custom-col-span-1 custom-lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
         <h2 className="text-xl font-semibold mb-4" ref={addCompanyHeadingRef} tabIndex={-1}>Add a company</h2>
         {hasSubmitted ? (
           <div className="p-3 bg-blue-100 text-blue-800 rounded-md text-sm border border-blue-200">
@@ -780,12 +780,12 @@ const AccessibleView = ({ companies, onSave, isLoading, hasSubmitted, companyLis
         <QuadrantInfo viewType="accessible" />
       </div>
 
-      <div className="custom-col-span-1 custom-lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
+      <div className="bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
         <h2 className="text-xl font-semibold mb-4" ref={companyListsRef} tabIndex={-1}>Company lists by quadrant</h2>
         {isLoading ? (
           <p className="text-gray-600">Loading lists...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
             {Object.entries(quadrants).map(([qName, comps]) => (
               <div key={qName} className="p-4 rounded-lg bg-gray-50 border">
                 <h3 className="font-bold text-lg text-gray-800">{qName}</h3>

@@ -322,14 +322,30 @@ export default function PromptBuilder() {
       setSecondRevision(data.polishedDraft);
 
       // If there's nothing left to do (every element sufficient AND no suggestions),
-      // skip the final submission entirely and finish now.
+      // still call final review API to get proper AI-generated final recommendations
       const allSufficient = (data.elementReviews || []).every((r) => r.isSufficient);
       if (allSufficient && (!data.suggestions || data.suggestions.length === 0)) {
-        setFinalResult({
-          isReady: true,
-          polishedPrompt: data.polishedDraft,
-          finalNotes: "",
-        });
+        // Call final review API to get proper final recommendations
+        try {
+          const finalRes = await fetch(API_PATH, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "finalReview", revisedPrompt: data.polishedDraft, promptType }),
+          });
+          if (!finalRes.ok) {
+            const finalErr = await finalRes.json().catch(() => ({}));
+            throw new Error(finalErr.details || finalErr.error || "Final review failed.");
+          }
+          const finalData = await finalRes.json();
+          setFinalResult(finalData);
+        } catch (finalErr) {
+          // Fallback if final review fails
+          setFinalResult({
+            isReady: true,
+            polishedPrompt: data.polishedDraft,
+            finalNotes: "Your prompt is comprehensive and ready to use. All elements have sufficient detail and specificity to generate consistent, high-quality results.",
+          });
+        }
         setStage("finalReviewed"); // read-only end state
         return;
       }
@@ -563,7 +579,7 @@ export default function PromptBuilder() {
 
 <aside className="bg-white border-4 border-black rounded-2xl shadow-lg p-6" aria-labelledby="tips-heading">
   <h2 id="tips-heading" className="text-xl font-semibold mb-3">Tips</h2>
-  <ul className="text-sm text-gray-600 list-disc pl-5 space-y-2">
+  <ul className="text-base text-gray-600 list-disc pl-5 space-y-2">
     <li>
       This tool helps you build clear, detailed prompts for marketing images and videos. Just fill in the fields you want to include.
     </li>
