@@ -398,6 +398,7 @@ const VisualView = ({
 }) => {
   const [hoveredTooltip, setHoveredTooltip] = useState(null);
   const [focusedDotIndex, setFocusedDotIndex] = useState(-1);
+  const [coordinateTooltip, setCoordinateTooltip] = useState(null);
 
   const companyGroups = Object.values(groupCompaniesByCoordinates(companies));
 
@@ -424,6 +425,24 @@ const VisualView = ({
         setFocusedDotIndex(-1);
         break;
     }
+  };
+
+  const handleQuadrantMouseMove = (e) => {
+    if (isReadyToPlace && !pendingCompany && !hasSubmitted) {
+      const rect = quadrantRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = 100 - (((e.clientY - rect.top) / rect.height) * 100);
+      setCoordinateTooltip({
+        x: Math.round(x),
+        y: Math.round(y),
+        mouseX: e.clientX,
+        mouseY: e.clientY
+      });
+    }
+  };
+
+  const handleQuadrantMouseLeave = () => {
+    setCoordinateTooltip(null);
   };
 
   return (
@@ -532,6 +551,8 @@ const VisualView = ({
                 isReadyToPlace && !pendingCompany && !hasSubmitted ? 'cursor-crosshair' : (hasSubmitted ? 'cursor-not-allowed' : 'cursor-default')
               }`}
               onClick={isReadyToPlace && !pendingCompany && !hasSubmitted ? handleQuadrantClick : undefined}
+              onMouseMove={handleQuadrantMouseMove}
+              onMouseLeave={handleQuadrantMouseLeave}
               tabIndex={-1}
               aria-label="Brand awareness quadrant chart"
             >
@@ -666,11 +687,24 @@ const VisualView = ({
               )}
             </div>
           </div>
-          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 pt-4" aria-hidden="true">
-            AI brand awareness →
-          </span>
         </div>
       </div>
+
+      {/* Coordinate tooltip - positioned relative to viewport when in ready-to-place mode */}
+      {coordinateTooltip && (
+        <div
+          className="fixed cursor-default pointer-events-none"
+          style={{
+            left: coordinateTooltip.mouseX + 10,
+            top: coordinateTooltip.mouseY - 25,
+            zIndex: 99999
+          }}
+        >
+          <div className="bg-black text-white text-xs rounded-md px-2 py-1 shadow-2xl border border-gray-600">
+            AI: {coordinateTooltip.x}, Consumer: {coordinateTooltip.y}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
