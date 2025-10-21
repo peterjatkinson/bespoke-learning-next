@@ -521,7 +521,7 @@ const VisualView = ({
             {pendingCompany && !hasSubmitted && (
               <div className="mt-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
                 <h3 className="font-semibold text-indigo-800">
-                  Confirm Placement
+                  Confirm placement
                 </h3>
                 <p className="text-sm text-indigo-700 mt-1">
                   Placing <span className="font-bold">{pendingCompany.name}</span> at:
@@ -530,18 +530,20 @@ const VisualView = ({
                   AI Awareness (X): {pendingCompany.x}, Consumer Awareness (Y):{" "}
                   {pendingCompany.y}
                 </p>
-                <div className="flex gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mt-4 justify-center sm:gap-3">
                   <button
                     onClick={() => saveCompany(pendingCompany)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#0056B3] text-white rounded-lg border-2 border-black hover:bg-[#0044A3] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 active:scale-95 font-semibold shadow-md"
+                    className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-[#0056B3] text-white rounded-lg border-2 border-black hover:bg-[#0044A3] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0056B3] focus:ring-offset-2 active:scale-95 font-semibold shadow-md flex-1 min-w-[90px] max-w-[140px]"
                   >
-                    <Save size={16} /> Save
+                    <Save size={16} className="flex-shrink-0" />
+                    <span className="whitespace-nowrap">Save</span>
                   </button>
                   <button
                     onClick={cancelPending}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 border-2 border-gray-400 rounded-lg hover:bg-gray-300 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-400 focus:ring-offset-2 active:scale-95 font-semibold"
+                    className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-200 border-2 border-gray-400 rounded-lg hover:bg-gray-300 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-400 focus:ring-offset-2 active:scale-95 font-semibold flex-1 min-w-[90px] max-w-[140px]"
                   >
-                    <XCircle size={16} /> Cancel
+                    <XCircle size={16} className="flex-shrink-0" />
+                    <span className="whitespace-nowrap">Cancel</span>
                   </button>
                 </div>
               </div>
@@ -568,10 +570,22 @@ const VisualView = ({
               tabIndex={-1}
               aria-label="Brand awareness quadrant chart"
             >
-              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold   text-center">High-street heroes</span></div>
-              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold  text-center">Cyborgs</span></div>
-              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-green-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold  text-center">Emergent</span></div>
-              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold text-center">AI pioneers</span></div>
+              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-none flex items-center justify-center p-2">
+                <ShoppingCart size={80} className="absolute text-gray-300/30 pointer-events-none" />
+                <span className="font-bold text-center relative z-10">High-street heroes</span>
+              </div>
+              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-none flex items-center justify-center p-2">
+                <Bot size={80} className="absolute text-gray-300/30 pointer-events-none" />
+                <span className="font-bold text-center relative z-10">Cyborgs</span>
+              </div>
+              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-green-500/10 rounded-none flex items-center justify-center p-2">
+                <Sunrise size={80} className="absolute text-gray-300/30 pointer-events-none" />
+                <span className="font-bold text-center relative z-10">Emergent</span>
+              </div>
+              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-500/10 rounded-none flex items-center justify-center p-2">
+                <Sparkles size={80} className="absolute text-gray-300/30 pointer-events-none" />
+                <span className="font-bold text-center relative z-10">AI pioneers</span>
+              </div>
               <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gray-400"></div>
               <div className="absolute left-1/2 top-0 h-full w-[1px] bg-gray-400"></div>
 
