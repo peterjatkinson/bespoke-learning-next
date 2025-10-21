@@ -187,7 +187,7 @@ const WaterfallApp = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Original position of link and explanation content (now moved) */}
+        {/* Original position of links and explanation content (now moved) */}
         {/*
         <div
           className="mt-10 text-sky-400 underline cursor-pointer text-sm"
