@@ -452,6 +452,11 @@ const VisualView = ({
     setCoordinateTooltip(null);
   };
 
+  const handleQuadrantClickWithTooltipClear = (e) => {
+    setCoordinateTooltip(null); // Clear the coordinate tooltip
+    handleQuadrantClick(e); // Call the original click handler
+  };
+
   return (
     <div className="grid custom-grid-cols-1 custom-lg:grid-cols-3 gap-8">
       <div className="custom-col-span-1 custom-lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
@@ -551,22 +556,22 @@ const VisualView = ({
           <span className="absolute top-1/2 -left-24 -translate-y-1/2 -rotate-90 text-sm font-medium text-gray-600 whitespace-nowrap" aria-hidden="true">
             Consumer brand awareness →
           </span>
-          <div className="relative w-full aspect-square bg-white rounded-2xl shadow-lg border-1 border-black">
+          <div className="relative w-full aspect-square bg-white rounded-none shadow-lg border-1 border-black">
             <div
               ref={quadrantRef}
               className={`relative w-full h-full p-4 sm:p-6 ${
                 isReadyToPlace && !pendingCompany && !hasSubmitted ? 'cursor-crosshair' : (hasSubmitted ? 'cursor-not-allowed' : 'cursor-default')
               }`}
-              onClick={isReadyToPlace && !pendingCompany && !hasSubmitted ? handleQuadrantClick : undefined}
+              onClick={isReadyToPlace && !pendingCompany && !hasSubmitted ? handleQuadrantClickWithTooltipClear : undefined}
               onMouseMove={handleQuadrantMouseMove}
               onMouseLeave={handleQuadrantMouseLeave}
               tabIndex={-1}
               aria-label="Brand awareness quadrant chart"
             >
-              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-tl-lg flex items-center justify-center p-2"><span className="font-bold   text-center">High-street heroes</span></div>
-              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-tr-lg flex items-center justify-center p-2"><span className="font-bold  text-center">Cyborgs</span></div>
-              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-green-500/10 rounded-bl-lg flex items-center justify-center p-2"><span className="font-bold  text-center">Emergent</span></div>
-              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-500/10 rounded-br-lg flex items-center justify-center p-2"><span className="font-bold text-center">AI pioneers</span></div>
+              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold   text-center">High-street heroes</span></div>
+              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold  text-center">Cyborgs</span></div>
+              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-green-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold  text-center">Emergent</span></div>
+              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-500/10 rounded-none flex items-center justify-center p-2"><span className="font-bold text-center">AI pioneers</span></div>
               <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gray-400"></div>
               <div className="absolute left-1/2 top-0 h-full w-[1px] bg-gray-400"></div>
 
@@ -671,8 +676,8 @@ const VisualView = ({
               <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
               <span className="absolute -bottom-5 right-0 translate-x-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
               <span className="absolute -left-4 bottom-0 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">0</span>
-              <span className="absolute -left-4 bottom-1/2 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
-              <span className="absolute -left-4 top-0 -translate-y-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
+              <span className="absolute -left-5 bottom-1/2 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
+              <span className="absolute -left-6 top-0 -translate-y-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
 
               {/* Separate tooltip container with highest z-index */}
               {hoveredTooltip && (
