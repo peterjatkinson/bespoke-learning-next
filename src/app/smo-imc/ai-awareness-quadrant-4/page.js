@@ -458,8 +458,8 @@ const VisualView = ({
   };
 
   return (
-    <div className="grid custom-grid-cols-1 custom-lg:grid-cols-3 gap-8">
-      <div className="custom-col-span-1 custom-lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
+<div className="grid grid-cols-1 min-[989px]:grid-cols-3 gap-8">
+  <div className="col-span-1 min-[989px]:col-span-1 bg-white p-6 rounded-2xl shadow-lg border-4 border-black">
         <h2 className="text-xl font-semibold mb-4" ref={addCompanyHeadingRef} tabIndex={-1}>Add a company</h2>
         {hasSubmitted ? (
           <div className="p-3 bg-blue-100 text-blue-800 rounded-md text-sm border border-blue-200">
@@ -553,7 +553,7 @@ const VisualView = ({
         <QuadrantInfo viewType="visual" />
       </div>
       
-      <div className="custom-col-span-1 custom-lg:col-span-2 flex items-center justify-center">
+  <div className="col-span-1 min-[989px]:col-span-2 flex items-center justify-center">
         <div className="w-full max-w-2xl mx-auto p-8 sm:p-10 relative flex justify-center">
           <span className="absolute top-1/2 -left-24 -translate-y-1/2 -rotate-90 text-sm font-medium text-gray-600 whitespace-nowrap" aria-hidden="true">
             Consumer brand awareness →

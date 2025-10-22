@@ -129,34 +129,8 @@ button { cursor: pointer; }
   }
 }
 
-/* Custom breakpoint at 989px */
-@layer utilities {
-  .custom-grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
 
-  .custom-col-span-1 {
-    grid-column: span 1 / span 1;
-  }
 
-  .custom-col-span-2 {
-    grid-column: span 2 / span 2;
-  }
-
-  @media (min-width: 989px) {
-    .custom-lg\:grid-cols-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .custom-lg\:col-span-1 {
-      grid-column: span 1 / span 1;
-    }
-
-    .custom-lg\:col-span-2 {
-      grid-column: span 2 / span 2;
-    }
-  }
-}
 
 
 

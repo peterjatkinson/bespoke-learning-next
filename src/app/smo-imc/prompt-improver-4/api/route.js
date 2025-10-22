@@ -16,8 +16,8 @@ const REQUIRED_ELEMENTS = {
     "Scene",
     "Ambiance",
     "Composition",
-    "Camera Motion",
-    "Shot Duration",
+    "Camera motion",
+    "Shot duration",
     "Pacing",
   ],
 };
@@ -145,8 +145,8 @@ ELEMENT HINTS:
 - Ambiance: mood, lighting, palette; *e.g., moody, cool blues and cyan highlights*.
 - Style: medium/influence/era/stock; *e.g., illustrative ink wash, 1970s sci-fi paperback vibe*.
 - Composition: shot size/angle/framing/DoF; *e.g., medium close-up, low angle, shallow depth*.
-${isVideo ? `- Camera Motion: move/rig/speed; *e.g., slow dolly forward, stabilized gimbal*.
-- Shot Duration: seconds or range; *e.g., a 6-second shot, single beat*.
+${isVideo ? `- Camera motion: move/rig/speed; *e.g., slow dolly forward, stabilized gimbal*.
+- Shot duration: seconds or range; *e.g., a 6-second shot, single beat*.
 - Pacing: rhythm/tempo/energy; *e.g., measured pacing, a breath between movements*.` : ""}
 `.trim();
 }
@@ -167,8 +167,8 @@ ${isVideo ? `` : `
 - IMAGES ONLY: Focus on visual elements only. Do not suggest sound, scent, taste, or other non-visual sensory details that cannot be depicted in a still image.`}
 
 ${isVideo ? `VIDEO INTEGRATION:
-- "Camera Motion": natural clause (e.g., "with a slow dolly forward" / "handheld with subtle sway").
-- "Shot Duration": phrase like "a 5-second shot".
+- "Camera motion": natural clause (e.g., "with a slow dolly forward" / "handheld with subtle sway").
+- "Shot duration": phrase like "a 5-second shot".
 - "Pacing": short natural phrasing ("with brisk pacing", "lingers slowly").` : ""}
 
 TASK B — PER-ELEMENT SUGGESTIONS:
