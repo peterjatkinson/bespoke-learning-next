@@ -22,10 +22,17 @@ export async function GET() {
   try {
     const appIdentifier = 'QuadrantApp';
 
+    // Only fetch data from the current calendar year
+    const currentYear = new Date().getFullYear();
+    const startOfYear = new Date(currentYear, 0, 1).toISOString();
+    const endOfYear = new Date(currentYear, 11, 31, 23, 59, 59).toISOString();
+
     const { data, error } = await supabase
       .from('app_data')
       .select('id, data, created_at')
       .eq('app_id', appIdentifier)
+      .gte('created_at', startOfYear)
+      .lte('created_at', endOfYear)
       .order('created_at', { ascending: false });
 
     if (error) {

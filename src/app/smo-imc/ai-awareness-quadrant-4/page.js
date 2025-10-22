@@ -63,7 +63,7 @@ export default function QuadrantApp() {
   const quadrantRef = useRef(null);
   const companyListsRef = useRef(null);
   const addCompanyHeadingRef = useRef(null);
-  const API_ENDPOINT = '/smo-imc/ai-awareness-quadrant-2/api';
+  const API_ENDPOINT = '/smo-imc/ai-awareness-quadrant-4/api';
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
