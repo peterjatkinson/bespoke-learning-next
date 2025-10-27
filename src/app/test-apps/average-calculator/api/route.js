@@ -2,10 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
 
 // Create a 'service' client we can use server-side:
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = createClient(supabaseUrl, supabaseSecretKey);
 
 // POST: Insert new data into "app_data"
 export async function POST(request) {

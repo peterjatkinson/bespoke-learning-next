@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY; // This key is secret, don’t expose it on the client!
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY; // This key is secret, don’t expose it on the client!
 
 // Create the client for server-side use.
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = createClient(supabaseUrl, supabaseSecretKey);
 
 export async function POST(request) {
   try {

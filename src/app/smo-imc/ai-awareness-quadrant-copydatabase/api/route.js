@@ -7,8 +7,9 @@ import { NextResponse } from 'next/server';
 export const runtime = 'nodejs';       // forces Node runtime (not Edge)
 export const dynamic = 'force-dynamic';// disables static caching for this route
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_TEST_URL;
+const supabaseSecretKey = process.env.SUPABASE_SECRET_TEST_KEY;
+
 
 let supabase;
 if (supabaseUrl && supabaseSecretKey) {
