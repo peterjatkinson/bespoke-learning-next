@@ -4,6 +4,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
+export const runtime = 'nodejs';       // forces Node runtime (not Edge)
+export const dynamic = 'force-dynamic';// disables static caching for this route
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
 
