@@ -3,7 +3,7 @@ export function initiateInsendiResize() {
   const container = document.querySelector('#root') || document.querySelector('#__next');
   if (!container) {
     console.warn("Insendi Resizer: Container element (#root or #__next) not found.");
-    return;
+    return () => {}; // Return empty cleanup function
   }
 
   let prevHeight = 0;
@@ -44,6 +44,12 @@ export function initiateInsendiResize() {
 
   sendResizeMessage(initialHeight);
   prevHeight = initialHeight;
+
+  // Return cleanup function
+  return () => {
+    console.log("Insendi Resizer: Cleaning up");
+    resizeObserver.disconnect();
+  };
 }
 
 // Canvas LMS resize implementation
@@ -51,12 +57,13 @@ export function initiateCanvasResize(canvasPostMessageToken = null) {
   const container = document.querySelector('#root') || document.querySelector('#__next');
   if (!container) {
     console.warn("Canvas Resizer: Container element (#root or #__next) not found.");
-    return;
+    return () => {}; // Return empty cleanup function
   }
 
   let prevHeight = 0;
   const minHeightThreshold = 100;
   const extraPadding = 30;
+  let timeoutId = null;
 
   const sendResizeMessage = (height) => {
     const newHeight = Math.ceil(height);
@@ -95,7 +102,7 @@ export function initiateCanvasResize(canvasPostMessageToken = null) {
     resizeObserver.observe(container);
 
     // Send initial height after a brief delay
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       let initialHeight = container.scrollHeight;
       if (initialHeight < minHeightThreshold) {
         initialHeight += extraPadding;
@@ -107,6 +114,15 @@ export function initiateCanvasResize(canvasPostMessageToken = null) {
   } catch (error) {
     console.error("Canvas Resizer: Error setting up ResizeObserver.", error);
   }
+
+  // Return cleanup function
+  return () => {
+    console.log("Canvas Resizer: Cleaning up");
+    resizeObserver.disconnect();
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
 }
 
 // Default export for backward compatibility (currently defaults to Insendi)
