@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { HelpCircle, List, Eye, Save, XCircle, Trash2, Bot, Sunrise, ShoppingCart, Sparkles } from 'lucide-react';
+import { LMSConfig } from '@/components/LMSConfig';
 
 // --- Helper function to determine the quadrant ---
 const getQuadrant = (x, y) => {
@@ -267,10 +268,12 @@ export default function QuadrantApp() {
   };
 
   return (
-    <div className="min-h-full bg-slate-100 font-sans antialiased">
-      <div aria-live="assertive" aria-atomic="true" className="sr-only">
-        {ariaLiveMessage}
-      </div>
+    <>
+      <LMSConfig lmsType="canvas" />
+      <div className="min-h-full bg-slate-100 font-sans antialiased">
+        <div aria-live="assertive" aria-atomic="true" className="sr-only">
+          {ariaLiveMessage}
+        </div>
       <header className="bg-white border-b-4 border-black p-4 sm:p-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -360,6 +363,7 @@ export default function QuadrantApp() {
         )}
       </div>
     </div>
+    </>
   );
 }
 
