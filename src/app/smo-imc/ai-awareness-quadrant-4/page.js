@@ -717,7 +717,7 @@ const VisualView = ({
               )}
             </div>
           </div>
-          <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 -bottom-[17px] sm:-bottom-[0px]" aria-hidden="true">
+          <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 -bottom-[17px] sm:-bottom-[0px] whitespace-nowrap" aria-hidden="true">
             AI brand awareness →
           </span>
         </div>
