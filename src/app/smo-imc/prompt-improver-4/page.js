@@ -496,13 +496,13 @@ export default function PromptBuilder() {
           <h1 id="collect-heading" style={srOnlyStyles}>Set up your prompt</h1>
           <section className="bg-white border-4 border-black rounded-2xl shadow-lg p-6" aria-labelledby="setup-heading">
             <h2 id="setup-heading" className="text-xl font-semibold mb-3">1) Choose type</h2>
-            <div className="flex gap-3">
+            <div className="flex flex-col min-[340px]:flex-row gap-3">
               <button
                 type="button"
                 onClick={() => setPromptType("image")}
-                className={`px-4 py-3 rounded-lg flex items-center gap-2 border-2 font-semibold transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-offset-2 ${
-                  promptType === "image" 
-                    ? "border-[#0056B3] bg-[#0056B3] text-white focus:ring-[#0056B3]" 
+                className={`px-4 py-3 rounded-lg flex items-center justify-center gap-2 border-2 font-semibold transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-offset-2 ${
+                  promptType === "image"
+                    ? "border-[#0056B3] bg-[#0056B3] text-white focus:ring-[#0056B3]"
                     : "border-black bg-white text-gray-800 hover:bg-gray-50 focus:ring-gray-400"
                 }`}
                 disabled={isLoading}
@@ -513,9 +513,9 @@ export default function PromptBuilder() {
               <button
                 type="button"
                 onClick={() => setPromptType("video")}
-                className={`px-4 py-3 rounded-lg flex items-center gap-2 border-2 font-semibold transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-offset-2 ${
-                  promptType === "video" 
-                    ? "border-[#0056B3] bg-[#0056B3] text-white focus:ring-[#0056B3]" 
+                className={`px-4 py-3 rounded-lg flex items-center justify-center gap-2 border-2 font-semibold transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-offset-2 ${
+                  promptType === "video"
+                    ? "border-[#0056B3] bg-[#0056B3] text-white focus:ring-[#0056B3]"
                     : "border-black bg-white text-gray-800 hover:bg-gray-50 focus:ring-gray-400"
                 }`}
                 disabled={isLoading}
