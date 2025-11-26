@@ -554,7 +554,7 @@ const VisualView = ({
       </div>
       
   <div className="col-span-1 min-[989px]:col-span-2 flex items-center justify-center">
-        <div className="w-full max-w-2xl mx-auto p-8 sm:p-10 relative flex justify-center">
+        <div className="w-full max-w-2xl mx-auto pl-8 pr-2 py-4 sm:p-8 md:p-10 relative flex justify-center">
           <span className="absolute top-1/2 -left-24 -translate-y-1/2 -rotate-90 text-sm font-medium text-gray-600 whitespace-nowrap" aria-hidden="true">
             Consumer brand awareness →
           </span>
@@ -686,9 +686,9 @@ const VisualView = ({
                 </>
               )}
 
-              <span className="absolute -bottom-5 left-0 -translate-x-1/2 text-xs text-gray-500" aria-hidden="true">0</span>
-              <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
-              <span className="absolute -bottom-5 right-0 translate-x-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
+              <span className="absolute left-0 -translate-x-1/2 text-xs text-gray-500" style={{ bottom: '-20px' }} aria-hidden="true">0</span>
+              <span className="absolute left-1/2 -translate-x-1/2 text-xs text-gray-500" style={{ bottom: '-20px' }} aria-hidden="true">50</span>
+              <span className="absolute right-0 translate-x-1/2 text-xs text-gray-500" style={{ bottom: '-20px' }} aria-hidden="true">100</span>
               <span className="absolute -left-4 bottom-0 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">0</span>
               <span className="absolute -left-5 bottom-1/2 translate-y-1/2 text-xs text-gray-500" aria-hidden="true">50</span>
               <span className="absolute -left-6 top-0 -translate-y-1/2 text-xs text-gray-500" aria-hidden="true">100</span>
@@ -700,7 +700,11 @@ const VisualView = ({
                   style={{
                     left: `${hoveredTooltip.x}%`,
                     bottom: `${hoveredTooltip.y}%`,
-                    transform: 'translate(-50%, calc(50% + 20px))',
+                    transform: hoveredTooltip.x < 20
+                      ? 'translate(0%, calc(50% + 20px))'
+                      : hoveredTooltip.x > 80
+                      ? 'translate(-100%, calc(50% + 20px))'
+                      : 'translate(-50%, calc(50% + 20px))',
                     zIndex: 99999
                   }}
                   onMouseEnter={() => setHoveredTooltip(hoveredTooltip)}
@@ -713,7 +717,7 @@ const VisualView = ({
               )}
             </div>
           </div>
-          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 pt-4" aria-hidden="true">
+          <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 -bottom-[17px] sm:-bottom-[0px]" aria-hidden="true">
             AI brand awareness →
           </span>
         </div>
