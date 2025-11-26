@@ -570,19 +570,19 @@ const VisualView = ({
               tabIndex={-1}
               aria-label="Brand awareness quadrant chart"
             >
-              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-none flex items-center justify-center p-2">
+              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-yellow-500/10 rounded-none flex items-center justify-center p-2 pointer-events-none">
                 <ShoppingCart size={80} className="absolute text-gray-300/30 pointer-events-none" />
                 <span className="font-bold text-center relative z-10">High-street heroes</span>
               </div>
-              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-none flex items-center justify-center p-2">
+              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-500/10 rounded-none flex items-center justify-center p-2 pointer-events-none">
                 <Bot size={80} className="absolute text-gray-300/30 pointer-events-none" />
                 <span className="font-bold text-center relative z-10">Cyborgs</span>
               </div>
-              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-green-500/10 rounded-none flex items-center justify-center p-2">
+              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-green-500/10 rounded-none flex items-center justify-center p-2 pointer-events-none">
                 <Sunrise size={80} className="absolute text-gray-300/30 pointer-events-none" />
                 <span className="font-bold text-center relative z-10">Emergent</span>
               </div>
-              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-500/10 rounded-none flex items-center justify-center p-2">
+              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-500/10 rounded-none flex items-center justify-center p-2 pointer-events-none">
                 <Sparkles size={80} className="absolute text-gray-300/30 pointer-events-none" />
                 <span className="font-bold text-center relative z-10">AI pioneers</span>
               </div>
