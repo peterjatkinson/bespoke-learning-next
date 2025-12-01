@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import { BookOpen, Activity, Info, RefreshCw, ArrowRight, Layers, Repeat, GitMerge } from 'lucide-react';
 
@@ -410,13 +409,13 @@ export default function App() {
                       <div className="w-10 h-0.5 bg-gray-400 relative">
                          <div className="absolute right-0 top-1/2 -translate-y-1/2 border-t-[3px] border-b-[3px] border-l-[4px] border-t-transparent border-b-transparent border-l-gray-400"></div>
                       </div>
-                      <span>Modulate (Input/Resource)</span>
+                      <span>Enables learner to modulate</span>
                    </div>
                    <div className="flex items-center gap-2">
                       <div className="w-10 h-0.5 border-t-2 border-dashed border-gray-400 relative">
                          <div className="absolute right-0 top-1/2 -translate-y-1/2 border-t-[3px] border-b-[3px] border-l-[4px] border-t-transparent border-b-transparent border-l-gray-400"></div>
                       </div>
-                      <span>Generate (Action/Output)</span>
+                      <span>Motivates learner to generate</span>
                    </div>
                 </div>
 
