@@ -287,17 +287,28 @@ export default function QuadrantApp() {
               setIsAccessibleView(newView);
               // Announce view change to screen readers
               if (newView) {
-                setAriaLiveMessage("Switched to accessible view; click again to switch to quadrant view");
+                setAriaLiveMessage("Switched to accessible view; press to switch back to quadrant view");
               } else {
-                setAriaLiveMessage("Switched to quadrant view; click again to switch to accessible view");
+                setAriaLiveMessage("Switched to quadrant view; press to switch to accessible view");
               }
             }}
-            className="px-4 py-2 text-sm font-semibold bg-gray-200 hover:bg-gray-300 border-2 border-gray-400 rounded-lg flex items-center gap-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-400 focus:ring-offset-2 active:scale-95"
+            role="switch"
+            aria-checked={isAccessibleView}
+            aria-label={`View mode toggle. Currently showing ${isAccessibleView ? 'accessible list' : 'visual quadrant'} view. Press to switch to ${isAccessibleView ? 'quadrant' : 'accessible list'} view.`}
+            className="flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-gray-400 focus:ring-offset-2 rounded-full transition-all duration-200"
           >
-            {isAccessibleView ? <Eye size={18} /> : <List size={18} />}
-            <span>
-              {isAccessibleView ? "Quadrant view" : "Accessible text view"}
+            <span className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              {isAccessibleView ? "Toggle accessible view" : "Toggle accessible view"}
             </span>
+            <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
+              isAccessibleView ? 'bg-blue-600' : 'bg-gray-300'
+            }`}>
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                  isAccessibleView ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </div>
           </button>
         </div>
       </header>
