@@ -233,15 +233,15 @@ const CostBehaviourTool = () => {
             <h2 className="text-sm font-semibold text-slate-700 mb-2">Cost per table</h2>
             <div className="grid grid-cols-3 gap-2 text-center text-xs">
               <div>
-                <p className="text-emerald-700">Variable</p>
+                <p className="text-emerald-700">Variable (per unit)</p>
                 <p className="font-semibold text-emerald-800">{formatCurrency(variableCostPerUnit)}</p>
               </div>
               <div>
-                <p className="text-blue-700">Fixed</p>
+                <p className="text-blue-700">Fixed (per unit)</p>
                 <p className="font-semibold text-blue-800">{formatCurrency(fixedCostPerUnit)}</p>
               </div>
               <div>
-                <p className="text-slate-600">Total</p>
+                <p className="text-slate-600">Total (per unit)</p>
                 <p className="font-semibold text-slate-800">{formatCurrency(costPerUnit)}</p>
               </div>
             </div>
