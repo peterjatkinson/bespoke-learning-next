@@ -309,6 +309,12 @@ const htmlContent = String.raw`
         <h1 class="page-title">1.5 Session review</h1>
       </div>
 
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>We have now reached the end of the first session of this primer.</p>
+        <p>In this session, you had an opportunity to explore the world of financial reporting, including the frameworks that make it reliable and the three core financial statements. You also saw how this information comes together in an annual report.</p>
+        <p>Let's now return to the learning outcomes outlined in the session introduction. To what extent do you feel you have achieved each of this session's learning outcomes?</p>
+      </div>
+
       <div class="quiz-header">
         <h2>Activity</h2>
       </div>
@@ -651,6 +657,18 @@ export default function AccountingPrimerSession1Page() {
         .accounting-primer-session1 .page-body ol {
           margin: 0.5rem 0 1rem 1.5rem;
           color: var(--ink-soft);
+        }
+        .accounting-primer-session1 .page-body ul,
+        .accounting-primer-session1 .q-text ul,
+        .accounting-primer-session1 .quiz-body ul,
+        .accounting-primer-session1 .text-block ul {
+          list-style: disc;
+        }
+        .accounting-primer-session1 .page-body ol,
+        .accounting-primer-session1 .q-text ol,
+        .accounting-primer-session1 .quiz-body ol,
+        .accounting-primer-session1 .text-block ol {
+          list-style: decimal;
         }
         .accounting-primer-session1 .page-body li { margin-bottom: 0.4rem; }
         .accounting-primer-session1 .lo-box,
