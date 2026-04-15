@@ -4,16 +4,10 @@ import { useEffect } from "react";
 
 const htmlContent = String.raw`
 <aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="course-label">Imperial College Business School</div>
-    <div class="course-title">Accounting Primer</div>
-  </div>
-
   <nav class="sidebar-nav">
     <div class="nav-section">
       <div class="nav-module active-module">
         Session 1: Financial Reporting
-        <span class="pill pill-active">Active</span>
       </div>
       <div class="nav-item" onclick="showPage('s1-1')" id="nav-s1-1">
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
@@ -41,13 +35,70 @@ const htmlContent = String.raw`
       </div>
     </div>
 
+    <div class="nav-section">
+      <div class="nav-module active-module">
+        Session 2: Balance sheet
+      </div>
+      <div class="nav-item" onclick="showPage('s2-1')" id="nav-s2-1">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        2.1 Introduction
+      </div>
+      <div class="nav-item" onclick="showPage('s2-2')" id="nav-s2-2">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        2.2 What is the balance sheet?
+      </div>
+      <div class="nav-item" onclick="showPage('s2-2-1')" id="nav-s2-2-1" style="padding-left: 2.8rem;">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M14 3H2v2h5v8h2V5h5V3z"/></svg>
+        2.2.1 Examining a balance sheet
+      </div>
+      <div class="nav-item" onclick="showPage('s2-3')" id="nav-s2-3">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        2.3 Assets
+      </div>
+      <div class="nav-item" onclick="showPage('s2-4')" id="nav-s2-4">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        2.4 Liabilities and equity
+      </div>
+      <div class="nav-item" onclick="showPage('s2-5')" id="nav-s2-5">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        2.5 Session review
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-module active-module">
+        Session 3: Income statement
+      </div>
+      <div class="nav-item" onclick="showPage('s3-1')" id="nav-s3-1">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        3.1 Introduction
+      </div>
+      <div class="nav-item" onclick="showPage('s3-2')" id="nav-s3-2">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        3.2 Revenue
+      </div>
+      <div class="nav-item" onclick="showPage('s3-3')" id="nav-s3-3">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        3.3 Expenses
+      </div>
+      <div class="nav-item" onclick="showPage('s3-4')" id="nav-s3-4">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        3.4 Depreciation
+      </div>
+      <div class="nav-item" onclick="showPage('s3-5')" id="nav-s3-5">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        3.5 Calculating the profit
+      </div>
+      <div class="nav-item" onclick="showPage('s3-6')" id="nav-s3-6">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        3.6 Session review
+      </div>
+    </div>
+
     <div class="nav-section" style="opacity:0.4">
-      <div class="nav-module nav-locked">Session 2: Balance sheet</div>
-      <div class="nav-module nav-locked">Session 3: Income statement</div>
-      <div class="nav-module nav-locked">Session 4: Cash flows</div>
-      <div class="nav-module nav-locked">Session 5: Sustainability</div>
-      <div class="nav-module nav-locked">Session 6: Short-term decision-making</div>
-      <div class="nav-module nav-locked">Session 7: Long-term decision-making</div>
+      <div class="nav-module nav-locked">Session 4: Cash Flow Statement</div>
+      <div class="nav-module nav-locked">Session 5: Management accounting: Part 1</div>
+      <div class="nav-module nav-locked">Session 6: Management accounting: Part 2</div>
     </div>
   </nav>
 </aside>
@@ -385,7 +436,745 @@ const htmlContent = String.raw`
 
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s1-4-1')">← 1.4.1 Discussion</button>
-        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 2 coming soon →</button>
+        <button class="nav-btn" onclick="showPage('s2-1')">Next: 2.1 Introduction →</button>
+      </div>
+    </div>
+
+    <!-- SESSION 2 -->
+
+    <div class="page" id="page-s2-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 2 · Balance sheet</div>
+        <h1 class="page-title">2.1 Introduction</h1>
+      </div>
+      <div class="page-body">
+        <p>Welcome to session two! In this session, we take a closer look at one of those core financial statements: the balance sheet. You'll explore what it contains and how to read it, building on the foundations laid in session one.</p>
+        <p>Now watch the following presentation where your AI facilitator, Laila, will explain what you can expect from this session.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Session introduction</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Please take the time to review the learning outcomes for this session below.</p>
+
+        <div class="lo-box">
+          <h2>Learning outcomes</h2>
+          <h5>By the end of this session, you will be able to:</h5>
+          <ul>
+            <li>Analyse a simple balance sheet</li>
+            <li>Distinguish between current and non-current assets</li>
+            <li>Identify the main categories of liabilities and equity.</li>
+          </ul>
+        </div>
+
+        <p>In the next activity, we'll start examining balance sheets in more detail.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s1-5')">← 1.5 Session review</button>
+        <button class="nav-btn primary" onclick="showPage('s2-2')">Next: 2.2 What is the balance sheet? →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s2-2">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 2 · Balance sheet</div>
+        <h1 class="page-title">2.2 What is the balance sheet?</h1>
+      </div>
+      <div class="page-body">
+        <p>In the next presentation, Laila discusses what kind of information is typically included balance sheets.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">What is the balance sheet?</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>In the next activity, you'll return to the annual report you looked at earlier to take a closer look at its balance sheet.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s2-1')">← 2.1 Introduction</button>
+        <button class="nav-btn primary" onclick="showPage('s2-2-1')">Next: 2.2.1 Examining a balance sheet →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s2-2-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 2 · Balance sheet</div>
+        <h1 class="page-title">2.2.1 Examining a balance sheet</h1>
+      </div>
+      <div class="page-body">
+        <div class="discussion-header">
+          <div class="discussion-header-icon">💬</div>
+          <h2>Discussion</h2>
+        </div>
+        <div class="quiz-body discussion-body-box">
+          <p style="color:var(--ink-soft);font-size:0.93rem">Return to the annual report you found in session one. This time, locate the balance sheet (it may also be labelled the 'statement of financial position').</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Using what you have learned in this session, answer the following questions:</p>
+          <ul style="margin:0.5rem 0 0.75rem 1.4rem;color:var(--ink-soft);font-size:0.93rem">
+            <li>What are the main assets the company owns?</li>
+            <li>What does the company owe (i.e. what are its liabilities)?&nbsp;</li>
+            <li>What is the single largest asset on the balance sheet? Does that surprise you, and what does it tell you about the nature of the business?</li>
+          </ul>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Share your findings with your cohort below. <em>(Discussion forum — available on Canvas)</em></p>
+        </div>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s2-2')">← 2.2 What is the balance sheet?</button>
+        <button class="nav-btn primary" onclick="showPage('s2-3')">Next: 2.3 Assets →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s2-3">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 2 · Balance sheet</div>
+        <h1 class="page-title">2.3 Assets</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>In the next presentation, Laila looks at how assets are formally defined and how they are divided into current and non-current categories.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Assets</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Now complete the exercise below to check your understanding of current and non-current assets.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Sort the items below into the correct category based on whether they are current or non-current assets.</p>
+          </div>
+          <div class="categorize-grid">
+            <div class="categorize-item" id="cat-brand">
+              <span class="cat-label">Brand name</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-brand')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-brand')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-cash">
+              <span class="cat-label">Cash in bank</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-cash')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-cash')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-vans">
+              <span class="cat-label">Delivery vans</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-vans')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-vans')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-store">
+              <span class="cat-label">Store buildings</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-store')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-store')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-sti">
+              <span class="cat-label">Short-term investments</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-sti')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-sti')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-raw">
+              <span class="cat-label">Raw materials</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-raw')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-raw')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-software">
+              <span class="cat-label">Computer software</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-software')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-software')">Non-current</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat-inventory">
+              <span class="cat-label">Inventory (products for sale)</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat-inventory')">Current</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat-inventory')">Non-current</div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-box" id="fb-2-3">
+            <div class="fb-label">✓ Answers</div>
+            <div class="fb-content">
+              <p><strong>Current assets:</strong> Cash in bank, Short-term investments, Raw materials, Inventory (products for sale)</p>
+              <p><strong>Non-current assets:</strong> Brand name, Delivery vans, Store buildings, Computer software</p>
+              <p>Thank you for your answers. In the next activity, you'll examine the other key elements of the balance sheet further: liabilities and equity.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-2-3', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s2-2-1')">← 2.2.1 Examining a balance sheet</button>
+        <button class="nav-btn primary" onclick="showPage('s2-4')">Next: 2.4 Liabilities and equity →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s2-4">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 2 · Balance sheet</div>
+        <h1 class="page-title">2.4 Liabilities and equity</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>The balance sheet also shows how a business's assets are financed. In the next presentation, Laila covers liabilities and equity, including what each represents and how they make up the other side of the balance sheet equation.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Liabilities and equity</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Now complete the following exercise to check your understanding of the difference between liabilities and equity.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>You are launching a small business and need £10,000 to get started. You have to choose between the following options, but note that your two choices must add up to £10,000.</p>
+            <p>How much will you invest yourself?</p>
+            <ul>
+              <li>£2,000</li>
+              <li>£5,000</li>
+              <li>£8,000</li>
+            </ul>
+            <p>How much will you borrow from a bank?</p>
+            <ul>
+              <li>£2,000</li>
+              <li>£5,000</li>
+              <li>£8,000</li>
+            </ul>
+            <p>The £10,000 you raise will sit in the business as cash (as an asset). But that cash has come from two different sources, each representing a different kind of claim on the business.</p>
+            <p>State the split between liabilities and equity based on your choices. Then, explain the key difference between the money you invested yourself and the money you borrowed from the bank. What does each one represent as a claim on the business?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="5"></textarea>
+          <div class="feedback-box" id="fb-2-4">
+            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-content">
+              <p>The money you borrowed is a liability. This means the bank has a legal claim on the business and expects to be repaid with interest, regardless of how the business performs.</p>
+              <p>The money you invested is equity. This is your own stake in the business, which carries no fixed repayment obligation but entitles you to any profits that remain once all other claims are settled.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-2-4', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s2-3')">← 2.3 Assets</button>
+        <button class="nav-btn primary" onclick="showPage('s2-5')">Next: 2.5 Session review →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s2-5">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 2 · Balance sheet</div>
+        <h1 class="page-title">2.5 Session review</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>We have now reached the end of this session of this primer.</p>
+        <p>In this session, you had an opportunity to take a closer look at the balance sheet, including what it contains and what it can tell you about how a business is financed and what it owns.</p>
+        <p>Let's now return to the learning outcomes outlined in the session introduction. To what extent do you feel you have achieved each of this session's learning outcomes?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="self-review">
+          <div class="self-review-header">
+            <div>Learning outcome</div>
+            <div style="text-align:center">Confident</div>
+            <div style="text-align:center">Need to review</div>
+            <div style="text-align:center">Need support</div>
+          </div>
+          <div class="self-review-row">
+            <div>Analyse a simple balance sheet</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Distinguish between current and non-current assets</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Identify the main categories of liabilities and equity</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+        </div>
+
+        <div class="q-block" style="margin-top:1.5rem">
+          <div class="q-number">Timing feedback</div>
+          <div class="q-text"><p>Was the estimated timing accurate?</p></div>
+          <div class="mcq-options" id="mcq-s2-timing">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s2-timing')">
+              <div class="mcq-radio"></div>
+              It took less time to complete the tasks and exercises than estimated
+            </div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s2-timing')">
+              <div class="mcq-radio"></div>
+              It took about the same amount of time to complete the tasks and exercises as estimated
+            </div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s2-timing')">
+              <div class="mcq-radio"></div>
+              It took more time to complete the tasks and exercises than estimated
+            </div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-number">Open feedback</div>
+          <div class="q-text"><p>Please provide feedback on the content covered.</p></div>
+          <textarea class="q-textarea" placeholder="Your thoughts on this session…" rows="4"></textarea>
+        </div>
+
+        <div class="feedback-box" id="fb-s2-review" style="display:none">
+          <div class="fb-label">✓ Submitted</div>
+          <div class="fb-content">
+            <p>Congratulations on finishing session two! In the next session, we will explore the income statement in more detail.</p>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="toggleFeedback('fb-s2-review', this)">Submit session review</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s2-4')">← 2.4 Liabilities and equity</button>
+        <button class="nav-btn primary" onclick="showPage('s3-1')">Next: 3.1 Introduction →</button>
+      </div>
+    </div>
+
+    <!-- SESSION 3 -->
+
+    <div class="page" id="page-s3-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 3 · Income statement</div>
+        <h1 class="page-title">3.1 Introduction</h1>
+      </div>
+      <div class="page-body">
+        <p>Welcome to session three! In this session, we turn to the income statement, the financial statement that tells you not what a business owns but how it has performed. You'll explore how revenue and costs are recorded and what they reveal about a company's profitability.</p>
+        <p>Now watch the following presentation where your AI facilitator, Laila, will explain what you can expect from this session.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Session introduction</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Please take the time to review the learning outcomes for this session below.</p>
+
+        <div class="lo-box">
+          <h2>Learning outcomes</h2>
+          <h5>By the end of this session, you will be able to:</h5>
+          <ul>
+            <li>Explain the purpose of the income statement</li>
+            <li>Distinguish between revenue and expenses</li>
+            <li>Calculate straight-line depreciation for a long-term asset</li>
+            <li>Recognise the steps that lead from revenue to net profit on an income statement.</li>
+          </ul>
+        </div>
+
+        <p>In the next activity, you'll learn about how companies recognise revenue.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s2-5')">← 2.5 Session review</button>
+        <button class="nav-btn primary" onclick="showPage('s3-2')">Next: 3.2 Revenue →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s3-2">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 3 · Income statement</div>
+        <h1 class="page-title">3.2 Revenue</h1>
+      </div>
+      <div class="page-body">
+        <p>Revenue is where the income statement begins. It represents the income a business earns from its ordinary activities. In the next presentation, Laila looks at how revenue is formally defined and when it should be recognised, which is not always the moment cash arrives.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Revenue</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <div class="quiz-header">
+          <h2>Activity</h2>
+        </div>
+        <div class="quiz-body" style="border-top:3px solid var(--gold)">
+          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+            <strong>Provisional</strong> — Exercise still to be developed for this page. The revenue presentation introduces accrual accounting and the concept of revenue recognition, so a possible activity could give students 3–4 short scenarios and ask them to determine whether revenue should be recognised immediately, partially or not yet — and what cash accounting would say in each case. That comparison would ask students to directly apply the principle they have just heard about rather than simply recall a definition
+          </div>
+        </div>
+
+        <p>In the next activity, we'll move down the income statement to look at how costs are recorded and when they should be recognised.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s3-1')">← 3.1 Introduction</button>
+        <button class="nav-btn primary" onclick="showPage('s3-3')">Next: 3.3 Expenses →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s3-3">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 3 · Income statement</div>
+        <h1 class="page-title">3.3 Expenses</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>Generating revenue always comes at a cost. In the next presentation, Laila looks at how expenses are defined and when they should be recognised.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Expenses</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Now that you've heard about the matching principle, put it to the test.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body" style="border-top:3px solid var(--gold)">
+        <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+          <strong>Provisional</strong> — An exercise here still to be added.
+        </div>
+        <p style="color:var(--ink-soft);font-size:0.93rem">In the next section, we look at one particular type of expense that requires its own treatment: depreciation.</p>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s3-2')">← 3.2 Revenue</button>
+        <button class="nav-btn primary" onclick="showPage('s3-4')">Next: 3.4 Depreciation →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s3-4">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 3 · Income statement</div>
+        <h1 class="page-title">3.4 Depreciation</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>In the previous activity, you saw how the matching principle determines when a cost should be recognised as an expense. Depreciation is a direct application of that same principle. It is a method used to spread the cost of a long-term asset across the periods in which it generates value. You'll learn more about this in the next presentation.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Depreciation</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>In the presentation, you saw how the matching principle means the cost of a long-term asset shouldn't be expensed all at once. Let's have a bit more practice at applying that idea now.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Imagine you are opening a new fashion retail store. You spend £100,000 on store fixtures and fittings (shelving, lighting, displays).</p>
+            <p>You expect these to last five years, after which they will have a resale/scrap value of £100,000.</p>
+            <p>Should the full £100,000 be recorded as an expense in Year 1 (keep in mind the 'matching principle' that you have just learned about)?</p>
+          </div>
+          <div class="mcq-options" id="mcq-s3-4-q1">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s3-4-q1')"><div class="mcq-radio"></div>Yes</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s3-4-q1')"><div class="mcq-radio"></div>No</div>
+          </div>
+          <div class="feedback-box" id="fb-3-4-q1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>The correct answer is no. As you learned in the presentation on expenses, expensing the full cost upfront would be inconsistent with the matching principle. It would make Year 1 look less profitable than it really is, and make Years 2–5 look artificially more profitable than they are.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-4-q1', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text">
+            <p>Using the straight-line depreciation formula that was shown in presentation, calculate the annual depreciation charge.</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your calculation here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-3-4-q2">
+            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-content">
+              <p>Annual depreciation = (Cost − Residual Value) / Useful Life.</p>
+              <p>Straight-line depreciation divides the depreciable cost evenly across the asset's useful life. The residual value is subtracted first because that portion of the cost is expected to be recovered when the asset is eventually sold, so it doesn't need to be expensed. Thus, the correct calculation to use here is:</p>
+              <p>Annual depreciation = (£100,000 – £10,000)/5 = £18,000 per year.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-4-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text">
+            <p>Your store generates steady profits each year. How should the cost of the store fit-out appear in the income statement each year? Your answer to the previous question should help with this.</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-3-4-q3">
+            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-content">
+              <p>Rather than a one-off £100,000 expense, each year's income statement absorbs £18,000, matching the cost to the period in which the fixtures are helping to generate revenue. Meanwhile, on the balance sheet, the asset's value reduces by £18,000 each year, as shown in the schedule below:</p>
+              <table>
+                <thead>
+                  <tr><th>Year-end</th><th>Depreciation expense on the income statement (£)</th><th>Asset value on the balance sheet (£)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>18,000</td><td>82,000</td></tr>
+                  <tr><td>2</td><td>18,000</td><td>64,000</td></tr>
+                  <tr><td>3</td><td>18,000</td><td>46,000</td></tr>
+                  <tr><td>4</td><td>18,000</td><td>28,000</td></tr>
+                  <tr><td>5</td><td>18,000</td><td>10,000 (residual value)</td></tr>
+                </tbody>
+              </table>
+              <p>In the next section, we bring revenue and costs together and work through the income statement step by step to calculate profit.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-4-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s3-3')">← 3.3 Expenses</button>
+        <button class="nav-btn primary" onclick="showPage('s3-5')">Next: 3.5 Calculating the profit →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s3-5">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 3 · Income statement</div>
+        <h1 class="page-title">3.5 Calculating the profit</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>So far in this session you have looked at revenue and how it is recognised, and at the costs a business incurs to generate it. In the next presentation, let's bring these together to show how the income statement is structured and how profit is calculated step by step.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Calclating the profit</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>In the presentation, you heard that profit isn't just one final number but rather a step-by-step process where costs are stripped away gradually, with each stage answering a different question about the business. To check your understanding, work through the example below. You may wish to refer back to the presentation to check you are doing the correct calculations at each stage.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Imagine you are analysing a retail business. Your task is to calculate its profit step-by-step and understand what each stage reveals. Use the figures below:</p>
+            <ul style="list-style-type: disc;">
+              <li>Revenue: £200,000</li>
+              <li>Cost of Goods Sold: £120,000</li>
+              <li>Operating Expenses: £50,000</li>
+              <li>Interest Expense: £5,000</li>
+              <li>Tax: £7,500</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p><strong>Layer 1: Gross profit</strong></p><p>What is the gross profit of the business?</p></div>
+          <textarea class="q-textarea" placeholder="Write your calculation here…" rows="2"></textarea>
+          <div class="feedback-box" id="fb-3-5-gp">
+            <div class="fb-label">✓ Answer</div>
+            <div class="fb-content"><p>Gross profit = £200,000 – £120,000 = <strong>£80,000</strong>.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-5-gp', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>What does this tell you?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-3-5-gp-why">
+            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-content"><p>Gross profit strips away everything except the core production cost. It tells you how efficiently the business produces its product, and for a retailer like this one, the cost of goods sold is the purchase cost of the goods being resold.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-5-gp-why', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p><strong>Layer 2: Operating profit</strong></p><p>What is the operating profit of the business?</p></div>
+          <textarea class="q-textarea" placeholder="Write your calculation here…" rows="2"></textarea>
+          <div class="feedback-box" id="fb-3-5-op">
+            <div class="fb-label">✓ Answer</div>
+            <div class="fb-content"><p>Operating profit = £80,000 – £50,000 = <strong>£30,000</strong>.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-5-op', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>What does this tell you?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-3-5-op-why">
+            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-content"><p>Operating profit shows how much the business earns from its core operations, before the effects of how it is financed and before tax. It is a useful figure for capturing core business performance.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-5-op-why', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p><strong>Layer 3: Net profit</strong></p><p>What is the net profit of the business?</p></div>
+          <textarea class="q-textarea" placeholder="Write your calculation here…" rows="2"></textarea>
+          <div class="feedback-box" id="fb-3-5-np">
+            <div class="fb-label">✓ Answer</div>
+            <div class="fb-content"><p>Net profit = £30,000 – £5,000 – £7,500 = <strong>£17,500</strong>.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-5-np', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>What does this tell you?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-3-5-np-why">
+            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-content">
+              <p>Net profit is what remains after every obligation has been met. Each layer above it tells a different part of the story: gross profit speaks to production efficiency. Operating profit tells you how well the business is run. And finally net profit shows you what shareholders can expect in return.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-5-np-why', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s3-4')">← 3.4 Depreciation</button>
+        <button class="nav-btn primary" onclick="showPage('s3-6')">Next: 3.6 Session review →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s3-6">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 3 · Income statement</div>
+        <h1 class="page-title">3.6 Session review</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>We have now reached the end of this session of this primer.</p>
+        <p>In this session, you explored how the income statement works and the principles that determine when revenue and costs should be recorded.</p>
+        <p>Let's now return to the learning outcomes outlined in the session introduction. To what extent do you feel you have achieved each of this session's learning outcomes?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="self-review">
+          <div class="self-review-header">
+            <div>Learning outcome</div>
+            <div style="text-align:center">Confident</div>
+            <div style="text-align:center">Need to review</div>
+            <div style="text-align:center">Need support</div>
+          </div>
+          <div class="self-review-row">
+            <div>Explain the purpose of the income statement</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Distinguish between revenue and expenses</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Calculate straight-line depreciation for a long-term asset</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Recognise the steps that lead from revenue to net profit on an income statement</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+        </div>
+
+        <div class="q-block" style="margin-top:1.5rem">
+          <div class="q-number">Timing feedback</div>
+          <div class="q-text"><p>Was the estimated timing accurate?</p></div>
+          <div class="mcq-options" id="mcq-s3-timing">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s3-timing')">
+              <div class="mcq-radio"></div>
+              It took less time to complete the tasks and exercises than estimated
+            </div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s3-timing')">
+              <div class="mcq-radio"></div>
+              It took about the same amount of time to complete the tasks and exercises as estimated
+            </div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s3-timing')">
+              <div class="mcq-radio"></div>
+              It took more time to complete the tasks and exercises than estimated
+            </div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-number">Open feedback</div>
+          <div class="q-text"><p>Please provide feedback on the content covered.</p></div>
+          <textarea class="q-textarea" placeholder="Your thoughts on this session…" rows="4"></textarea>
+        </div>
+
+        <div class="feedback-box" id="fb-s3-review" style="display:none">
+          <div class="fb-label">✓ Submitted</div>
+          <div class="fb-content">
+            <p>Congratulations on finishing session three! In the next session, we will examine the third main financial statement: the cash flow statement.</p>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="toggleFeedback('fb-s3-review', this)">Submit session review</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s3-5')">← 3.5 Calculating the profit</button>
+        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 4 coming soon →</button>
       </div>
     </div>
   </div>
@@ -397,8 +1186,20 @@ const pages = {
   "s1-2": "1.2 Objectives",
   "s1-3": "1.3 Main financial statements",
   "s1-4": "1.4 Annual reports",
-  "s1-4-1": "1.4.1 Exploring an annual report",
+  "s1-4-1": "1.4.1 Examining an annual report",
   "s1-5": "1.5 Session review",
+  "s2-1": "2.1 Introduction",
+  "s2-2": "2.2 What is the balance sheet?",
+  "s2-2-1": "2.2.1 Examining a balance sheet",
+  "s2-3": "2.3 Assets",
+  "s2-4": "2.4 Liabilities and equity",
+  "s2-5": "2.5 Session review",
+  "s3-1": "3.1 Introduction",
+  "s3-2": "3.2 Revenue",
+  "s3-3": "3.3 Expenses",
+  "s3-4": "3.4 Depreciation",
+  "s3-5": "3.5 Calculating the profit",
+  "s3-6": "3.6 Session review",
 };
 
 export default function AccountingPrimerSession1Page() {
@@ -455,6 +1256,15 @@ export default function AccountingPrimerSession1Page() {
       el.classList.add("checked");
     };
 
+    window.selectCat = function selectCat(el, groupId) {
+      const group = document.getElementById(groupId);
+      if (!group) return;
+      group.querySelectorAll(".cat-opt").forEach((opt) => {
+        opt.classList.remove("selected");
+      });
+      el.classList.add("selected");
+    };
+
     window.showPage("s1-1");
 
     return () => {
@@ -500,7 +1310,7 @@ export default function AccountingPrimerSession1Page() {
         .accounting-primer-session1 button { cursor: pointer; }
         .accounting-primer-session1 .sidebar {
           width: var(--sidebar-w);
-          min-height: 100vh;
+          height: 100vh;
           background: var(--accent);
           color: #fff;
           position: fixed;
@@ -509,11 +1319,9 @@ export default function AccountingPrimerSession1Page() {
           display: flex;
           flex-direction: column;
           z-index: 100;
+          overflow: hidden;
         }
-        .accounting-primer-session1 .sidebar-header {
-          padding: 2rem 1.5rem 1.5rem;
-          border-bottom: 1px solid rgba(255,255,255,0.12);
-        }
+
         .accounting-primer-session1 .course-label {
           font-size: 0.65rem;
           font-weight: 600;
@@ -541,6 +1349,9 @@ export default function AccountingPrimerSession1Page() {
           flex: 1;
           overflow-y: auto;
           padding: 1rem 0;
+          height: 100vh;
+          position: sticky;
+          top: 0;
         }
         .accounting-primer-session1 .nav-section { margin-bottom: 0.25rem; }
         .accounting-primer-session1 .nav-module {
@@ -1016,6 +1827,54 @@ export default function AccountingPrimerSession1Page() {
         }
         .accounting-primer-session1 .text-block p { color: var(--ink-soft); font-size: 0.93rem; margin-bottom: 0.75rem; }
         .accounting-primer-session1 .text-block p:last-child { margin-bottom: 0; }
+
+        .accounting-primer-session1 .categorize-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+        .accounting-primer-session1 .categorize-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.6rem 0.75rem;
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          background: var(--white);
+          flex-wrap: wrap;
+        }
+        .accounting-primer-session1 .cat-label {
+          font-size: 0.88rem;
+          color: var(--ink);
+          flex: 1;
+        }
+        .accounting-primer-session1 .cat-options {
+          display: flex;
+          gap: 0.4rem;
+        }
+        .accounting-primer-session1 .cat-opt {
+          padding: 0.35rem 0.85rem;
+          border: 1px solid var(--border);
+          border-radius: 20px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          cursor: pointer;
+          color: var(--ink-soft);
+          background: var(--bg);
+          transition: all 0.15s;
+          user-select: none;
+        }
+        .accounting-primer-session1 .cat-opt:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+        .accounting-primer-session1 .cat-opt.selected {
+          background: var(--accent);
+          border-color: var(--accent);
+          color: #fff;
+        }
 
         @media (max-width: 900px) {
           .accounting-primer-session1 {
