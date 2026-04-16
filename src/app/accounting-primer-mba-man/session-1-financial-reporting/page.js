@@ -96,7 +96,31 @@ const htmlContent = String.raw`
     </div>
 
     <div class="nav-section" style="opacity:0.4">
-      <div class="nav-module nav-locked">Session 4: Cash Flow Statement</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-module active-module">
+        Session 4: Cash Flow Statement
+      </div>
+      <div class="nav-item" onclick="showPage('s4-1')" id="nav-s4-1">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        4.1 Introduction
+      </div>
+      <div class="nav-item" onclick="showPage('s4-2')" id="nav-s4-2">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        4.2 Structure of cash flow statements
+      </div>
+      <div class="nav-item" onclick="showPage('s4-3')" id="nav-s4-3">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        4.3 Is all cash equal?
+      </div>
+      <div class="nav-item" onclick="showPage('s4-4')" id="nav-s4-4">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        4.4 Session review
+      </div>
+    </div>
+
+    <div class="nav-section" style="opacity:0.4">
       <div class="nav-module nav-locked">Session 5: Management accounting: Part 1</div>
       <div class="nav-module nav-locked">Session 6: Management accounting: Part 2</div>
     </div>
@@ -1174,7 +1198,327 @@ const htmlContent = String.raw`
 
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s3-5')">← 3.5 Calculating the profit</button>
-        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 4 coming soon →</button>
+        <button class="nav-btn" onclick="showPage('s4-1')">Next: 4.1 Introduction →</button>
+      </div>
+    </div>
+
+    <!-- SESSION 4 -->
+
+    <div class="page" id="page-s4-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
+        <h1 class="page-title">4.1 Introduction</h1>
+      </div>
+      <div class="page-body">
+        <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+          <strong>Note</strong> — This session is currently a bit light; we may add more exercises in due course.
+        </div>
+        <p>Welcome to session four!&nbsp;In this session, we turn to the final core financial statement: the cash flow statement. You'll explore why cash and profit can tell very different stories about a business, and what it means for a company's financial health.</p>
+        <p>Now watch the following presentation where your AI facilitator, Laila, will explain what you can expect from this session.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Session introduction</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Please take the time to review the learning outcomes for this session below.</p>
+
+        <div class="lo-box">
+          <h2>Learning outcomes</h2>
+          <h5>By the end of this session, you will be able to:</h5>
+          <ul>
+            <li>Distinguish between the three sections of the cash flow statement and what should be included in each&nbsp;</li>
+            <li>Identify the sources of a company's cash flows and what these imply about its financial health.</li>
+          </ul>
+        </div>
+
+        <p>In the next activity, you'll learn about the structure of the cash flow statement.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s3-6')">← 3.6 Session review</button>
+        <button class="nav-btn primary" onclick="showPage('s4-2')">Next: 4.2 Structure of cash flow statements →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s4-2">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
+        <h1 class="page-title">4.2 Structure of cash flow statements</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>The cash flow statement is built around three distinct sections, each answering a specific question about how a business generates and uses cash. In the next presentation, Laila walks through each one in turn.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Structure of cash flow statements</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Now test your understanding in the next exercise.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Imagine you are reviewing a company's cash movements for the year. Your task is to classify each cash flow and interpret what it means.</p>
+            <p>Put each item into the correct category.</p>
+          </div>
+          <div class="categorize-grid">
+            <div class="categorize-item" id="cat4-customers">
+              <span class="cat-label">Cash received from customers</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-customers')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-customers')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-customers')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-suppliers">
+              <span class="cat-label">Cash paid to suppliers</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-suppliers')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-suppliers')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-suppliers')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-salaries">
+              <span class="cat-label">Salaries paid</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-salaries')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-salaries')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-salaries')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-machinery">
+              <span class="cat-label">Purchase of new machinery</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-machinery')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-machinery')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-machinery')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-disposal">
+              <span class="cat-label">Disposal of business operations</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-disposal')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-disposal')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-disposal')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-loan-recv">
+              <span class="cat-label">Bank loan received</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-loan-recv')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-loan-recv')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-loan-recv')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-loan-rep">
+              <span class="cat-label">Loan repayment</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-loan-rep')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-loan-rep')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-loan-rep')">Financing</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat4-equity">
+              <span class="cat-label">Equity issuance</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-equity')">Operating</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-equity')">Investing</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat4-equity')">Financing</div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-box" id="fb-4-2-cat">
+            <div class="fb-label">✓ Answers</div>
+            <div class="fb-content">
+              <p><strong>Operating activities:</strong> Cash received from customers, Cash paid to suppliers, Salaries paid</p>
+              <p><strong>Investing activities:</strong> Purchase of new machinery, Disposal of business operations</p>
+              <p><strong>Financing activities:</strong> Bank loan received, Loan repayment, Equity issuance</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-2-cat', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+            <strong>Note</strong> — The following questions are still to be checked/finalised.
+          </div>
+          <div class="q-text">
+            <p>Now that you have sorted the cash flows into their correct sections, test your understanding of the three main types of activities covered on a cash flow statement a little further.</p>
+            <p>Most companies use the indirect method to present operating activities. What does this method start from?</p>
+          </div>
+          <div class="mcq-options" id="mcq-4-2-q2">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q2')"><div class="mcq-radio"></div>The total cash collected from customers during the year</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q2')"><div class="mcq-radio"></div>Net profit, adjusted for non-cash items and working capital movements</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q2')"><div class="mcq-radio"></div>The opening cash balance from the previous year</div>
+          </div>
+          <div class="feedback-box" id="fb-4-2-q2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The indirect method starts from net profit and works backwards, adjusting for non-cash items like depreciation and for changes in working capital.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-2-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+            <strong>Note</strong> — The following question is still to be checked/finalised.
+          </div>
+          <div class="q-text">
+            <p>A company buys a new piece of manufacturing machinery for £100,000. How does this cash outflow appear in the cash flow statement?</p>
+          </div>
+          <div class="mcq-options" id="mcq-4-2-q3">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q3')"><div class="mcq-radio"></div>As a £100,000 expense in operating activities</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q3')"><div class="mcq-radio"></div>As a £100,000 outflow in investing activities</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q3')"><div class="mcq-radio"></div>As a £100,000 outflow in financing activities</div>
+          </div>
+          <div class="feedback-box" id="fb-4-2-q3">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The full £100,000 appears in investing activities as the purchase of a long-term asset. Only the annual depreciation charge appears on the income statement, not the full purchase price. This is one of the key reasons profit and cash can diverge.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-2-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+            <strong>Note</strong> — The following question is still to be checked/finalised.
+          </div>
+          <div class="q-text">
+            <p>A company issues new shares and uses the proceeds to repay an existing bank loan. Where would both of these appear in the cash flow statement?</p>
+          </div>
+          <div class="mcq-options" id="mcq-4-2-q4">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q4')"><div class="mcq-radio"></div>Operating activities</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q4')"><div class="mcq-radio"></div>Investing activities</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-4-2-q4')"><div class="mcq-radio"></div>Financing activities</div>
+          </div>
+          <div class="feedback-box" id="fb-4-2-q4">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>Both sit within financing activities, which captures cash flows between the business and its investors and lenders.</p>
+              <p>Thank you for your answers. In the next activity, we'll consider an important question: is all cash equal?</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-2-q4', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s4-1')">← 4.1 Introduction</button>
+        <button class="nav-btn primary" onclick="showPage('s4-3')">Next: 4.3 Is all cash equal? →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s4-3">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
+        <h1 class="page-title">4.3 Is all cash equal?</h1>
+      </div>
+      <div class="page-body">
+        <div class="discussion-header">
+          <div class="discussion-header-icon">💬</div>
+          <h2>Discussion</h2>
+        </div>
+        <div class="quiz-body discussion-body-box">
+          <p style="color:var(--ink-soft);font-size:0.93rem">Return to the annual report you have been using throughout this primer.</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Locate the cash flow statement and use what you have learned in this session to answer the questions below:</p>
+          <ul style="margin:0.5rem 0 0.75rem 1.4rem;color:var(--ink-soft);font-size:0.93rem">
+            <li>Is operating cash flow positive? What does this tell you about whether the core business is generating real cash?</li>
+            <li>What has the company been spending on in investing activities? Does the pattern suggest a business that is growing or one that is simply maintaining what it already has?</li>
+            <li>Has the company paid dividends or repaid loans during the year? What does that suggest about its relationship with investors and lenders?</li>
+          </ul>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Share your findings with your cohort below. <em>(Discussion forum — available on Canvas)</em></p>
+        </div>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s4-2')">← 4.2 Structure of cash flow statements</button>
+        <button class="nav-btn primary" onclick="showPage('s4-4')">Next: 4.4 Session review →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s4-4">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
+        <h1 class="page-title">4.4 Session review</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>We have now reached the end of this session of this primer.</p>
+        <p>In this session, you explored the cash flow statement and what it can reveal about a business that the income statement alone cannot.</p>
+        <p>Let's now return to the learning outcomes outlined in the session introduction. To what extent do you feel you have achieved each of this session's learning outcomes?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="self-review">
+          <div class="self-review-header">
+            <div>Learning outcome</div>
+            <div style="text-align:center">Confident</div>
+            <div style="text-align:center">Need to review</div>
+            <div style="text-align:center">Need support</div>
+          </div>
+          <div class="self-review-row">
+            <div>Distinguish between the three sections of the cash flow statement and what should be included in each</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Identify the sources of a company's cash flows and what these imply about its financial health</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+        </div>
+
+        <div class="q-block" style="margin-top:1.5rem">
+          <div class="q-number">Timing feedback</div>
+          <div class="q-text"><p>Was the estimated timing accurate?</p></div>
+          <div class="mcq-options" id="mcq-s4-timing">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s4-timing')">
+              <div class="mcq-radio"></div>
+              It took less time to complete the tasks and exercises than estimated
+            </div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s4-timing')">
+              <div class="mcq-radio"></div>
+              It took about the same amount of time to complete the tasks and exercises as estimated
+            </div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s4-timing')">
+              <div class="mcq-radio"></div>
+              It took more time to complete the tasks and exercises than estimated
+            </div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-number">Open feedback</div>
+          <div class="q-text"><p>Please provide feedback on the content covered.</p></div>
+          <textarea class="q-textarea" placeholder="Your thoughts on this session…" rows="4"></textarea>
+        </div>
+
+        <div class="feedback-box" id="fb-s4-review" style="display:none">
+          <div class="fb-label">✓ Submitted</div>
+          <div class="fb-content">
+            <p>Congratulations on finishing session three! In the next session, we turn to a different area of accounting, one focused not on communicating with the outside world, but on helping managers make better decisions from within.</p>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="toggleFeedback('fb-s4-review', this)">Submit session review</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s4-3')">← 4.3 Is all cash equal?</button>
+        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 5 coming soon →</button>
       </div>
     </div>
   </div>
@@ -1200,6 +1544,10 @@ const pages = {
   "s3-4": "3.4 Depreciation",
   "s3-5": "3.5 Calculating the profit",
   "s3-6": "3.6 Session review",
+  "s4-1": "4.1 Introduction",
+  "s4-2": "4.2 Structure of cash flow statements",
+  "s4-3": "4.3 Is all cash equal?",
+  "s4-4": "4.4 Session review",
 };
 
 export default function AccountingPrimerSession1Page() {
