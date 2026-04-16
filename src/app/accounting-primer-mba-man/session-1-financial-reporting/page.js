@@ -18,7 +18,7 @@ const htmlContent = String.raw`
         1.2 Objectives of financial information
       </div>
       <div class="nav-item" onclick="showPage('s1-3')" id="nav-s1-3">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         1.3 Main financial statements
       </div>
       <div class="nav-item" onclick="showPage('s1-4')" id="nav-s1-4">
@@ -26,11 +26,11 @@ const htmlContent = String.raw`
         1.4 Annual reports
       </div>
       <div class="nav-item" onclick="showPage('s1-4-1')" id="nav-s1-4-1" style="padding-left: 2.8rem;">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M14 3H2v2h5v8h2V5h5V3z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         1.4.1 Exploring an annual report
       </div>
       <div class="nav-item" onclick="showPage('s1-5')" id="nav-s1-5">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         1.5 Session review
       </div>
     </div>
@@ -48,19 +48,19 @@ const htmlContent = String.raw`
         2.2 What is the balance sheet?
       </div>
       <div class="nav-item" onclick="showPage('s2-2-1')" id="nav-s2-2-1" style="padding-left: 2.8rem;">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M14 3H2v2h5v8h2V5h5V3z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         2.2.1 Examining a balance sheet
       </div>
       <div class="nav-item" onclick="showPage('s2-3')" id="nav-s2-3">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         2.3 Assets
       </div>
       <div class="nav-item" onclick="showPage('s2-4')" id="nav-s2-4">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         2.4 Liabilities and equity
       </div>
       <div class="nav-item" onclick="showPage('s2-5')" id="nav-s2-5">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         2.5 Session review
       </div>
     </div>
@@ -78,19 +78,19 @@ const htmlContent = String.raw`
         3.2 Revenue
       </div>
       <div class="nav-item" onclick="showPage('s3-3')" id="nav-s3-3">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         3.3 Expenses
       </div>
       <div class="nav-item" onclick="showPage('s3-4')" id="nav-s3-4">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         3.4 Depreciation
       </div>
       <div class="nav-item" onclick="showPage('s3-5')" id="nav-s3-5">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         3.5 Calculating the profit
       </div>
       <div class="nav-item" onclick="showPage('s3-6')" id="nav-s3-6">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7zm0 6h2v2H7z"/></svg>
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         3.6 Session review
       </div>
     </div>
