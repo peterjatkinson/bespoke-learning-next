@@ -114,6 +114,10 @@ const htmlContent = String.raw`
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         4.3 Is all cash equal?
       </div>
+      <div class="nav-item" onclick="showPage('s4-3-1')" id="nav-s4-3-1" style="padding-left: 2.8rem;">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        4.3.1 Examining a cash flow statement
+      </div>
       <div class="nav-item" onclick="showPage('s4-4')" id="nav-s4-4">
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         4.4 Session review
@@ -1423,6 +1427,30 @@ const htmlContent = String.raw`
         <h1 class="page-title">4.3 Is all cash equal?</h1>
       </div>
       <div class="page-body">
+        <p>Now that you understand how the cash flow statement is structured, in the next presentation you'll see that where cash comes from matters just as much as how much of it there is.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Is all cash equal?</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>In the next activity, you'll return to the annual report you've used in previous activities on this primer, and this time look at its cash flow statement.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s4-2')">← 4.2 Structure of cash flow statements</button>
+        <button class="nav-btn primary" onclick="showPage('s4-3-1')">Next: 4.3.1 Examining a cash flow statement →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s4-3-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
+        <h1 class="page-title">4.3.1 Examining a cash flow statement</h1>
+      </div>
+      <div class="page-body">
         <div class="discussion-header">
           <div class="discussion-header-icon">💬</div>
           <h2>Discussion</h2>
@@ -1439,7 +1467,7 @@ const htmlContent = String.raw`
         </div>
       </div>
       <div class="page-nav">
-        <button class="nav-btn" onclick="showPage('s4-2')">← 4.2 Structure of cash flow statements</button>
+        <button class="nav-btn" onclick="showPage('s4-3-1')">← 4.3.1 Examining a cash flow statement</button>
         <button class="nav-btn primary" onclick="showPage('s4-4')">Next: 4.4 Session review →</button>
       </div>
     </div>
@@ -1547,6 +1575,7 @@ const pages = {
   "s4-1": "4.1 Introduction",
   "s4-2": "4.2 Structure of cash flow statements",
   "s4-3": "4.3 Is all cash equal?",
+  "s4-3-1": "4.3.1 Examining a cash flow statement",
   "s4-4": "4.4 Session review",
 };
 
