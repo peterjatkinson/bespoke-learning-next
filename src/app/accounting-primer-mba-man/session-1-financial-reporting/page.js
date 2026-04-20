@@ -196,9 +196,9 @@ const htmlContent = String.raw`
         </div>
         <div class="quiz-body" style="border-top:3px solid var(--gold)">
           <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-            <strong>Provisional</strong> — To be added if the tool we're going to use for this in Canvas is approved in time.
+            There will be an interactive map activity here on Canvas.
           </div>
-          <p style="color:var(--ink-soft);font-size:0.93rem">EXERCISE: Drop a pin on the map to show where you are based, and indicate whether your country follows IFRS or a local GAAP framework. If you are unsure, a quick search for your country's name alongside 'accounting standards' or 'financial reporting framework' should give you the answer.</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Drop a pin on the map to show where you are based, and indicate whether your country follows IFRS or a local GAAP framework. If you are unsure, a quick search for your country's name alongside 'accounting standards' or 'financial reporting framework' should give you the answer.</p>
         </div>
 
         <p>In the next activity, you'll be introduced to the three main financial statements you should become familiar with.</p>
