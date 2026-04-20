@@ -656,11 +656,94 @@ const htmlContent = String.raw`
             <div class="fb-content">
               <p><strong>Current assets:</strong> Cash in bank, Short-term investments, Raw materials, Inventory (products for sale)</p>
               <p><strong>Non-current assets:</strong> Brand name, Delivery vans, Store buildings, Computer software</p>
-              <p>Thank you for your answers. In the next activity, you'll examine the other key elements of the balance sheet further: liabilities and equity.</p>
+
             </div>
           </div>
         </div>
         <button class="submit-btn" onclick="toggleFeedback('fb-2-3', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>The presentation also touched on intangible assets, which don't have a physical form but can still be enormously valuable. Now complete the exercise below to check your understanding of how different types of assets tend to reflect different kinds of business.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Choose the type of business each statement most likely describes.</p>
+          </div>
+          <div class="categorize-grid">
+            <div class="categorize-item" id="match-intangible">
+              <span class="cat-label">Likely to have almost entirely intangible assets (platform, users, brand)</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Supermarket</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Car manufacturer</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Software company</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Pharmaceutical company</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="match-brand-inventory">
+              <span class="cat-label">Likely to have valuable brand and some inventory</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'match-brand-inventory')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-brand-inventory')">Supermarket</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-brand-inventory')">Car manufacturer</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-brand-inventory')">Software company</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-brand-inventory')">Pharmaceutical company</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="match-factories">
+              <span class="cat-label">Likely to have factories, machinery, and raw materials</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Supermarket</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Car manufacturer</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Software company</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Pharmaceutical company</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="match-software">
+              <span class="cat-label">Likely to have mainly licenses and intangible assets</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'match-software')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-software')">Supermarket</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-software')">Car manufacturer</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-software')">Software company</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-software')">Pharmaceutical company</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="match-patents">
+              <span class="cat-label">Likely to have patents, research assets, and intellectual property</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Supermarket</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Car manufacturer</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Software company</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Pharmaceutical company</div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-box" id="fb-2-3-match">
+            <div class="fb-label">✓ Answers</div>
+            <div class="fb-content">
+              <p><strong>Social media platform</strong> — Likely to have almost entirely intangible assets (platform, users, brand)</p>
+              <p><strong>Supermarket</strong> — Likely to have valuable brand and some inventory</p>
+              <p><strong>Car manufacturer</strong> — Likely to have factories, machinery, and raw materials</p>
+              <p><strong>Software company</strong> — Likely to have mainly licenses and intangible assets</p>
+              <p><strong>Pharmaceutical company</strong> — Likely to have patents, research assets, and intellectual property</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-2-3-match', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-body" style="margin-top:1.5rem">
+        <p>Well done for attempting this activity. You are hopefully now beginning to recognise the key links between business nature (economics) and the balance sheet.</p>
+        <p>In the next activity, you'll examine the other key elements of the balance sheet further: liabilities and equity.</p>
       </div>
 
       <div class="page-nav">
@@ -708,16 +791,71 @@ const htmlContent = String.raw`
               <li>£5,000</li>
               <li>£8,000</li>
             </ul>
+            <p>Now imagine the bank agrees to lend you money, but it is split into two types:</p>
+            <ul>
+              <li>Current Liability (pay soon – within 12 months)</li>
+              <li>Non-Current Liability (pay later – over several years)</li>
+            </ul>
             <p>The £10,000 you raise will sit in the business as cash (as an asset). But that cash has come from two different sources, each representing a different kind of claim on the business.</p>
-            <p>State the split between liabilities and equity based on your choices. Then, explain the key difference between the money you invested yourself and the money you borrowed from the bank. What does each one represent as a claim on the business?</p>
           </div>
-          <textarea class="q-textarea" placeholder="Write your answer here…" rows="5"></textarea>
+
+          <table style="width:100%;border-collapse:collapse;font-size:0.88rem;margin:0.75rem 0 1.25rem">
+            <thead>
+              <tr>
+                <th style="background:var(--accent);color:#fff;padding:0.5rem 0.75rem;text-align:left">Assets</th>
+                <th style="background:var(--accent);color:#fff;padding:0.5rem 0.75rem;text-align:left">Liabilities &amp; Equity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:0.5rem 0.75rem;border:1px solid var(--border);vertical-align:top">£10,000</td>
+                <td style="padding:0.5rem 0.75rem;border:1px solid var(--border);vertical-align:top">
+                  Non-current liability &nbsp;&nbsp; £ ______<br>
+                  Current liability &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; £ ______<br>
+                  Equity &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; £ ______
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="q-text" style="margin-top:1rem">
+            <p><strong>Debt financing</strong></p>
+            <p>Which part of your loan creates immediate pressure on your business?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="2"></textarea>
+
+          <div class="q-text" style="margin-top:1rem">
+            <p>Which part gives you more time and flexibility?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="2"></textarea>
+
+          <div class="q-text" style="margin-top:1.5rem">
+            <p><strong>Who has a claim on the business?</strong></p>
+            <p>What percentage of the business is funded by you (equity)?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="2"></textarea>
+
+          <div class="q-text" style="margin-top:1rem">
+            <p>What percentage is funded by debt (liability)?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="2"></textarea>
+
+          <div class="q-text" style="margin-top:1.5rem">
+            <p><strong>Implications</strong></p>
+            <p>If you chose more borrowing, what does that mean for financial risk?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="2"></textarea>
+
+          <div class="q-text" style="margin-top:1rem">
+            <p>If you chose more equity, what does that mean for control and ownership?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="2"></textarea>
+
           <div class="feedback-box" id="fb-2-4">
-            <div class="fb-label">✓ Model answer</div>
+            <div class="fb-label">✓ Feedback</div>
             <div class="fb-content">
-              <p>The money you borrowed is a liability. This means the bank has a legal claim on the business and expects to be repaid with interest, regardless of how the business performs.</p>
-              <p>The money you invested is equity. This is your own stake in the business, which carries no fixed repayment obligation but entitles you to any profits that remain once all other claims are settled.</p>
-              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+              <p>This simple activity should provide you a good understanding of how a business is financed through a combination of equity (owner investment) and liabilities (borrowing). You are beginning to see that not all money in a business is the same: some represents ownership, while some represents obligations that must be repaid.</p>
+              <p>You have also started to distinguish between current liabilities (short-term pressure) and non-current liabilities (long-term borrowing), which is an important concept in understanding financial risk and stability.</p>
             </div>
           </div>
         </div>
