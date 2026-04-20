@@ -196,9 +196,9 @@ const htmlContent = String.raw`
         </div>
         <div class="quiz-body" style="border-top:3px solid var(--gold)">
           <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-            Interactive map will be visible on real version.
+            <strong>Provisional</strong> — To be added if the tool we're going to use for this in Canvas is approved in time.
           </div>
-          <p style="color:var(--ink-soft);font-size:0.93rem">Drop a pin on the map to show where you are based, and indicate whether your country follows IFRS or a local GAAP framework. If you are unsure, a quick search for your country's name alongside 'accounting standards' or 'financial reporting framework' should give you the answer.</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">EXERCISE: Drop a pin on the map to show where you are based, and indicate whether your country follows IFRS or a local GAAP framework. If you are unsure, a quick search for your country's name alongside 'accounting standards' or 'financial reporting framework' should give you the answer.</p>
         </div>
 
         <p>In the next activity, you'll be introduced to the three main financial statements you should become familiar with.</p>
@@ -363,16 +363,19 @@ const htmlContent = String.raw`
           <h2>Discussion</h2>
         </div>
         <div class="quiz-body discussion-body-box">
-          <p style="color:var(--ink-soft);font-size:0.93rem">Find the annual report of a company you genuinely like or use. Most publicly listed companies publish their annual reports on their websites (sometimes under an 'Investors' or 'Investor Relations' section).</p>
-          <p style="color:var(--ink-soft);font-size:0.93rem">In your chosen annual report, try to locate the sections listed below and answer these questions:</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Find the annual report of a company you genuinely like or use. Most publicly listed companies publish their annual reports on their websites, usually under an 'Investors' or 'Investor Relations' section. Once you have found one, work through the questions below. You may not find every section in every report, but try to locate as many as you can.</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Note that some US companies file a document called a 10-K in place of a traditional annual report, and not all reports will use exactly the same section headings as those covered in the presentation.</p>
           <ul style="margin:0.5rem 0 0.75rem 1.4rem;color:var(--ink-soft);font-size:0.93rem">
-            <li>Letter to Shareholders: What does the CEO identify as the main challenge of the year?</li>
-            <li>Auditor's Report: Is the opinion qualified or unqualified?</li>
-            <li>Financial Statements: Do they cover more than one year, and which three statements can you find?</li>
-            <li>Business Overview/Management Discussion: what reason does management give for a change in performance?</li>
-            <li>ESG section: Is there one at all, and if so what sort of commitments does the company make?</li>
+            <li>Which company have you chosen and what is the reporting period?</li>
+            <li>Were you able to locate the Letter to Shareholders and the Business Overview/Management Discussion?</li>
+            <li>What does the CEO identify as the main challenge of the year?</li>
+            <li>What reason does management give for that year's performance?</li>
+            <li>Did you come across the Auditor's Report, and if so is the opinion qualified or unqualified?</li>
+            <li>Were you able to find all three financial statements, and do they cover more than one year? How many periods exactly?</li>
+            <li>Is there an ESG section, and if so what sort of commitments does the company make?</li>
           </ul>
-          <p style="color:var(--ink-soft);font-size:0.93rem">Note that some US companies' sometimes use a form called a '10-K' as their annual report, and not all annual reports will always include all of the same sections with the same headings that were outlined in the presentation in the previous page.</p>
+          <p style="color:var(--ink-soft);font-size:0.93rem">Completing this task, will help you learn how to navigate a company’s annual report and to identify key sections such as the Letter to Shareholders and Management Discussion, the Auditor’s Report and the financial statements</p>
+
           <p style="color:var(--ink-soft);font-size:0.93rem">Share your findings with your cohort below. <em>(Discussion forum — available on Canvas)</em></p>
         </div>
       </div>
