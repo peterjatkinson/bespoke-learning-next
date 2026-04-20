@@ -548,10 +548,14 @@ const htmlContent = String.raw`
           <p style="color:var(--ink-soft);font-size:0.93rem">Return to the annual report you found in session one. This time, locate the balance sheet (it may also be labelled the 'statement of financial position').</p>
           <p style="color:var(--ink-soft);font-size:0.93rem">Using what you have learned in this session, answer the following questions:</p>
           <ul style="margin:0.5rem 0 0.75rem 1.4rem;color:var(--ink-soft);font-size:0.93rem">
-            <li>What are the main assets the company owns?</li>
-            <li>What does the company owe (i.e. what are its liabilities)?&nbsp;</li>
-            <li>What is the single largest asset on the balance sheet? Does that surprise you, and what does it tell you about the nature of the business?</li>
+            <li>What does the company own (its assets)?</li>
+            <li>What is the largest asset the company owns?</li>
+            <li>Is this asset tangible (physical) or intangible (e.g. brand, patents, goodwill)?</li>
+            <li>What might this tell you about the nature of the business?</li>
+            <li>What does the company owe (its liabilities)?</li>
+            <li>What is the company worth to shareholders (its equity)?</li>
           </ul>
+          <p>By completing this task, you'll get a better understanding of the basic structure of a balance sheet and how it provides a snapshot of what a company owns and owes, as well as what it's worth.</p>
           <p style="color:var(--ink-soft);font-size:0.93rem">Share your findings with your cohort below. <em>(Discussion forum — available on Canvas)</em></p>
         </div>
       </div>
