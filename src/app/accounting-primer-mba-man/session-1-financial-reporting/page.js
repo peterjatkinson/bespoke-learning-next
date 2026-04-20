@@ -114,13 +114,13 @@ const htmlContent = String.raw`
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
         4.3 Is all cash equal?
       </div>
-      <div class="nav-item" onclick="showPage('s4-3-1')" id="nav-s4-3-1" style="padding-left: 2.8rem;">
-        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
-        4.3.1 Examining a cash flow statement
-      </div>
       <div class="nav-item" onclick="showPage('s4-4')" id="nav-s4-4">
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
-        4.4 Session review
+        4.4 Examining a cash flow statement
+      </div>
+      <div class="nav-item" onclick="showPage('s4-5')" id="nav-s4-5">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        4.5 Session review
       </div>
     </div>
 
@@ -1692,18 +1692,18 @@ const htmlContent = String.raw`
           </div>
         </div>
 
-        <p>In the next activity, you'll return to the annual report you've used in previous activities on this primer, and this time look at its cash flow statement.</p>
+        <p>In the next activity, you'll apply what you've just learned to a real company's cash flow statement.</p>
       </div>
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s4-2')">← 4.2 Structure of cash flow statements</button>
-        <button class="nav-btn primary" onclick="showPage('s4-3-1')">Next: 4.3.1 Examining a cash flow statement →</button>
+        <button class="nav-btn primary" onclick="showPage('s4-4')">Next: 4.4 Examining a cash flow statement →</button>
       </div>
     </div>
 
-    <div class="page" id="page-s4-3-1">
+    <div class="page" id="page-s4-4">
       <div class="page-header">
         <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
-        <h1 class="page-title">4.3.1 Examining a cash flow statement</h1>
+        <h1 class="page-title">4.4 Examining a cash flow statement</h1>
       </div>
 
       <div class="page-body" style="margin-bottom:1.5rem">
@@ -1751,16 +1751,20 @@ const htmlContent = String.raw`
         </div>
       </div>
 
+      <div class="page-body" style="margin-top:1.5rem">
+        <p>This brings us to the end of the session. In the next activity, you will review what you’ve learned in this session.</p>
+      </div>
+
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s4-3')">← 4.3 Is all cash equal?</button>
-        <button class="nav-btn primary" onclick="showPage('s4-4')">Next: 4.4 Session review →</button>
+        <button class="nav-btn primary" onclick="showPage('s4-5')">Next: 4.5 Session review →</button>
       </div>
     </div>
 
-    <div class="page" id="page-s4-4">
+    <div class="page" id="page-s4-5">
       <div class="page-header">
         <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
-        <h1 class="page-title">4.4 Session review</h1>
+        <h1 class="page-title">4.5 Session review</h1>
       </div>
 
       <div class="page-body" style="margin-bottom:1.5rem">
@@ -1830,7 +1834,7 @@ const htmlContent = String.raw`
       </div>
 
       <div class="page-nav">
-        <button class="nav-btn" onclick="showPage('s4-3')">← 4.3 Is all cash equal?</button>
+        <button class="nav-btn" onclick="showPage('s4-4')">← 4.4 Examining a cash flow statement</button>
         <button class="nav-btn" style="opacity:0.5;cursor:default">Session 5 coming soon →</button>
       </div>
     </div>
@@ -1860,8 +1864,8 @@ const pages = {
   "s4-1": "4.1 Introduction",
   "s4-2": "4.2 Structure of cash flow statements",
   "s4-3": "4.3 Is all cash equal?",
-  "s4-3-1": "4.3.1 Examining a cash flow statement",
-  "s4-4": "4.4 Session review",
+  "s4-4": "4.4 Examining a cash flow statement",
+  "s4-5": "4.5 Session review",
 };
 
 export default function AccountingPrimerSession1Page() {
