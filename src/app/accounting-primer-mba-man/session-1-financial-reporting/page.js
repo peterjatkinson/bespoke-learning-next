@@ -1014,13 +1014,69 @@ const htmlContent = String.raw`
           </div>
         </div>
 
+        <p>A key idea from the presentation is that revenue is recognised when a service or good has been delivered, not simply when cash changes hands. The scenarios below let you apply that principle directly. For each transaction, identify whether revenue should be recognised under accrual accounting, and what the impact on cash is.</p>
+
         <div class="quiz-header">
           <h2>Activity</h2>
         </div>
-        <div class="quiz-body" style="border-top:3px solid var(--gold)">
-          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-            <strong>Provisional</strong> — Exercise still to be developed for this page. The revenue presentation introduces accrual accounting and the concept of revenue recognition, so a possible activity could give students 3–4 short scenarios and ask them to determine whether revenue should be recognised immediately, partially or not yet — and what cash accounting would say in each case. That comparison would ask students to directly apply the principle they have just heard about rather than simply recall a definition
+        <div class="quiz-body">
+          <div class="q-block">
+            <div class="q-text">
+              <p>For each transaction identify whether we should recognise revenue under accrual accounting and the impact on cash.</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Transaction</th>
+                    <th>Revenue</th>
+                    <th>Cash</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>A customer pays £300 upfront for a 3-month gym membership</td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                  </tr>
+                  <tr>
+                    <td>A customer attends a personal training session and pays £50 immediately after.</td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                  </tr>
+                  <tr>
+                    <td>A customer buys a £100 gift card but hasn't used it yet.</td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                  </tr>
+                  <tr>
+                    <td>Completes a corporate fitness workshop worth £500 but hasn't been paid yet.</td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                    <td><input type="text" class="q-input-cell" placeholder="e.g. no or £..." /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="feedback-box" id="fb-3-2">
+              <div class="fb-label">✓ Answers</div>
+              <div class="fb-content">
+                <table>
+                  <thead>
+                    <tr><th>Transaction</th><th>Revenue</th><th>Cash</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>A customer pays £300 upfront for a 3-month gym membership</td><td>No</td><td>£300</td></tr>
+                    <tr><td>A customer attends a personal training session and pays £50 immediately after.</td><td>£50</td><td>£50</td></tr>
+                    <tr><td>A customer buys a £100 gift card but hasn't used it yet.</td><td>No</td><td>£100</td></tr>
+                    <tr><td>Completes a corporate fitness workshop worth £500 but hasn't been paid yet.</td><td>£500</td><td>No</td></tr>
+                  </tbody>
+                </table>
+                <p style="margin-top:0.75rem"><strong>Gym membership (£300 upfront):</strong> the cash has been received, but the service hasn't been delivered yet — the gym still owes the customer three months of access. Under accrual accounting, revenue is only recognised as each month passes. The £300 sits as a liability (deferred revenue) until it is earned.</p>
+                <p><strong>Personal training session (£50):</strong> the service has been delivered and payment received immediately, so both revenue and cash are recognised at the same time. This is the simplest case.</p>
+                <p><strong>Gift card (£100):</strong> like the gym membership, cash has been received but no service delivered. Revenue cannot be recognised until the customer actually uses the card.</p>
+                <p><strong>Corporate workshop (£500, unpaid):</strong> the service has been delivered, so revenue is recognised — but no cash has yet been received. This creates a receivable on the balance sheet. It is a clear illustration of why profit and cash can diverge: the business has earned revenue it hasn't been paid for yet.</p>
+              </div>
+            </div>
           </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-2', this)">Submit &amp; see answers</button>
         </div>
 
         <p>In the next activity, we'll move down the income statement to look at how costs are recorded and when they should be recognised.</p>
@@ -2355,6 +2411,23 @@ export default function AccountingPrimerSession1Page() {
         }
         .accounting-primer-session1 .text-block p { color: var(--ink-soft); font-size: 0.93rem; margin-bottom: 0.75rem; }
         .accounting-primer-session1 .text-block p:last-child { margin-bottom: 0; }
+
+        .accounting-primer-session1 .q-input-cell {
+          width: 100%;
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          padding: 0.35rem 0.5rem;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.83rem;
+          color: var(--ink);
+          background: var(--bg);
+          min-width: 80px;
+        }
+        .accounting-primer-session1 .q-input-cell:focus {
+          outline: none;
+          border-color: var(--accent);
+          background: var(--white);
+        }
 
         .accounting-primer-session1 .categorize-grid {
           display: flex;
