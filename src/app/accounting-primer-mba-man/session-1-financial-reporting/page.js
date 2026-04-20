@@ -1705,24 +1705,54 @@ const htmlContent = String.raw`
         <div class="page-eyebrow">Session 4 · Cash Flow Statement</div>
         <h1 class="page-title">4.3.1 Examining a cash flow statement</h1>
       </div>
-      <div class="page-body">
-        <div class="discussion-header">
-          <div class="discussion-header-icon">💬</div>
-          <h2>Discussion</h2>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>Explore the <a href="https://www.cocacolaep.com/assets/Global/Investors/2025-Annual-Report/CCEP-Annual-Report-and-Form-20-F-2025.pdf" target="_blank" style="color:var(--accent)">Cash Flow Statement of Coca-Cola Europacific Partners</a>, world's largest independent Coca-Cola bottler, page 213 in the PDF or 211 of the report.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>Is operating cash flow positive? Is the core business generating real cash?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-4-3-1-q1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>Net cash flow from operations is positive for 2025 (€11m), but was negative in 2024 (€137m).</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-3-1-q1', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
         </div>
-        <div class="quiz-body discussion-body-box">
-          <p style="color:var(--ink-soft);font-size:0.93rem">Return to the annual report you have been using throughout this primer.</p>
-          <p style="color:var(--ink-soft);font-size:0.93rem">Locate the cash flow statement and use what you have learned in this session to answer the questions below:</p>
-          <ul style="margin:0.5rem 0 0.75rem 1.4rem;color:var(--ink-soft);font-size:0.93rem">
-            <li>Is operating cash flow positive? What does this tell you about whether the core business is generating real cash?</li>
-            <li>What has the company been spending on in investing activities? Does the pattern suggest a business that is growing or one that is simply maintaining what it already has?</li>
-            <li>Has the company paid dividends or repaid loans during the year? What does that suggest about its relationship with investors and lenders?</li>
-          </ul>
-          <p style="color:var(--ink-soft);font-size:0.93rem">Share your findings with your cohort below. <em>(Discussion forum — available on Canvas)</em></p>
+
+        <div class="q-block">
+          <div class="q-text"><p>What did the company spend money on in investing activities? Is it growing or maintaining?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-4-3-1-q2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>Under the investing section, the company lists €15m investment in subsidiaries for 2025 and €567m for 2024. The much larger 2024 figure was primarily due to an investment writedown rather than ongoing capital expenditure.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-3-1-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>Did the company pay dividends or repay loans?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="3"></textarea>
+          <div class="feedback-box" id="fb-4-3-1-q3">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>In 2025 the company paid €386m in dividends and repaid €1,750m in borrowings (listed under financing activities), plus €141m in interest. In 2024 the figures were €4,050m in dividends, €3,650m in loan repayments, and €154m in interest.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-4-3-1-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
         </div>
       </div>
+
       <div class="page-nav">
-        <button class="nav-btn" onclick="showPage('s4-3-1')">← 4.3.1 Examining a cash flow statement</button>
+        <button class="nav-btn" onclick="showPage('s4-3')">← 4.3 Is all cash equal?</button>
         <button class="nav-btn primary" onclick="showPage('s4-4')">Next: 4.4 Session review →</button>
       </div>
     </div>
