@@ -1110,11 +1110,59 @@ const htmlContent = String.raw`
       <div class="quiz-header">
         <h2>Activity</h2>
       </div>
-      <div class="quiz-body" style="border-top:3px solid var(--gold)">
-        <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-          <strong>Provisional</strong> — An exercise here still to be added.
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>The two income statements below both contain an error relating to the matching principle. For each one, identify the error and explain how it should be corrected.</p>
+            <div class="info-box" style="margin:1rem 0 0.5rem">
+              <h2 style="font-size:1rem;margin-bottom:0.5rem">SouthKen Bakery — Year 1 Income Statement</h2>
+              <table>
+                <tbody>
+                  <tr><td>Revenue</td><td>£160,000</td></tr>
+                  <tr><td>Cost of goods sold</td><td>£100,000 <span style="font-weight:normal;color:var(--ink-soft)">(flour, sugar and packaging purchased in November, none yet sold by 31 December)</span></td></tr>
+                  <tr><td><strong>Gross profit</strong></td><td><strong>£60,000</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>What is the error, and how should it be corrected?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-3-3-y1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>The £100,000 of inventory purchased in November should not appear as an expense in Year 1 because none of it has yet helped to generate revenue. It remains unsold at 31 December. Under the matching principle, expenses are recognised in the same period as the revenues they helped generate. The £100,000 should sit on the balance sheet as an asset (inventory) until it is sold, at which point it becomes a cost of goods sold and is recognised as an expense.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-3-y1', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
         </div>
-        <p style="color:var(--ink-soft);font-size:0.93rem">In the next section, we look at one particular type of expense that requires its own treatment: depreciation.</p>
+
+        <div class="q-block">
+          <div class="q-text">
+            <div class="info-box" style="margin:0 0 0.5rem">
+              <h2 style="font-size:1rem;margin-bottom:0.5rem">SouthKen Bakery — Year 2 Income Statement</h2>
+              <table>
+                <tbody>
+                  <tr><td>Revenue</td><td>£200,000</td></tr>
+                  <tr><td>Cost of goods sold</td><td>£40,000 <span style="font-weight:normal;color:var(--ink-soft)">(only includes purchases made during Year 2)</span></td></tr>
+                  <tr><td><strong>Gross profit</strong></td><td><strong>£160,000</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>What is the error, and how should it be corrected?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-3-3-y2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>The cost of goods sold only includes new purchases (£40,000) but ignores the inventory that was actually used and sold during the year. The £100,000 of inventory carried over from Year 1 should be included as cost of goods sold in Year 2, since that is the period in which it helped generate revenue.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-3-3-y2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+      </div>
+
+      <div class="page-body" style="margin-top:1.5rem">
+        <p>In the next activity, we look at one particular type of expense that requires its own treatment: depreciation.</p>
       </div>
 
       <div class="page-nav">
