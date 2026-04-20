@@ -778,7 +778,7 @@ const htmlContent = String.raw`
       <div class="quiz-body">
         <div class="q-block">
           <div class="q-text">
-            <p>You are launching a small business and need £10,000 to get started. You have to choose between the following options, but note that your two choices must add up to £10,000.</p>
+            <p>You're launching a small business and need £10,000 to get started. You must raise this from a combination of your own investment and a bank loan; you cannot use just one source. Choose a split from the options below, but note that your two choices must add up to £10,000.</p>
             <p>How much will you invest yourself?</p>
             <ul>
               <li>£2,000</li>
@@ -856,6 +856,12 @@ const htmlContent = String.raw`
             <div class="fb-content">
               <p>This simple activity should provide you a good understanding of how a business is financed through a combination of equity (owner investment) and liabilities (borrowing). You are beginning to see that not all money in a business is the same: some represents ownership, while some represents obligations that must be repaid.</p>
               <p>You have also started to distinguish between current liabilities (short-term pressure) and non-current liabilities (long-term borrowing), which is an important concept in understanding financial risk and stability.</p>
+              <p><strong>Which part creates immediate pressure?</strong> The current liability, because it must be repaid within 12 months.</p>
+              <p><strong>Which part gives more time and flexibility?</strong> The non-current liability. Because repayment is spread over several years, the business has time to generate returns before the full obligation falls due.</p>
+              <p><strong>What percentage of the business is funded by you (equity)?</strong> For example, £2,000 invested = 20% equity-funded. £5,000 = 50%. £8,000 = 80%.</p>
+              <p><strong>What percentage is funded by debt (liability)?</strong> The remainder, i.e. 100% minus your equity percentage.</p>
+              <p><strong>If you chose more borrowing, what does that mean for financial risk?</strong> Higher borrowing means more of the business's cash flow is committed to repaying lenders, regardless of how well the business is performing. If revenue falls, the business may struggle to meet those obligations. Lenders also have a prior claim over owners if the business fails.</p>
+              <p><strong>If you chose more equity, what does that mean for control and ownership?</strong> Investing more yourself means you retain greater ownership and control. There is no repayment obligation and no interest. However, you are taking on more personal financial risk, and any profits remain with you rather than being shared with a lender.</p>
             </div>
           </div>
         </div>
