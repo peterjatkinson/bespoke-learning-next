@@ -12,14 +12,14 @@ import {
   YAxis,
 } from "recharts";
 
-const VARIABLE_COSTS = [
+const BASE_VARIABLE_COSTS = [
   { name: "Flour", amount: 0.4 },
   { name: "Water and salt", amount: 0.05 },
   { name: "Yeast", amount: 0.1 },
   { name: "Packaging bag", amount: 0.15 },
 ];
 
-const FIXED_COSTS = [
+const BASE_FIXED_COSTS = [
   { name: "Rent", amount: 2000 },
   { name: "Business rates", amount: 400 },
   { name: "Owner salary", amount: 3500 },
@@ -31,6 +31,14 @@ const FIXED_COSTS = [
 const SCENARIOS = [200, 400, 800];
 const MIN_UNITS = 0;
 const MAX_UNITS = 1500;
+const BASE_VARIABLE_COST_TOTAL = BASE_VARIABLE_COSTS.reduce((sum, item) => sum + item.amount, 0);
+const BASE_FIXED_COST_TOTAL = BASE_FIXED_COSTS.reduce((sum, item) => sum + item.amount, 0);
+const MIN_VARIABLE_COST_PER_LOAF = 0.4;
+const MAX_VARIABLE_COST_PER_LOAF = 1.4;
+const MIN_TOTAL_FIXED_COST = 4000;
+const MAX_TOTAL_FIXED_COST = 10000;
+const MAX_CHART_COST = MAX_TOTAL_FIXED_COST + (MAX_UNITS * MAX_VARIABLE_COST_PER_LOAF);
+const Y_AXIS_TICKS = [0, 2000, 4000, 6000, 8000, 10000, 12000];
 const X_AXIS_TICKS = [0, 250, 500, 750, 1000, 1250, 1500];
 const CHART_POINTS = [0, 200, 400, 800, 1500];
 
@@ -181,12 +189,25 @@ function BreakdownModal({ title, subtitle, rows, total, totalLabel, onClose, row
 
 export default function FixedVariableCostsPage() {
   const [units, setUnits] = useState(400);
+  const [variableCostPerLoaf, setVariableCostPerLoaf] = useState(BASE_VARIABLE_COST_TOTAL);
+  const [totalFixedCostTarget, setTotalFixedCostTarget] = useState(BASE_FIXED_COST_TOTAL);
   const [openBreakdown, setOpenBreakdown] = useState(null);
   const variableInfoButtonRef = useRef(null);
   const fixedInfoButtonRef = useRef(null);
 
-  const totalVariablePerUnit = VARIABLE_COSTS.reduce((sum, item) => sum + item.amount, 0);
-  const totalFixedCosts = FIXED_COSTS.reduce((sum, item) => sum + item.amount, 0);
+  const variableCostScale = variableCostPerLoaf / BASE_VARIABLE_COST_TOTAL;
+  const fixedCostScale = totalFixedCostTarget / BASE_FIXED_COST_TOTAL;
+  const variableCosts = BASE_VARIABLE_COSTS.map((item) => ({
+    ...item,
+    amount: item.amount * variableCostScale,
+  }));
+  const fixedCosts = BASE_FIXED_COSTS.map((item) => ({
+    ...item,
+    amount: item.amount * fixedCostScale,
+  }));
+
+  const totalVariablePerUnit = variableCosts.reduce((sum, item) => sum + item.amount, 0);
+  const totalFixedCosts = fixedCosts.reduce((sum, item) => sum + item.amount, 0);
   const totalVariableCosts = units * totalVariablePerUnit;
   const totalCosts = totalFixedCosts + totalVariableCosts;
   const fixedCostPerUnit = units === 0 ? 0 : totalFixedCosts / units;
@@ -239,6 +260,56 @@ export default function FixedVariableCostsPage() {
               <span>0</span>
               <span>750</span>
               <span>1,500</span>
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+              <div className="flex items-center justify-between gap-4">
+                <label htmlFor="variable-cost-slider" className="text-[0.94rem] font-semibold text-slate-700">
+                  Variable cost per loaf
+                </label>
+                <strong className="text-[1rem] text-slate-900">{formatCurrency(totalVariablePerUnit)}</strong>
+              </div>
+              <input
+                id="variable-cost-slider"
+                type="range"
+                min={MIN_VARIABLE_COST_PER_LOAF}
+                max={MAX_VARIABLE_COST_PER_LOAF}
+                step={0.05}
+                value={variableCostPerLoaf}
+                onChange={(event) => setVariableCostPerLoaf(Number(event.target.value))}
+                className="mt-4 h-3 w-full accent-[#f59e0b]"
+              />
+              <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
+                <span>{formatCurrency(MIN_VARIABLE_COST_PER_LOAF)}</span>
+                <span>{formatCurrency(0.9)}</span>
+                <span>{formatCurrency(MAX_VARIABLE_COST_PER_LOAF)}</span>
+              </div>
+            </div>
+
+            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+              <div className="flex items-center justify-between gap-4">
+                <label htmlFor="fixed-cost-slider" className="text-[0.94rem] font-semibold text-slate-700">
+                  Total fixed cost
+                </label>
+                <strong className="text-[1rem] text-slate-900">{formatWholePounds(totalFixedCosts)}</strong>
+              </div>
+              <input
+                id="fixed-cost-slider"
+                type="range"
+                min={MIN_TOTAL_FIXED_COST}
+                max={MAX_TOTAL_FIXED_COST}
+                step={50}
+                value={totalFixedCostTarget}
+                onChange={(event) => setTotalFixedCostTarget(Number(event.target.value))}
+                className="mt-4 h-3 w-full accent-[#0891b2]"
+              />
+              <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
+                <span>{formatWholePounds(MIN_TOTAL_FIXED_COST)}</span>
+                <span>{formatWholePounds(7000)}</span>
+                <span>{formatWholePounds(MAX_TOTAL_FIXED_COST)}</span>
+              </div>
             </div>
           </div>
 
@@ -355,6 +426,8 @@ export default function FixedVariableCostsPage() {
                     label={{ value: "Loaves", position: "insideBottom", offset: -2, fill: "#64748b", fontSize: 12 }}
                   />
                   <YAxis
+                    domain={[0, MAX_CHART_COST]}
+                    ticks={Y_AXIS_TICKS}
                     tickFormatter={formatAxisPounds}
                     tick={{ fill: "#64748b", fontSize: 12 }}
                     tickLine={false}
@@ -416,7 +489,7 @@ export default function FixedVariableCostsPage() {
           <BreakdownModal
             title="Variable cost ingredients"
             subtitle="These costs make up the per-loaf variable cost."
-            rows={VARIABLE_COSTS}
+            rows={variableCosts}
             total={formatCurrency(totalVariablePerUnit)}
             totalLabel="Total variable cost per loaf"
             onClose={() => {
@@ -430,7 +503,7 @@ export default function FixedVariableCostsPage() {
           <BreakdownModal
             title="Fixed monthly costs"
             subtitle="These costs remain fixed in total across the output range shown here."
-            rows={FIXED_COSTS}
+            rows={fixedCosts}
             total={formatWholePounds(totalFixedCosts)}
             totalLabel="Total fixed costs"
             rowFormatter={formatWholePounds}
