@@ -673,15 +673,27 @@ const htmlContent = String.raw`
               <span class="cat-label">Likely to have almost entirely intangible assets (platform, users, brand)</span>
               <div class="cat-options">
                 <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Supermarket</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Car manufacturer</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Software company</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-intangible')">Pharmaceutical company</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="match-supermarket">
+              <span class="cat-label">Likely to have tangible assets (leased or owned) as well as large inventory with very quick turnaround</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'match-supermarket')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-supermarket')">Supermarket</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-supermarket')">Car manufacturer</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-supermarket')">Software company</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-supermarket')">Pharmaceutical company</div>
               </div>
             </div>
             <div class="categorize-item" id="match-factories">
               <span class="cat-label">Likely to have factories, machinery, and raw materials</span>
               <div class="cat-options">
                 <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Supermarket</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Car manufacturer</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Software company</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-factories')">Pharmaceutical company</div>
@@ -691,6 +703,7 @@ const htmlContent = String.raw`
               <span class="cat-label">Likely to have mainly licenses and intangible assets</span>
               <div class="cat-options">
                 <div class="cat-opt" onclick="selectCat(this, 'match-software')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-software')">Supermarket</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-software')">Car manufacturer</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-software')">Software company</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-software')">Pharmaceutical company</div>
@@ -700,6 +713,7 @@ const htmlContent = String.raw`
               <span class="cat-label">Likely to have patents, research assets, and intellectual property</span>
               <div class="cat-options">
                 <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Social media platform</div>
+                <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Supermarket</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Car manufacturer</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Software company</div>
                 <div class="cat-opt" onclick="selectCat(this, 'match-patents')">Pharmaceutical company</div>
@@ -710,6 +724,7 @@ const htmlContent = String.raw`
             <div class="fb-label">✓ Answers</div>
             <div class="fb-content">
               <p><strong>Social media platform</strong> — Likely to have almost entirely intangible assets (platform, users, brand)</p>
+              <p><strong>Supermarket</strong> — Likely to have tangible assets (leased or owned) as well as large inventory with very quick turnaround</p>
               <p><strong>Car manufacturer</strong> — Likely to have factories, machinery, and raw materials</p>
               <p><strong>Software company</strong> — Likely to have mainly licenses and intangible assets</p>
               <p><strong>Pharmaceutical company</strong> — Likely to have patents, research assets, and intellectual property</p>
