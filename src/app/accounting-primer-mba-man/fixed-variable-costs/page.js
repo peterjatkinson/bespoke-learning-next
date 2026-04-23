@@ -204,8 +204,8 @@ export default function FixedVariableCostsPage() {
 
   return (
     <main className='min-h-full bg-[radial-gradient(circle_at_top_left,rgba(15,98,254,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(8,145,178,0.12),transparent_22%),linear-gradient(180deg,#f8fbff_0%,#f2f6fb_100%)] font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
-      <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1300px]:px-0 max-[1300px]:pb-0 max-[1300px]:pt-0 max-sm:pb-0">
-        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-[1300px]:rounded-none max-[1300px]:border-x-0 max-[1300px]:bg-white max-[1300px]:shadow-none max-sm:p-[18px]">
+      <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1400px]:px-0 max-[1400px]:pb-0 max-[1400px]:pt-0 max-sm:pb-0">
+        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-[1400px]:rounded-none max-[1400px]:border-x-0 max-[1400px]:bg-white max-[1400px]:shadow-none max-sm:p-[18px]">
           <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">
@@ -318,7 +318,7 @@ export default function FixedVariableCostsPage() {
 
         </section>
 
-        <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-[1300px]:rounded-none max-[1300px]:border-x-0 max-[1300px]:bg-white max-[1300px]:shadow-none max-sm:p-[18px]">
+        <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-[1400px]:rounded-none max-[1400px]:border-x-0 max-[1400px]:bg-white max-[1400px]:shadow-none max-sm:p-[18px]">
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
             <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
               <div className="mb-3">
