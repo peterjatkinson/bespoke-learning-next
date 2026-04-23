@@ -64,50 +64,20 @@ function formatAxisPounds(value) {
   return `£${Math.round(value).toLocaleString("en-GB")}`;
 }
 
-function StatCard({ label, value, note, accent, onInfoClick, infoLabel, buttonRef }) {
-  const accentClasses = {
-    amber: "bg-[linear-gradient(180deg,#f59e0b_0%,#f97316_100%)]",
-    blue: "bg-[linear-gradient(180deg,#0f62fe_0%,#3b82f6_100%)]",
-    teal: "bg-[linear-gradient(180deg,#0891b2_0%,#14b8a6_100%)]",
-    slate: "bg-[linear-gradient(180deg,#475569_0%,#0f172a_100%)]",
-  };
-
-  return (
-    <div className="relative overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,rgba(252,253,255,0.98)_0%,rgba(246,249,253,0.92)_100%)] p-[18px]">
-      <span
-        aria-hidden="true"
-        className={`absolute bottom-0 left-0 top-0 w-1 ${accentClasses[accent]}`}
-      />
-      <div className="flex items-start justify-between gap-3">
-        <p className="m-0 text-[0.76rem] font-bold uppercase tracking-[0.12em] text-slate-500">
-          {label}
-        </p>
-        {onInfoClick ? (
-          <button
-            ref={buttonRef}
-            type="button"
-            onClick={onInfoClick}
-            aria-label={infoLabel}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(15,23,42,0.1)] bg-white text-sm font-semibold text-slate-500 transition hover:border-[rgba(15,98,254,0.22)] hover:text-[#0f62fe]"
-          >
-            i
-          </button>
-        ) : null}
-      </div>
-      <p className="mt-[10px] text-[2rem] leading-none font-bold tracking-[-0.03em] text-slate-900">
-        {value}
-      </p>
-      <p className="mt-[10px] text-[0.95rem] leading-[1.55] text-slate-600">
-        {note}
-      </p>
-    </div>
-  );
-}
-
-function BehaviourRow({ label, value, helper, tone }) {
+function BehaviourRow({
+  label,
+  value,
+  helper,
+  tone,
+  onInfoClick,
+  infoLabel,
+  buttonRef,
+  formatter = formatWholePounds,
+}) {
   const toneClasses = {
     teal: "bg-[#eefaf8] text-cyan-700",
     blue: "bg-[#eef4ff] text-blue-700",
+    amber: "bg-[#fff5e8] text-orange-700",
     slate: "bg-slate-100 text-slate-700",
   };
 
@@ -115,13 +85,26 @@ function BehaviourRow({ label, value, helper, tone }) {
     <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] px-4 py-[15px] shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="m-0 text-[0.98rem] font-bold text-slate-900">{label}</p>
+          <div className="flex items-center gap-2">
+            <p className="m-0 text-[0.98rem] font-bold text-slate-900">{label}</p>
+            {onInfoClick ? (
+              <button
+                ref={buttonRef}
+                type="button"
+                onClick={onInfoClick}
+                aria-label={infoLabel}
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(15,23,42,0.1)] bg-white text-xs font-semibold text-slate-500 transition hover:border-[rgba(15,98,254,0.22)] hover:text-[#0f62fe]"
+              >
+                i
+              </button>
+            ) : null}
+          </div>
           <p className="mt-[6px] text-[0.9rem] leading-[1.45] text-slate-500">
             {helper}
           </p>
         </div>
         <p className={`m-0 rounded-full px-3 py-2 text-[1rem] font-bold tracking-[-0.02em] ${toneClasses[tone]}`}>
-          {formatWholePounds(value)}
+          {formatter(value)}
         </p>
       </div>
     </div>
@@ -243,9 +226,12 @@ export default function FixedVariableCostsPage() {
           </div>
 
           <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
-            <label htmlFor="units-slider" className="sr-only">
-              Output volume in loaves
-            </label>
+            <div className="mb-3 flex items-center justify-between gap-4">
+              <label htmlFor="units-slider" className="text-[0.94rem] font-semibold text-slate-700">
+                Number of loaves <span className="font-normal text-slate-500"></span>
+              </label>
+              <strong className="text-[1rem] text-slate-900">{units}</strong>
+            </div>
             <input
               id="units-slider"
               type="range"
@@ -330,157 +316,139 @@ export default function FixedVariableCostsPage() {
             ))}
           </div>
 
-          <div className="mt-5 grid gap-[18px] md:grid-cols-2 xl:grid-cols-4">
-            <StatCard
-              label="Variable cost per loaf"
-              value={formatCurrency(totalVariablePerUnit)}
-              note="Same for each extra loaf."
-              accent="amber"
-              onInfoClick={() => setOpenBreakdown("variable")}
-              infoLabel="Show variable cost breakdown"
-              buttonRef={variableInfoButtonRef}
-            />
-            <StatCard
-              label="Total costs"
-              value={formatWholePounds(totalCosts)}
-              note="Fixed plus variable combined."
-              accent="slate"
-            />
-            <StatCard
-              label="Total variable cost"
-              value={formatWholePounds(totalVariableCosts)}
-              note="Rises with output."
-              accent="blue"
-            />
-            <StatCard
-              label="Total fixed cost"
-              value={formatWholePounds(totalFixedCosts)}
-              note="Flat in total."
-              accent="teal"
-              onInfoClick={() => setOpenBreakdown("fixed")}
-              infoLabel="Show fixed cost breakdown"
-              buttonRef={fixedInfoButtonRef}
-            />
-          </div>
-
-          <div className="mt-[14px] grid gap-3 md:grid-cols-2">
-            <div className="flex items-center justify-between gap-4 rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-4 py-[14px]">
-              <span className="text-[0.94rem] text-slate-600">Fixed cost per loaf</span>
-              <strong className="text-base font-bold text-slate-900">
-                {formatCurrency(fixedCostPerUnit)}
-              </strong>
-            </div>
-            <div className="flex items-center justify-between gap-4 rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-4 py-[14px]">
-              <span className="text-[0.94rem] text-slate-600">Average cost per loaf</span>
-              <strong className="text-base font-bold text-slate-900">
-                {formatCurrency(totalCostPerUnit)}
-              </strong>
-            </div>
-          </div>
         </section>
 
         <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-sm:p-[18px]">
-          <div className="grid gap-3 md:grid-cols-3">
-            <BehaviourRow
-              label="Total fixed costs"
-              value={totalFixedCosts}
-              helper="Unchanged in total across the output range"
-              tone="teal"
-            />
-            <BehaviourRow
-              label="Total variable costs"
-              value={totalVariableCosts}
-              helper="Moves directly with every extra loaf"
-              tone="blue"
-            />
-            <BehaviourRow
-              label="Total costs"
-              value={totalCosts}
-              helper="Fixed and variable costs together"
-              tone="slate"
-            />
-          </div>
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
+              <div className="mb-3">
+                <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
+                  Cost behaviour by output volume
+                </h3>
+                <p className="mt-1 text-[0.92rem] leading-[1.5] text-slate-500">
+                  The chart shows fixed cost as a flat line, while variable and total costs rise as output increases.
+                </p>
+              </div>
 
-          <div className="mt-5 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
-            <div className="mb-3">
-              <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
-                Cost behaviour by output volume
-              </h3>
-              <p className="mt-1 text-[0.92rem] leading-[1.5] text-slate-500">
-                The chart shows fixed cost as a flat line, while variable and total costs rise as output increases.
-              </p>
-            </div>
+              <div className="h-[320px]" aria-hidden="true">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartPoints} margin={{ top: 10, right: 16, left: 8, bottom: 6 }}>
+                    <CartesianGrid stroke="#dbe4ee" strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="volume"
+                      type="number"
+                      domain={[MIN_UNITS, MAX_UNITS]}
+                      ticks={X_AXIS_TICKS}
+                      tick={{ fill: "#64748b", fontSize: 12 }}
+                      tickLine={false}
+                      axisLine={{ stroke: "#cbd5e1" }}
+                      label={{ value: "Loaves", position: "insideBottom", offset: -2, fill: "#64748b", fontSize: 12 }}
+                    />
+                    <YAxis
+                      domain={[0, MAX_CHART_COST]}
+                      ticks={Y_AXIS_TICKS}
+                      tickFormatter={formatAxisPounds}
+                      tick={{ fill: "#64748b", fontSize: 12 }}
+                      tickLine={false}
+                      axisLine={{ stroke: "#cbd5e1" }}
+                      width={84}
+                    />
+                    <Tooltip
+                      formatter={(value) => formatWholePounds(value)}
+                      labelFormatter={(value) => `${value} loaves`}
+                      contentStyle={{
+                        borderRadius: "14px",
+                        border: "1px solid rgba(15,23,42,0.08)",
+                        boxShadow: "0 12px 28px rgba(15,23,42,0.08)",
+                      }}
+                    />
+                    <Legend />
+                    <Line type="monotone" dataKey="fixed" name="Fixed cost" stroke="#0891b2" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    <Line type="monotone" dataKey="variable" name="Variable cost" stroke="#0f62fe" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    <Line type="monotone" dataKey="total" name="Total cost" stroke="#334155" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
 
-            <div className="h-[320px]" aria-hidden="true">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartPoints} margin={{ top: 10, right: 16, left: 8, bottom: 6 }}>
-                  <CartesianGrid stroke="#dbe4ee" strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="volume"
-                    type="number"
-                    domain={[MIN_UNITS, MAX_UNITS]}
-                    ticks={X_AXIS_TICKS}
-                    tick={{ fill: "#64748b", fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={{ stroke: "#cbd5e1" }}
-                    label={{ value: "Loaves", position: "insideBottom", offset: -2, fill: "#64748b", fontSize: 12 }}
-                  />
-                  <YAxis
-                    domain={[0, MAX_CHART_COST]}
-                    ticks={Y_AXIS_TICKS}
-                    tickFormatter={formatAxisPounds}
-                    tick={{ fill: "#64748b", fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={{ stroke: "#cbd5e1" }}
-                    width={84}
-                  />
-                  <Tooltip
-                    formatter={(value) => formatWholePounds(value)}
-                    labelFormatter={(value) => `${value} loaves`}
-                    contentStyle={{
-                      borderRadius: "14px",
-                      border: "1px solid rgba(15,23,42,0.08)",
-                      boxShadow: "0 12px 28px rgba(15,23,42,0.08)",
-                    }}
-                  />
-                  <Legend />
-                  <Line type="monotone" dataKey="fixed" name="Fixed cost" stroke="#0891b2" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                  <Line type="monotone" dataKey="variable" name="Variable cost" stroke="#0f62fe" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                  <Line type="monotone" dataKey="total" name="Total cost" stroke="#334155" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+              <div className="sr-only" aria-live="polite">
+                At {units} loaves, fixed cost is {formatWholePounds(totalFixedCosts)}, variable cost is {formatWholePounds(totalVariableCosts)}, and total cost is {formatWholePounds(totalCosts)}.
+              </div>
 
-            <div className="sr-only" aria-live="polite">
-              At {units} loaves, fixed cost is {formatWholePounds(totalFixedCosts)}, variable cost is {formatWholePounds(totalVariableCosts)}, and total cost is {formatWholePounds(totalCosts)}.
-            </div>
-
-            <div className="mt-4 overflow-x-auto">
-              <table className="min-w-full border-separate border-spacing-y-2">
-                <caption className="sr-only">
-                  Cost values shown in the chart for selected output volumes.
-                </caption>
-                <thead>
-                  <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-500">
-                    <th className="px-3 py-1 font-semibold">Loaves</th>
-                    <th className="px-3 py-1 font-semibold">Fixed cost</th>
-                    <th className="px-3 py-1 font-semibold">Variable cost</th>
-                    <th className="px-3 py-1 font-semibold">Total cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {chartPoints.map((point) => (
-                    <tr key={point.volume} className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
-                      <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">
-                        {point.volume}
-                      </td>
-                      <td className="px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.fixed)}</td>
-                      <td className="px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.variable)}</td>
-                      <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.total)}</td>
+              <div className="mt-4 overflow-x-auto">
+                <table className="min-w-full border-separate border-spacing-y-2">
+                  <caption className="sr-only">
+                    Cost values shown in the chart for selected output volumes.
+                  </caption>
+                  <thead>
+                    <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-500">
+                      <th className="px-3 py-1 font-semibold">Loaves</th>
+                      <th className="px-3 py-1 font-semibold">Fixed cost</th>
+                      <th className="px-3 py-1 font-semibold">Variable cost</th>
+                      <th className="px-3 py-1 font-semibold">Total cost</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {chartPoints.map((point) => (
+                      <tr key={point.volume} className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
+                        <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">
+                          {point.volume}
+                        </td>
+                        <td className="px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.fixed)}</td>
+                        <td className="px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.variable)}</td>
+                        <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.total)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-1">
+              <BehaviourRow
+                label="Variable cost per loaf"
+                value={totalVariablePerUnit}
+                helper="Same for each extra loaf"
+                tone="amber"
+                onInfoClick={() => setOpenBreakdown("variable")}
+                infoLabel="Show variable cost breakdown"
+                buttonRef={variableInfoButtonRef}
+                formatter={formatCurrency}
+              />
+              <BehaviourRow
+                label="Fixed cost per loaf"
+                value={fixedCostPerUnit}
+                helper="Falls as output increases"
+                tone="teal"
+                formatter={formatCurrency}
+              />
+              <BehaviourRow
+                label="Average cost per loaf"
+                value={totalCostPerUnit}
+                helper="Total cost divided by output"
+                tone="slate"
+                formatter={formatCurrency}
+              />
+              <BehaviourRow
+                label="Total fixed costs"
+                value={totalFixedCosts}
+                helper="Unchanged in total across the output range"
+                tone="teal"
+                onInfoClick={() => setOpenBreakdown("fixed")}
+                infoLabel="Show fixed cost breakdown"
+                buttonRef={fixedInfoButtonRef}
+              />
+              <BehaviourRow
+                label="Total variable costs"
+                value={totalVariableCosts}
+                helper="Moves directly with every extra loaf"
+                tone="blue"
+              />
+              <BehaviourRow
+                label="Total costs"
+                value={totalCosts}
+                helper="Fixed and variable costs together"
+                tone="slate"
+              />
             </div>
           </div>
         </section>
