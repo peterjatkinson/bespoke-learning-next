@@ -84,7 +84,7 @@ function ResultCard({ label, value, helper, tone }) {
   );
 }
 
-function InputSlider({ id, label, value, onChange, min, max, step, displayValue, tickLeft, tickMiddle, tickRight, accent }) {
+function InputSlider({ id, label, value, onChange, min, max, step, displayValue, tickLeft, tickRight, accent }) {
   return (
     <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
       <div className="flex items-center justify-between gap-4">
@@ -105,7 +105,6 @@ function InputSlider({ id, label, value, onChange, min, max, step, displayValue,
       />
       <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
         <span>{tickLeft}</span>
-        <span>{tickMiddle}</span>
         <span>{tickRight}</span>
       </div>
     </div>
@@ -283,7 +282,6 @@ export default function BreakEvenFormulaPage() {
               step={5000}
               displayValue={formatWholeCurrency(fixedCosts)}
               tickLeft={formatWholeCurrency(FIXED_COST_MIN)}
-              tickMiddle={formatWholeCurrency(180000)}
               tickRight={formatWholeCurrency(FIXED_COST_MAX)}
               accent="accent-[#0891b2]"
             />
@@ -297,7 +295,6 @@ export default function BreakEvenFormulaPage() {
               step={0.05}
               displayValue={formatCurrency(sellingPrice)}
               tickLeft={formatCurrency(SELLING_PRICE_MIN)}
-              tickMiddle={formatCurrency(3.5)}
               tickRight={formatCurrency(SELLING_PRICE_MAX)}
               accent="accent-[#0f62fe]"
             />
@@ -311,7 +308,6 @@ export default function BreakEvenFormulaPage() {
               step={0.05}
               displayValue={formatCurrency(variableCost)}
               tickLeft={formatCurrency(VARIABLE_COST_MIN)}
-              tickMiddle={formatCurrency(1.6)}
               tickRight={formatCurrency(VARIABLE_COST_MAX)}
               accent="accent-[#f59e0b]"
             />
@@ -325,7 +321,6 @@ export default function BreakEvenFormulaPage() {
               step={5000}
               displayValue={`${formatNumber(forecastSales)} bottles`}
               tickLeft={formatNumber(FORECAST_MIN)}
-              tickMiddle={formatNumber(120000)}
               tickRight={formatNumber(FORECAST_MAX)}
               accent="accent-[#334155]"
             />
@@ -339,7 +334,7 @@ export default function BreakEvenFormulaPage() {
             </div>
           ) : (
             <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-              <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
+              <div className="min-w-0 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
                 <div className="mb-3">
                   <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
                     Revenue and total cost at different output levels
@@ -351,7 +346,7 @@ export default function BreakEvenFormulaPage() {
 
                 <div className="h-[320px]" aria-hidden="true">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} margin={{ top: 10, right: 16, left: 8, bottom: 6 }}>
+                    <LineChart data={chartData} margin={{ top: 10, right: 12, left: 0, bottom: 6 }}>
                       <CartesianGrid stroke="#dbe4ee" strokeDasharray="3 3" />
                       <XAxis
                         dataKey="units"
@@ -367,7 +362,7 @@ export default function BreakEvenFormulaPage() {
                         tick={{ fill: "#64748b", fontSize: 12 }}
                         tickLine={false}
                         axisLine={{ stroke: "#cbd5e1" }}
-                        width={84}
+                        width={58}
                       />
                       <Tooltip
                         formatter={(value) => formatWholeCurrency(value)}
@@ -378,7 +373,7 @@ export default function BreakEvenFormulaPage() {
                           boxShadow: "0 12px 28px rgba(15,23,42,0.08)",
                         }}
                       />
-                      <Legend />
+                      <Legend verticalAlign="bottom" wrapperStyle={{ bottom: -8 }} />
                       <ReferenceLine
                         y={fixedCosts}
                         stroke="#0891b2"
