@@ -28,6 +28,7 @@ const VARIABLE_COST_MIN = 0.8;
 const VARIABLE_COST_MAX = 3.2;
 const FORECAST_MIN = 20000;
 const FORECAST_MAX = 180000;
+const BREAK_EVEN_TOLERANCE = 1;
 
 function formatCurrency(value, digits = 2) {
   return new Intl.NumberFormat("en-GB", {
@@ -61,12 +62,20 @@ function formatSignedCurrency(value) {
   return `${prefix}${formatWholeCurrency(rounded)}`;
 }
 
+function formatApproximateSignedCurrency(value) {
+  if (Math.abs(value) < BREAK_EVEN_TOLERANCE) {
+    return `~${formatWholeCurrency(0)}`;
+  }
+
+  return formatSignedCurrency(value);
+}
+
 function ResultCard({ label, value, helper, tone }) {
   const toneClasses = {
-    cyan: "bg-[#eefaf8] text-cyan-700",
-    blue: "bg-[#eef4ff] text-blue-700",
-    amber: "bg-[#fff5e8] text-orange-700",
-    slate: "bg-slate-100 text-slate-700",
+    cyan: "bg-[#eefaf8] text-black",
+    blue: "bg-[#eef4ff] text-black",
+    amber: "bg-[#fff5e8] text-black",
+    slate: "bg-slate-100 text-black",
   };
 
   return (
@@ -74,7 +83,7 @@ function ResultCard({ label, value, helper, tone }) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="m-0 text-[0.98rem] font-bold text-slate-900">{label}</p>
-          <p className="mt-[6px] text-[0.9rem] leading-[1.45] text-slate-500">{helper}</p>
+          <p className="mt-[6px] text-[0.9rem] leading-[1.45] text-slate-800">{helper}</p>
         </div>
         <p className={`m-0 rounded-full px-3 py-2 text-[1rem] font-bold tracking-[-0.02em] ${toneClasses[tone]}`}>
           {value}
@@ -84,7 +93,9 @@ function ResultCard({ label, value, helper, tone }) {
   );
 }
 
-function InputSlider({ id, label, value, onChange, min, max, step, displayValue, tickLeft, tickRight, accent }) {
+function InputSlider({ id, label, value, onChange, min, max, step, displayValue, tickLeft, tickRight, fillColor, ariaValueText }) {
+  const percentage = ((value - min) / (max - min)) * 100;
+
   return (
     <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
       <div className="flex items-center justify-between gap-4">
@@ -101,9 +112,14 @@ function InputSlider({ id, label, value, onChange, min, max, step, displayValue,
         step={step}
         value={value}
         onChange={(event) => onChange(Number(event.target.value))}
-        className={`mt-4 h-3 w-full ${accent}`}
+        aria-valuetext={ariaValueText ?? displayValue}
+        style={{
+          background: `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percentage}%, #9ca3af ${percentage}%, #9ca3af 100%)`,
+          "--slider-fill": fillColor,
+        }}
+        className="mt-4 h-2.5 w-full appearance-none rounded-full [&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:mt-[-5px] [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-[var(--slider-fill)] [&::-webkit-slider-thumb]:shadow-none [&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[#9ca3af] [&::-moz-range-track]:border-0 [&::-moz-range-progress]:h-2.5 [&::-moz-range-progress]:rounded-full [&::-moz-range-progress]:border-0 [&::-moz-range-progress]:bg-[var(--slider-fill)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[var(--slider-fill)]"
       />
-      <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
+      <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-600" aria-hidden="true">
         <span>{tickLeft}</span>
         <span>{tickRight}</span>
       </div>
@@ -122,6 +138,7 @@ function RightSideReferenceLabel({ viewBox, value, fill, y = 18 }) {
       y={y}
       fill={fill}
       fontSize={12}
+      fontWeight={600}
       textAnchor="start"
     >
       {value}
@@ -221,21 +238,30 @@ export default function BreakEvenFormulaPage() {
     }
 
     const points = [
-      { label: "0 bottles", units: 0 },
-      { label: "Break-even point", units: calculations.breakEvenUnits },
+      {
+        label: "Break-even point",
+        units: calculations.breakEvenUnits,
+        revenue: calculations.breakEvenRevenue,
+        totalCosts: calculations.breakEvenRevenue,
+        profit: 0,
+        outcome: "Break-even",
+      },
       { label: "Forecast sales", units: forecastSales },
     ];
 
     return points.map((point) => {
-      const revenue = point.units * sellingPrice;
-      const totalCosts = fixedCosts + point.units * variableCost;
-      const profit = revenue - totalCosts;
+      const revenue = point.revenue ?? point.units * sellingPrice;
+      const totalCosts = point.totalCosts ?? fixedCosts + point.units * variableCost;
+      const rawProfit = point.profit ?? revenue - totalCosts;
+      const profit = Math.abs(rawProfit) < BREAK_EVEN_TOLERANCE ? 0 : rawProfit;
 
-      let outcome = "Break-even";
-      if (profit > 0) {
-        outcome = "Profit";
-      } else if (profit < 0) {
-        outcome = "Loss";
+      let outcome = point.outcome ?? "Break-even";
+      if (!point.outcome) {
+        if (profit > 0) {
+          outcome = "Profit";
+        } else if (profit < 0) {
+          outcome = "Loss";
+        }
       }
 
       return {
@@ -257,12 +283,12 @@ export default function BreakEvenFormulaPage() {
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">
                 Break-even formula
               </h2>
-              <p className="mt-2 max-w-[700px] text-[0.95rem] leading-[1.6] text-slate-500">
+              <p className="mt-2 max-w-[700px] text-[0.95rem] leading-[1.6] text-slate-700">
                 Use contribution margin to see when total revenue and total costs are exactly equal, then test how far forecast sales sit above or below that break-even point.
               </p>
             </div>
             <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left sm:text-right">
-              <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">
+              <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">
                 Innocent example
               </span>
               <strong className="mt-1 block text-[1.15rem] text-slate-900">
@@ -283,7 +309,7 @@ export default function BreakEvenFormulaPage() {
               displayValue={formatWholeCurrency(fixedCosts)}
               tickLeft={formatWholeCurrency(FIXED_COST_MIN)}
               tickRight={formatWholeCurrency(FIXED_COST_MAX)}
-              accent="accent-[#0891b2]"
+              fillColor="#0891b2"
             />
             <InputSlider
               id="selling-price-slider"
@@ -296,7 +322,8 @@ export default function BreakEvenFormulaPage() {
               displayValue={formatCurrency(sellingPrice)}
               tickLeft={formatCurrency(SELLING_PRICE_MIN)}
               tickRight={formatCurrency(SELLING_PRICE_MAX)}
-              accent="accent-[#0f62fe]"
+              fillColor="#0f62fe"
+              ariaValueText={`${formatCurrency(sellingPrice)} per bottle`}
             />
             <InputSlider
               id="variable-cost-slider"
@@ -309,7 +336,8 @@ export default function BreakEvenFormulaPage() {
               displayValue={formatCurrency(variableCost)}
               tickLeft={formatCurrency(VARIABLE_COST_MIN)}
               tickRight={formatCurrency(VARIABLE_COST_MAX)}
-              accent="accent-[#f59e0b]"
+              fillColor="#f59e0b"
+              ariaValueText={`${formatCurrency(variableCost)} per bottle`}
             />
             <InputSlider
               id="forecast-slider"
@@ -322,7 +350,7 @@ export default function BreakEvenFormulaPage() {
               displayValue={`${formatNumber(forecastSales)} bottles`}
               tickLeft={formatNumber(FORECAST_MIN)}
               tickRight={formatNumber(FORECAST_MAX)}
-              accent="accent-[#334155]"
+              fillColor="#334155"
             />
           </div>
         </section>
@@ -339,7 +367,7 @@ export default function BreakEvenFormulaPage() {
                   <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
                     Revenue and total cost at different output levels
                   </h3>
-                  <p className="mt-1 text-[0.92rem] leading-[1.5] text-slate-500">
+                  <p className="mt-1 text-[0.92rem] leading-[1.5] text-slate-700">
                     Break-even happens where the revenue line and the total cost line meet. To the left of that point the business makes a loss; to the right it moves into profit.
                   </p>
                 </div>
@@ -351,17 +379,17 @@ export default function BreakEvenFormulaPage() {
                       <XAxis
                         dataKey="units"
                         type="number"
-                        tick={{ fill: "#64748b", fontSize: 12 }}
+                        tick={{ fill: "#0f172a", fontSize: 13 }}
                         tickLine={false}
-                        axisLine={{ stroke: "#cbd5e1" }}
+                        axisLine={{ stroke: "#64748b" }}
                         tickFormatter={(value) => formatNumber(value)}
-                        label={{ value: "Bottles sold", position: "insideBottom", offset: -2, fill: "#64748b", fontSize: 12 }}
+                        label={{ value: "Bottles sold", position: "insideBottom", offset: -2, fill: "#0f172a", fontSize: 12 }}
                       />
                       <YAxis
                         tickFormatter={(value) => `£${Math.round(value / 1000)}k`}
-                        tick={{ fill: "#64748b", fontSize: 12 }}
+                        tick={{ fill: "#0f172a", fontSize: 13 }}
                         tickLine={false}
-                        axisLine={{ stroke: "#cbd5e1" }}
+                        axisLine={{ stroke: "#64748b" }}
                         width={58}
                       />
                       <Tooltip
@@ -378,19 +406,19 @@ export default function BreakEvenFormulaPage() {
                         y={fixedCosts}
                         stroke="#0891b2"
                         strokeDasharray="5 5"
-                        label={{ value: "Fixed costs", fill: "#0891b2", position: "insideTopRight", fontSize: 12 }}
+                        label={{ value: "Fixed costs", fill: "#075985", position: "insideTopRight", fontSize: 12, fontWeight: 600 }}
                       />
                       <ReferenceLine
                         x={calculations.breakEvenUnits}
                         stroke="#f59e0b"
                         strokeDasharray="5 5"
-                        label={<RightSideReferenceLabel value="Break-even" fill="#b45309" y={46} />}
+                        label={<RightSideReferenceLabel value="Break-even" fill="#92400e" y={46} />}
                       />
                       <ReferenceLine
                         x={forecastSales}
                         stroke="#334155"
                         strokeDasharray="4 4"
-                        label={{ value: "Forecast", fill: "#334155", position: "insideTopLeft", fontSize: 12 }}
+                        label={{ value: "Forecast", fill: "#111827", position: "insideTopLeft", fontSize: 12, fontWeight: 600 }}
                       />
                       <Line type="monotone" dataKey="revenue" name="Revenue" stroke="#0f62fe" strokeWidth={3} dot={false} />
                       <Line type="monotone" dataKey="totalCosts" name="Total costs" stroke="#334155" strokeWidth={3} dot={false} />
@@ -398,45 +426,45 @@ export default function BreakEvenFormulaPage() {
                   </ResponsiveContainer>
                 </div>
 
-                <div className="sr-only" aria-live="polite">
+                <div className="sr-only">
                   The graph table below gives the key points for screen reader users. At zero bottles, revenue is {formatWholeCurrency(0)} and total costs are {formatWholeCurrency(fixedCosts)}. At the break-even point of {formatNumber(calculations.breakEvenUnits)} bottles, revenue and total costs are both about {formatWholeCurrency(calculations.breakEvenRevenue)}. At forecast sales of {formatNumber(forecastSales)} bottles, revenue is {formatWholeCurrency(forecastSales * sellingPrice)} and total costs are {formatWholeCurrency(fixedCosts + forecastSales * variableCost)}.
                 </div>
 
                 <div className="mt-4 overflow-x-auto">
                   <table className="min-w-full border-separate border-spacing-y-2">
-                    <caption className="sr-only">
-                      Worked example showing the main break-even figures.
+                    <caption className="text-left text-[0.9rem] font-semibold text-slate-700">
+                      Worked example
                     </caption>
                     <thead>
-                      <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-500">
-                        <th className="px-3 py-1 font-semibold">Step</th>
-                        <th className="px-3 py-1 font-semibold">Calculation</th>
-                        <th className="px-3 py-1 font-semibold">Answer</th>
+                      <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-700">
+                        <th scope="col" className="px-3 py-1 font-semibold">Step</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Calculation</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Answer</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
-                        <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">1</td>
+                        <th scope="row" className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">1</th>
                         <td className="px-3 py-2 text-[0.92rem] text-slate-700">
-                          {formatCurrency(sellingPrice)} - {formatCurrency(variableCost)}
+                          {formatCurrency(sellingPrice)} − {formatCurrency(variableCost)}
                         </td>
                         <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">
                           Contribution per unit = {formatCurrency(calculations.contributionPerUnit)}
                         </td>
                       </tr>
                       <tr className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
-                        <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">2</td>
+                        <th scope="row" className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">2</th>
                         <td className="px-3 py-2 text-[0.92rem] text-slate-700">
-                          {formatWholeCurrency(fixedCosts)} / {formatCurrency(calculations.contributionPerUnit)}
+                          {formatWholeCurrency(fixedCosts)} ÷ {formatCurrency(calculations.contributionPerUnit)}
                         </td>
                         <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">
                           Break-even point = {formatNumber(calculations.breakEvenUnits)} bottles
                         </td>
                       </tr>
                       <tr className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
-                        <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">3</td>
+                        <th scope="row" className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">3</th>
                         <td className="px-3 py-2 text-[0.92rem] text-slate-700">
-                          {formatNumber(forecastSales)} - {formatNumber(calculations.breakEvenUnits)}
+                          {formatNumber(forecastSales)} − {formatNumber(calculations.breakEvenUnits)}
                         </td>
                         <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">
                           Margin of safety = {formatNumber(calculations.marginOfSafetyUnits)} bottles
@@ -452,21 +480,21 @@ export default function BreakEvenFormulaPage() {
                       Graph key points table
                     </caption>
                     <thead>
-                      <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-500">
-                        <th className="px-3 py-1 font-semibold">Point</th>
-                        <th className="px-3 py-1 font-semibold">Output</th>
-                        <th className="px-3 py-1 font-semibold">Revenue</th>
-                        <th className="px-3 py-1 font-semibold">Total costs</th>
-                        <th className="px-3 py-1 font-semibold">Profit or loss</th>
-                        <th className="px-3 py-1 font-semibold">Position</th>
+                      <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-700">
+                        <th scope="col" className="px-3 py-1 font-semibold">Point</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Output</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Revenue</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Total costs</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Profit or loss</th>
+                        <th scope="col" className="px-3 py-1 font-semibold">Position</th>
                       </tr>
                     </thead>
                     <tbody>
                       {graphKeyPoints.map((point) => (
                         <tr key={point.label} className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
-                          <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">
+                          <th scope="row" className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">
                             {point.label}
-                          </td>
+                          </th>
                           <td className="px-3 py-2 text-[0.92rem] text-slate-700">
                             {formatNumber(point.units)} bottles
                           </td>
@@ -477,7 +505,7 @@ export default function BreakEvenFormulaPage() {
                             {formatWholeCurrency(point.totalCosts)}
                           </td>
                           <td className="px-3 py-2 text-[0.92rem] text-slate-700">
-                            {formatSignedCurrency(point.profit)}
+                            {formatApproximateSignedCurrency(point.profit)}
                           </td>
                           <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">
                             {point.outcome}
