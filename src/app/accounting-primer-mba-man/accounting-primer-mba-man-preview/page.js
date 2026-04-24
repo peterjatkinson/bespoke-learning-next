@@ -124,8 +124,57 @@ const htmlContent = String.raw`
       </div>
     </div>
 
+    <div class="nav-section">
+      <div class="nav-module active-module">
+        Session 5: Management accounting: Part 1
+      </div>
+      <div class="nav-item" onclick="showPage('s5-1')" id="nav-s5-1">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.1 Introduction
+      </div>
+      <div class="nav-item" onclick="showPage('s5-2')" id="nav-s5-2">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.2 Why do we need management accounting?
+      </div>
+      <div class="nav-item" onclick="showPage('s5-3')" id="nav-s5-3">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.3 Cost classification: Direct vs indirect
+      </div>
+      <div class="nav-item" onclick="showPage('s5-4')" id="nav-s5-4">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.4 Cost classification: Fixed vs variable
+      </div>
+      <div class="nav-item" onclick="showPage('s5-5')" id="nav-s5-5">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.5 Short-term decision making
+      </div>
+      <div class="nav-item" onclick="showPage('s5-5-1')" id="nav-s5-5-1" style="padding-left: 2.8rem;">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.5.1 The special order
+      </div>
+      <div class="nav-item" onclick="showPage('s5-5-2')" id="nav-s5-5-2" style="padding-left: 2.8rem;">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.5.2 The make or buy decision
+      </div>
+      <div class="nav-item" onclick="showPage('s5-5-3')" id="nav-s5-5-3" style="padding-left: 2.8rem;">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.5.3 Continue or discontinue?
+      </div>
+      <div class="nav-item" onclick="showPage('s5-5-4')" id="nav-s5-5-4" style="padding-left: 2.8rem;">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.5.4 Limiting factors
+      </div>
+      <div class="nav-item" onclick="showPage('s5-6')" id="nav-s5-6">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.6 The break-even formula
+      </div>
+      <div class="nav-item" onclick="showPage('s5-7')" id="nav-s5-7">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        5.7 Session review
+      </div>
+    </div>
+
     <div class="nav-section" style="opacity:0.4">
-      <div class="nav-module nav-locked">Session 5: Management accounting: Part 1</div>
       <div class="nav-module nav-locked">Session 6: Management accounting: Part 2</div>
     </div>
   </nav>
@@ -1828,7 +1877,664 @@ const htmlContent = String.raw`
 
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s4-4')">← 4.4 Examining a cash flow statement</button>
-        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 5 coming soon →</button>
+        <button class="nav-btn" onclick="showPage('s5-1')">Next: 5.1 Introduction →</button>
+      </div>
+    </div>
+
+    <!-- SESSION 5 -->
+
+    <div class="page" id="page-s5-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.1 Introduction</h1>
+      </div>
+      <div class="page-body">
+        <p>Welcome to session five! In this session, we shift focus from financial reporting to management accounting. This branch of accounting is concerned less with communicating to the outside world, and more with helping managers make better decisions from within the business</p>
+        <p>Now watch the following presentation where your AI facilitator, Laila, will explain what you can expect from this session.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Session introduction</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Please take the time to review the learning outcomes for this session below.</p>
+
+        <div class="lo-box">
+          <h2>Learning outcomes</h2>
+          <h5>By the end of this session, you will be able to:</h5>
+          <ul>
+            <li>Explain what management accounting is and how it differs from financial accounting</li>
+            <li>Classify costs by allocation and by behaviour</li>
+            <li>Calculate contribution margin and use it to determine a break-even point</li>
+            <li>Apply management accounting principles to short-term decision-making</li>
+          </ul>
+        </div>
+
+        <p>In the next activity, we'll consider why management accounting is important in the first place.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s4-5')">← 4.5 Session review</button>
+        <button class="nav-btn primary" onclick="showPage('s5-2')">Next: 5.2 Why do we need management accounting? →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-2">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.2 Why do we need management accounting?</h1>
+      </div>
+      <div class="page-body">
+        <p>As you have learned, financial accounting helps stakeholders of the business understand how it is performing. But do the kinds of statements you have examined so far provide enough information for the people running the business from within? In the next presentation, Laila explores what a standard income statement cannot tell you, and what becomes visible when you look at the same numbers in more detail.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Why do we need management accounting?</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>In the next activity, we start looking at some of the ways in which costs are classified.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-1')">← 5.1 Introduction</button>
+        <button class="nav-btn primary" onclick="showPage('s5-3')">Next: 5.3 Cost classification: Direct vs indirect →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-3">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.3 Cost classification by allocation: Direct vs indirect</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>To manage a business effectively, you first need to understand its costs and how to classify them. In the next presentation, you'll learn about a key distinction in management accounting: whether a cost can be traced to a specific product or service (a direct cost), or whether it is shared across the business more broadly (an indirect cost).</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Cost classification by allocation: Direct vs Indirect</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Now check your understanding of this distinction by completing the exercise below.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Sort the following costs into the correct category based on what you have just learned.</p>
+          </div>
+          <div class="categorize-grid">
+            <div class="categorize-item" id="cat5-rawmat">
+              <span class="cat-label">Raw materials</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-rawmat')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-rawmat')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-labour">
+              <span class="cat-label">Direct labour wages</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-labour')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-labour')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-components">
+              <span class="cat-label">Component parts</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-components')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-components')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-packaging">
+              <span class="cat-label">Packaging per unit</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-packaging')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-packaging')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-fabric">
+              <span class="cat-label">Fabric for a garment</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-fabric')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-fabric')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-rent">
+              <span class="cat-label">Factory rent</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-rent')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-rent')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-electricity">
+              <span class="cat-label">Building electricity</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-electricity')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-electricity')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-supervisor">
+              <span class="cat-label">Supervisor's salary</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-supervisor')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-supervisor')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-depreciation">
+              <span class="cat-label">Machinery depreciation</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-depreciation')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-depreciation')">Indirect costs</div>
+              </div>
+            </div>
+            <div class="categorize-item" id="cat5-admin">
+              <span class="cat-label">Office administration</span>
+              <div class="cat-options">
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-admin')">Direct costs</div>
+                <div class="cat-opt" onclick="selectCat(this, 'cat5-admin')">Indirect costs</div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-box" id="fb-5-3-sort">
+            <div class="fb-label">✓ Answers</div>
+            <div class="fb-content">
+              <p><strong>Direct costs:</strong> Raw materials, Direct labour wages, Component parts, Packaging per unit, Fabric for a garment</p>
+              <p><strong>Indirect costs:</strong> Factory rent, Building electricity, Supervisor's salary, Machinery depreciation, Office administration</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-5-3-sort', this)">Submit &amp; see answers</button>
+      </div>
+
+      <div class="page-body" style="margin-top:1.5rem">
+        <p>Direct costs are made up of three distinct components. In the next presentation, let's consider each one in turn.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">The three components of direct cost</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>It is worth noting that the line between direct and indirect is not always as clean in practice as it appears in a textbook. A cost that can be measured and traced in one business may be impossible to trace in another. In the next activity, we turn to a second important way of classifying costs: by how they behave.</p>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-2')">← 5.2 Why do we need management accounting?</button>
+        <button class="nav-btn primary" onclick="showPage('s5-4')">Next: 5.4 Cost classification: Fixed vs variable →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-4">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.4 Cost classification by behaviour: Fixed vs variable</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>You have seen how costs can be classified by whether they can be traced to a specific product. There is a second equally important way to think about costs: how they behave as the volume of activity changes. In the next presentation, let's examine the distinction between fixed and variable costs using the same bakery context from the previous activity.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Cost classification by behaviour: Fixed vs Variable</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>The presentation introduced the core distinction, but the most important implications only become clear when you see the numbers move. Use the interactive tool below to explore how the bakery's costs respond to changes in output and to changes in the cost structure itself.</p>
+        <p>Use the three sliders in the tool to explore the questions set out further below. (<em>Note:</em> the cost figures in the simulator are designed to illustrate how fixed and variable costs behave, not to reflect a realistic bakery operation.)</p>
+
+        <div class="video-placeholder" style="aspect-ratio:unset;height:200px;padding:1.5rem 0">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+            <div style="margin-bottom:0.75rem;font-size:0.9rem">Fixed versus variable costs interactive tool</div>
+            <a href="https://bespoke-learning-next.vercel.app/accounting-primer-mba-man/fixed-variable-costs" target="_blank" style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;margin-bottom:0.75rem">Open tool in new tab ↗</a>
+            <div class="video-label-pending">This tool will be embedded directly in Canvas — the button above opens it in a new tab for now.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <ol>
+              <li>Keep the variable cost and fixed costs at their default values. Move the output slider from 400 to 1,500 loaves. Total fixed costs don't change, so why does the fixed cost per loaf fall?</li>
+              <li>With output set to 400 loaves, drag the variable cost per loaf slider up to £1.40. What happens to the total fixed cost figure? What does this tell you about the relationship between fixed and variable costs?</li>
+              <li>What is the total cost at 400 loaves? Now increase output to 800 loaves. How much has total cost risen, and why does it rise by less than double?</li>
+            </ol>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answers here…" rows="6"></textarea>
+          <div class="feedback-box" id="fb-5-4">
+            <div class="fb-label">✓ Model answers</div>
+            <div class="fb-content">
+              <p><strong>1.</strong> Average fixed cost per loaf falls because you're spreading the same total fixed cost over more loaves. In other words, each loaf carries a smaller share of that burden as more loaves are produced.</p>
+              <p><strong>2.</strong> When you drag the variable cost per loaf up to £1.40 (with output at 400 loaves), the total fixed cost figure doesn't change at all. No matter how high or low you set the variable cost, fixed costs remain completely unaffected.</p>
+              <p><strong>3.</strong> The total costs at 400 loaves are £10,400 and they shift to 10,800 at 800 loaves. Note that fixed costs don't change when output increases, only the variable part doubles.</p>
+              <p>In the next activity, you'll start to apply your growing understanding of costs to some short-term decision making scenarios.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-5-4', this)">Submit &amp; see answers</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-3')">← 5.3 Cost classification: Direct vs indirect</button>
+        <button class="nav-btn primary" onclick="showPage('s5-5')">Next: 5.5 Short-term decision making →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-5">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.5 Short-term decision making</h1>
+      </div>
+      <div class="page-body">
+        <p>You now have the tools to classify costs by how they behave. In the next presentation, Laila introduces how this understanding feeds directly into one of the most practical areas of management accounting: making decisions in the short term.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Short-term decision-making</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>The presentation outlined four types of short-term decision a business commonly faces. In the activities that follow, you will work through a scenario illustrating each one. In the next activity, you will tackle the first of these: the special order decision.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-4')">← 5.4 Cost classification: Fixed vs variable</button>
+        <button class="nav-btn primary" onclick="showPage('s5-5-1')">Next: 5.5.1 The special order →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-5-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.5.1 Short-term decisions: The special order</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>A hotel chain wants 5,000 branded notebooks at £14 each. Your normal price is £20. Your variable cost is £12.</p>
+        <p>Do you accept?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>What would you do? Submit your reflections below, then read the feedback afterwards.</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-5-1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>Your instinct might be to say no. Perhaps £14 feels too cheap or too damaging to the brand. But if the business has spare capacity, the relevant question is not whether £14 covers all costs. It is whether £14 covers the additional costs of fulfilling the order. It does, by £2 per unit. That is £10,000 of contribution that would not otherwise exist:</p>
+              <table style="margin:0.5rem 0 0.75rem">
+                <tbody>
+                  <tr><td>Special order price</td><td style="padding-left:2rem">£14</td></tr>
+                  <tr><td>Variable cost</td><td style="padding-left:2rem">(£12)</td></tr>
+                  <tr><td>Contribution per unit</td><td style="padding-left:2rem">£2</td></tr>
+                  <tr><td>Order size</td><td style="padding-left:2rem">5,000 units</td></tr>
+                  <tr><td><strong>Total contribution</strong></td><td style="padding-left:2rem"><strong>£10,000</strong></td></tr>
+                </tbody>
+              </table>
+              <p>If spare capacity exists, then accept.</p>
+              <p>In the next activity, you will work through the make or buy decision.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-5-5-1', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-5')">← 5.5 Short-term decision making</button>
+        <button class="nav-btn primary" onclick="showPage('s5-5-2')">Next: 5.5.2 The make or buy decision →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-5-2">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.5.2 The make or buy decision</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>Meet Richardson's, a family-run bakery based in Yorkshire, now in its third generation. Richardson's produces a range of artisan preserves: jams, marmalades and chutneys that are sold alongside its baked goods in the shop and supplied to a handful of local delicatessens.</p>
+        <p>To make its preserves, Richardson's currently produces its own glass jars in a small on-site facility using a semi-automated moulding machine the family bought outright several years ago. A regional packaging supplier has approached them offering to supply equivalent jars for £1.20 per unit. Richardson's produces 30,000 jars per year.</p>
+        <p>The family's first instinct is to run the numbers on what it currently costs to make each jar:</p>
+        <table style="margin-bottom:1.5rem">
+          <thead><tr><th>Cost element</th><th>Cost per unit</th></tr></thead>
+          <tbody>
+            <tr><td>Raw materials (sand, soda ash, cullet)</td><td>£0.42</td></tr>
+            <tr><td>Direct labour (part-time operative)</td><td>£0.28</td></tr>
+            <tr><td>Variable energy costs</td><td>£0.15</td></tr>
+            <tr><td>Allocated fixed overhead (depreciation, space, insurance)</td><td>£0.55</td></tr>
+            <tr><td><strong>Total cost per unit</strong></td><td><strong>£1.40</strong></td></tr>
+          </tbody>
+        </table>
+        <p>The family's initial reaction is to outsource it. It seems this would save £0.20 per jar and free up the operative for other work. That is £6,000 saved per year. It seems obvious. But is it correct?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>Is the family's initial reaction right? Share your reflections below, then read the feedback.</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-5-2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>The correct approach compares the supplier price to the avoidable costs of making it internally, the costs that genuinely disappear if you stop making it. Fixed costs that remain regardless, like the factory space, the supervisory salaries and the equipment already owned, are irrelevant to the decision.</p>
+              <p>Let's look at that £0.55 fixed overhead allocation. It includes depreciation on the moulding machine, which the family already owns outright and cannot sell for meaningful value. It also includes a share of the building's insurance and rates, costs that continue whether the machine runs or not.</p>
+              <p>None of these costs go away if Richardson's stops making jars. They are not avoidable. The relevant comparison is:</p>
+              <table>
+                <thead><tr><th>Avoidable costs</th><th>Cost per unit</th></tr></thead>
+                <tbody>
+                  <tr><td>Raw materials (sand, soda ash, cullet)</td><td>£0.42</td></tr>
+                  <tr><td>Direct labour (part-time operative)</td><td>£0.28</td></tr>
+                  <tr><td>Variable energy costs</td><td>£0.15</td></tr>
+                  <tr><td><strong>Total cost per unit</strong></td><td><strong>£0.85</strong></td></tr>
+                </tbody>
+              </table>
+              <p>The avoidable cost of making jars in-house is £0.85. The supplier wants £1.20. Richardson's should keep making its own jars: it is £0.35 per unit cheaper to do so, saving £10,500 per year compared to outsourcing.</p>
+              <p>In the next activity, you will work through a continue or discontinue decision.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-5-5-2', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-5-1')">← 5.5.1 The special order</button>
+        <button class="nav-btn primary" onclick="showPage('s5-5-3')">Next: 5.5.3 Continue or discontinue? →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-5-3">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.5.3 Continue or discontinue?</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>Pinnacle Consumer Goods is a listed consumer products company with three divisions:</p>
+        <ol>
+          <li>Personal Care</li>
+          <li>Home Cleaning</li>
+          <li>Nutritional Supplements.</li>
+        </ol>
+        <p>The Supplements division was acquired five years ago as part of a strategic push into health and wellness. It has never quite delivered on its promise, and at the annual strategy review the board is under pressure from shareholders to improve returns.</p>
+        <p>The divisional profit and loss tells an uncomfortable story:</p>
+        <table style="margin-bottom:1.5rem">
+          <thead>
+            <tr><th></th><th>Personal care</th><th>Home cleaning</th><th>Nutritional supplements</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Revenue</td><td>£42m</td><td>£38m</td><td>£11m</td><td>£91m</td></tr>
+            <tr><td>Variable costs</td><td>(£18m)</td><td>(£16m)</td><td>(£8m)</td><td>(£42m)</td></tr>
+            <tr><td>Contribution</td><td>£24m</td><td>£22m</td><td>£3m</td><td>£49m</td></tr>
+            <tr><td>Allocated fixed costs</td><td>(£12m)</td><td>(£12m)</td><td>(£12m)</td><td>(£36m)</td></tr>
+            <tr><td><strong>Net profit / (loss)</strong></td><td><strong>£12m</strong></td><td><strong>£10m</strong></td><td><strong>(£9m)</strong></td><td><strong>£13m</strong></td></tr>
+          </tbody>
+        </table>
+        <p><em>Note:</em> The allocated fixed costs represent Pinnacle's shared corporate overhead. These are costs like the group head office, technology infrastructure and central functions, which are divided equally across the three divisions.</p>
+        <p>The Nutritional Supplements division is loss-making to the tune of £9m. The board has been presented with a recommendation from a strategy consultancy to close it, reallocate resources to the two performing divisions, and return the freed-up capital to shareholders.</p>
+        <p>Should the business divest from the division?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>Share your reflections below, then look at the feedback.</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-5-3">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>Before the board votes, the CFO asks a simple question. What costs actually disappear if Nutritional Supplements is closed?</p>
+              <p>The variable costs of £8m disappear (like raw material inputs, contract manufacturing fees, packaging and distribution costs specific to the supplements range). Those are genuinely avoidable. But the £12m of fixed costs allocated to Supplements represents Pinnacle's corporate overhead, and none of it goes away when supplements is closed. Every pound of it is reallocated across Personal Care and Home Cleaning.</p>
+              <p>Here is what the picture looks like after closing supplements:</p>
+              <table>
+                <thead>
+                  <tr><th></th><th>Personal care</th><th>Home cleaning</th><th>Total</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Revenue</td><td>£42m</td><td>£38m</td><td>£80m</td></tr>
+                  <tr><td>Variable costs</td><td>(£18m)</td><td>(£16m)</td><td>(£34m)</td></tr>
+                  <tr><td>Contribution</td><td>£24m</td><td>£22m</td><td>£46m</td></tr>
+                  <tr><td>Allocated fixed costs</td><td>(£18m)</td><td>(£18m)</td><td>(£36m)</td></tr>
+                  <tr><td><strong>Net profit / (loss)</strong></td><td><strong>£6m</strong></td><td><strong>£4m</strong></td><td><strong>£10m</strong></td></tr>
+                </tbody>
+              </table>
+              <p>Total group profit falls from £13m to £10m. The board could have just made the business £3m worse off, precisely equal to the contribution the supplements division was generating before closure (if the allocated fixed costs were taken off).</p>
+              <p>The £9m loss that looked so damaging was almost entirely a function of £12m of shared corporate overhead being allocated to a division too small to absorb it comfortably. Strip out that allocation, and supplements was contributing £3m towards the group's fixed cost base.</p>
+              <p>In the next activity, you will work through the limiting factor decision.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-5-5-3', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-5-2')">← 5.5.2 The make or buy decision</button>
+        <button class="nav-btn primary" onclick="showPage('s5-5-4')">Next: 5.5.4 Limiting factors →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-5-4">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.5.4 Limiting factors</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>Lumière is a premium skincare brand which is sold through high-end department stores and online. The business produces three product lines: a daily moisturiser, a vitamin C serum and an overnight repair mask.</p>
+        <p>All three are manufactured at Lumière's production facility. At the facility, a specialist blending and filling line is used to mix and bottle every product. This represents the single constrained resource in the operation.</p>
+        <p>The blending line can run for a maximum of 6,000 hours per quarter. Consumer demand, particularly through the online channel, consistently outstrips what the line can produce. The head of finance has been asked to determine the optimal production mix for the coming quarter to maximise contribution.</p>
+        <table style="margin-bottom:1.5rem">
+          <thead>
+            <tr><th></th><th>Moisturiser</th><th>Vitamin C serum</th><th>Overnight mask</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Selling price per unit</td><td>£48</td><td>£65</td><td>£54</td></tr>
+            <tr><td>Variable cost per unit</td><td>£18</td><td>£22</td><td>£16</td></tr>
+            <tr><td><strong>Contribution per unit</strong></td><td><strong>£30</strong></td><td><strong>£43</strong></td><td><strong>£38</strong></td></tr>
+            <tr><td>Blending line hours per unit</td><td>0.5 hours</td><td>1.2 hours</td><td>0.8 hours</td></tr>
+            <tr><td>Maximum quarterly demand</td><td>8,000 units</td><td>4,000 units</td><td>5,000 units</td></tr>
+          </tbody>
+        </table>
+        <p>Contribution per unit is simply the selling price minus the variable cost per unit. This is the amount each sale contributes towards covering fixed costs and, once those are covered, generating profit. You will explore this concept in more depth in the next activity on break-even analysis, so this will prepare you for thinking about that concept further. Also bear in mind that when a scarce resource exists, the correct approach is not to rank products by contribution per unit, but by contribution per unit of the scarce resource (contribution margin per limiting factor), which in this case is the contribution per blending line hour.</p>
+        <p>The marketing director's instinct is to prioritise the vitamin C serum, which has the highest contribution per unit at £43 and is the brand's most talked-about product. Are they right? You might want to rewatch the very end of the presentation on Short-term decision making for a hint.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>Share your reflections below, then read the feedback.</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-5-4">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>Ranking by contribution margin per blending line hour changes the view entirely:</p>
+              <table>
+                <thead>
+                  <tr><th></th><th>Moisturiser</th><th>Vitamin C serum</th><th>Overnight mask</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Contribution per unit</strong></td><td>£30</td><td>£43</td><td>£38</td></tr>
+                  <tr><td><strong>Blending line hours per unit</strong></td><td>0.5 hours</td><td>1.2 hours</td><td>0.8 hours</td></tr>
+                  <tr><td><strong>Contribution per blending line hour</strong></td><td>£60</td><td>£35.83</td><td>£47.50</td></tr>
+                  <tr><td><strong>Ranking</strong></td><td>1</td><td>3</td><td>2</td></tr>
+                </tbody>
+              </table>
+              <p>The moisturiser (the cheapest) is actually the most valuable use of the blending line's time. It generates £60 of contribution for every hour the line runs, far ahead of the serum that everyone assumed should take priority.</p>
+              <p>The serum, despite its premium positioning and high per-unit margin, drops to last place because it is so demanding of the one resource the business cannot expand in the short term.</p>
+              <p>With the correct ranking established, Lumière should allocate blending line hours in order of priority, subject to maximum quarterly demand. The company will not be able to produce any units of the Vitamin C serum as the line hours are fully consumed by the moisturiser and overnight mask.</p>
+              <table>
+                <thead>
+                  <tr><th>Priority</th><th>Product</th><th>Line hours allocated</th><th>Units produced</th><th>Contribution</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1st</td><td>Moisturiser</td><td>4,000</td><td>8,000</td><td>£240,000</td></tr>
+                  <tr><td>2nd</td><td>Overnight Mask</td><td>2,000</td><td>2,500</td><td>£95,000</td></tr>
+                  <tr><td><strong>Total</strong></td><td></td><td>6,000</td><td></td><td><strong>£335,000</strong></td></tr>
+                </tbody>
+              </table>
+              <p>That brings us to the end of these scenarios. In the next activity, we turn to break-even analysis, which builds directly on the cost behaviour and contribution thinking you have developed in this session.</p>
+            </div>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="toggleFeedback('fb-5-5-4', this)">Submit &amp; see feedback</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-5-3')">← 5.5.3 Continue or discontinue?</button>
+        <button class="nav-btn primary" onclick="showPage('s5-6')">Next: 5.6 The break-even formula →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-6">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.6 The break-even formula</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>The short-term decision activities you have just worked through depended on understanding the distinction between fixed and variable costs. That same distinction is important when conducting a break-even analysis, one of the most practical tools in management accounting. In the next presentation, you'll learn more about the contribution margin and how it is used to calculate the point at which a business covers all its costs and begins to generate profit.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">The break-even formula</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>The interactive tool below is set up using the Innocent Drinks example you've just heard about. At the default settings you should recognise the numbers from the presentation. Try adjusting the four sliders — fixed costs, selling price, variable cost per bottle and forecast sales — to see how each one shifts the break-even point and the margin of safety. Then complete the exercise that follows.</p>
+
+        <div class="video-placeholder" style="aspect-ratio:unset;height:200px;padding:1.5rem 0">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+            <div style="margin-bottom:0.75rem;font-size:0.9rem">Break-even calculator tool</div>
+            <a href="https://bespoke-learning-next.vercel.app/accounting-primer-mba-man/break-even-formula" target="_blank" style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;margin-bottom:0.75rem">Open tool in new tab ↗</a>
+            <div class="video-label-pending">This tool will be embedded directly in Canvas — the button above opens it in a new tab for now.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body" style="border-top:3px solid var(--gold)">
+        <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
+          <strong>Provisional</strong> — Questions and feedback still to be added.
+        </div>
+        <p style="color:var(--ink-soft);font-size:0.93rem">This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-5-4')">← 5.5.4 Limiting factors</button>
+        <button class="nav-btn primary" onclick="showPage('s5-7')">Next: 5.7 Session review →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s5-7">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
+        <h1 class="page-title">5.7 Session review</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>We have now reached the end of this session of this primer.</p>
+        <p>In this session, you explored how management accounting equips the people running a business with useful cost analysis and decision-making tools.</p>
+        <p>Let's now return to the learning outcomes outlined in the session introduction. To what extent do you feel you have achieved each of this session's learning outcomes?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="self-review">
+          <div class="self-review-header">
+            <div>Learning outcome</div>
+            <div style="text-align:center">Confident</div>
+            <div style="text-align:center">Need to review</div>
+            <div style="text-align:center">Need support</div>
+          </div>
+          <div class="self-review-row">
+            <div>Explain what management accounting is and how it differs from financial accounting</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Classify costs by allocation and by behaviour</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Calculate contribution margin and use it to determine a break-even point</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Apply management accounting principles to short-term decision-making</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+        </div>
+
+        <div class="q-block" style="margin-top:1.5rem">
+          <div class="q-number">Timing feedback</div>
+          <div class="q-text"><p>Was the estimated timing accurate?</p></div>
+          <div class="mcq-options" id="mcq-s5-timing">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s5-timing')"><div class="mcq-radio"></div>It took less time to complete the tasks and exercises than estimated</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s5-timing')"><div class="mcq-radio"></div>It took about the same amount of time to complete the tasks and exercises as estimated</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s5-timing')"><div class="mcq-radio"></div>It took more time to complete the tasks and exercises than estimated</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-number">Open feedback</div>
+          <div class="q-text"><p>Please provide feedback on the content covered.</p></div>
+          <textarea class="q-textarea" placeholder="Your thoughts on this session…" rows="4"></textarea>
+        </div>
+
+        <div class="feedback-box" id="fb-s5-review" style="display:none">
+          <div class="fb-label">✓ Submitted</div>
+          <div class="fb-content">
+            <p>Congratulations on finishing session five! In the next session, we consider some further concepts and calculations that are relevant to management accounting.</p>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="toggleFeedback('fb-s5-review', this)">Submit session review</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-6')">← 5.6 The break-even formula</button>
+        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 6 coming soon →</button>
       </div>
     </div>
   </div>
@@ -1859,6 +2565,17 @@ const pages = {
   "s4-3": "4.3 Is all cash equal?",
   "s4-4": "4.4 Examining a cash flow statement",
   "s4-5": "4.5 Session review",
+  "s5-1": "5.1 Introduction",
+  "s5-2": "5.2 Why do we need management accounting?",
+  "s5-3": "5.3 Cost classification: Direct vs indirect",
+  "s5-4": "5.4 Cost classification: Fixed vs variable",
+  "s5-5": "5.5 Short-term decision making",
+  "s5-5-1": "5.5.1 The special order",
+  "s5-5-2": "5.5.2 The make or buy decision",
+  "s5-5-3": "5.5.3 Continue or discontinue?",
+  "s5-5-4": "5.5.4 Limiting factors",
+  "s5-6": "5.6 The break-even formula",
+  "s5-7": "5.7 Session review",
 };
 
 export default function AccountingPrimerSession1Page() {
@@ -2306,25 +3023,29 @@ export default function AccountingPrimerSession1Page() {
         .accounting-primer-session1 .q-text ol { margin-left: 1.5rem; margin-bottom: 0.6rem; }
         .accounting-primer-session1 .q-text li { margin-bottom: 0.3rem; }
         .accounting-primer-session1 .q-text table,
-        .accounting-primer-session1 .fb-content table {
+        .accounting-primer-session1 .fb-content table,
+        .accounting-primer-session1 .page-body table {
           width: 100%;
           border-collapse: collapse;
           font-size: 0.85rem;
           margin: 0.75rem 0;
         }
-        .accounting-primer-session1 .q-text th {
+        .accounting-primer-session1 .q-text th,
+        .accounting-primer-session1 .page-body th {
           background: var(--accent);
           color: #fff;
           padding: 0.5rem 0.75rem;
           text-align: left;
           font-weight: 600;
         }
-        .accounting-primer-session1 .q-text td {
+        .accounting-primer-session1 .q-text td,
+        .accounting-primer-session1 .page-body td {
           padding: 0.5rem 0.75rem;
           border: 1px solid var(--border);
           vertical-align: top;
         }
-        .accounting-primer-session1 .q-text tr:nth-child(even) td { background: var(--bg); }
+        .accounting-primer-session1 .q-text tr:nth-child(even) td,
+        .accounting-primer-session1 .page-body tr:nth-child(even) td { background: var(--bg); }
         .accounting-primer-session1 .q-textarea {
           width: 100%;
           border: 1px solid var(--border);
