@@ -575,6 +575,7 @@ const htmlContent = String.raw`
           </div>
         </div>
 
+        <p>You may have noticed in the presentation that equity is also an important part of the balance sheet. We'll explore that further later in this session.</p>
         <p>In the next activity, you'll return to the annual report you looked at earlier to take a closer look at its balance sheet.</p>
       </div>
       <div class="page-nav">
