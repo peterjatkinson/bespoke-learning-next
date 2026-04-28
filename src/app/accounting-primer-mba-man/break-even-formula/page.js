@@ -79,7 +79,7 @@ function ResultCard({ label, value, helper, tone }) {
   };
 
   return (
-    <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] px-4 py-[15px] shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
+    <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] px-4 py-[15px] shadow-[0_10px_24px_rgba(15,23,42,0.05)] max-[480px]:rounded-none max-[480px]:border-x-0">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="m-0 text-[0.98rem] font-bold text-slate-900">{label}</p>
@@ -97,7 +97,7 @@ function InputSlider({ id, label, value, onChange, min, max, step, displayValue,
   const percentage = ((value - min) / (max - min)) * 100;
 
   return (
-    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px] max-[480px]:rounded-none max-[480px]:border-x-0">
       <div className="flex items-center justify-between gap-4">
         <label htmlFor={id} className="text-[0.94rem] font-semibold text-slate-700">
           {label}
@@ -277,8 +277,8 @@ export default function BreakEvenFormulaPage() {
   return (
     <main className='min-h-full bg-white font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
       <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1500px]:max-w-none max-[1500px]:px-0 max-[1500px]:pb-0 max-[1500px]:pt-0 max-sm:pb-0">
-        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
-          <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
+          <div className="mb-[18px] flex flex-col gap-4 max-[480px]:px-[18px] sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">
                 Break-even formula
@@ -287,7 +287,7 @@ export default function BreakEvenFormulaPage() {
                 Use contribution margin to see when total revenue and total costs are exactly equal, then test how far forecast sales sit above or below that break-even point.
               </p>
             </div>
-            <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left sm:text-right">
+            <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left max-[480px]:-mx-[18px] max-[480px]:rounded-none max-[480px]:border-x-0 sm:text-right">
               <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">
                 Innocent example
               </span>
@@ -355,14 +355,14 @@ export default function BreakEvenFormulaPage() {
           </div>
         </section>
 
-        <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
+        <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
           {!calculations.validContribution ? (
-            <div className="rounded-[20px] border border-[rgba(245,158,11,0.24)] bg-[rgba(255,247,237,0.92)] px-5 py-4 text-[0.95rem] leading-[1.6] text-amber-900">
+            <div className="rounded-[20px] border border-[rgba(245,158,11,0.24)] bg-[rgba(255,247,237,0.92)] px-5 py-4 text-[0.95rem] leading-[1.6] text-amber-900 max-[480px]:rounded-none max-[480px]:border-x-0">
               The selling price must be higher than the variable cost per bottle. Otherwise each sale fails to contribute towards fixed costs, so a break-even point cannot be calculated.
             </div>
           ) : (
             <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-              <div className="min-w-0 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
+              <div className="min-w-0 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4 max-[480px]:rounded-none max-[480px]:border-x-0">
                 <div className="mb-3">
                   <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
                     Revenue and total cost at different output levels

@@ -75,10 +75,10 @@ function BehaviourRow({
   formatter = formatWholePounds,
 }) {
   const toneClasses = {
-    teal: "bg-[#eefaf8] text-cyan-700",
-    blue: "bg-[#eef4ff] text-blue-700",
-    amber: "bg-[#fff5e8] text-orange-700",
-    slate: "bg-slate-100 text-slate-700",
+    teal: "bg-[#eefaf8] text-black",
+    blue: "bg-[#eef4ff] text-black",
+    amber: "bg-[#fff5e8] text-black",
+    slate: "bg-slate-100 text-black",
   };
 
   return (
@@ -93,13 +93,13 @@ function BehaviourRow({
                 type="button"
                 onClick={onInfoClick}
                 aria-label={infoLabel}
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(15,23,42,0.1)] bg-white text-xs font-semibold text-slate-500 transition hover:border-[rgba(15,98,254,0.22)] hover:text-[#0f62fe]"
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(15,23,42,0.1)] bg-white text-xs font-semibold text-slate-700 transition hover:border-[rgba(15,98,254,0.22)] hover:text-[#0f62fe]"
               >
                 i
               </button>
             ) : null}
           </div>
-          <p className="mt-[6px] text-[0.9rem] leading-[1.45] text-slate-500">
+          <p className="mt-[6px] text-[0.9rem] leading-[1.45] text-slate-800">
             {helper}
           </p>
         </div>
@@ -134,14 +134,14 @@ function BreakdownModal({ title, subtitle, rows, total, totalLabel, onClose, row
             >
               {title}
             </h3>
-            <p className="mt-2 text-[0.94rem] leading-[1.6] text-slate-500">{subtitle}</p>
+            <p className="mt-2 text-[0.94rem] leading-[1.6] text-slate-700">{subtitle}</p>
           </div>
           <button
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
             aria-label="Close breakdown"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(15,23,42,0.1)] bg-slate-50 text-lg text-slate-500 transition hover:text-slate-900"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(15,23,42,0.1)] bg-slate-50 text-lg text-slate-700 transition hover:text-slate-900"
           >
             ×
           </button>
@@ -165,6 +165,40 @@ function BreakdownModal({ title, subtitle, rows, total, totalLabel, onClose, row
             </strong>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function InputSlider({ id, label, value, onChange, min, max, step, displayValue, tickLeft, tickRight, fillColor, ariaValueText }) {
+  const percentage = ((value - min) / (max - min)) * 100;
+
+  return (
+    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+      <div className="flex items-center justify-between gap-4">
+        <label htmlFor={id} className="text-[0.94rem] font-semibold text-slate-700">
+          {label}
+        </label>
+        <strong className="text-[1rem] text-slate-900">{displayValue}</strong>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
+        aria-valuetext={ariaValueText ?? displayValue}
+        style={{
+          background: `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percentage}%, #9ca3af ${percentage}%, #9ca3af 100%)`,
+          "--slider-fill": fillColor,
+        }}
+        className="mt-4 h-2.5 w-full appearance-none rounded-full [&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:mt-[-5px] [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-[var(--slider-fill)] [&::-webkit-slider-thumb]:shadow-none [&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[#9ca3af] [&::-moz-range-track]:border-0 [&::-moz-range-progress]:h-2.5 [&::-moz-range-progress]:rounded-full [&::-moz-range-progress]:border-0 [&::-moz-range-progress]:bg-[var(--slider-fill)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[var(--slider-fill)]"
+      />
+      <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-600" aria-hidden="true">
+        <span>{tickLeft}</span>
+        <span>{tickRight}</span>
       </div>
     </div>
   );
@@ -211,12 +245,12 @@ export default function FixedVariableCostsPage() {
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">
                 Fixed vs variable costs
               </h2>
-              <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-500">
+              <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-700">
                 Change output volume and compare what moves with production against what stays constant in total.
               </p>
             </div>
             <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left sm:text-right">
-              <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">
+              <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">
                 Current output
               </span>
               <strong className="mt-1 block text-[1.15rem] text-slate-900">
@@ -225,78 +259,49 @@ export default function FixedVariableCostsPage() {
             </div>
           </div>
 
-          <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
-            <div className="mb-3 flex items-center justify-between gap-4">
-              <label htmlFor="units-slider" className="text-[0.94rem] font-semibold text-slate-700">
-                Number of loaves <span className="font-normal text-slate-500"></span>
-              </label>
-              <strong className="text-[1rem] text-slate-900">{units}</strong>
-            </div>
-            <input
-              id="units-slider"
-              type="range"
-              min={MIN_UNITS}
-              max={MAX_UNITS}
-              step={25}
-              value={units}
-              onChange={(event) => setUnits(Number(event.target.value))}
-              className="h-3 w-full accent-[#0f62fe]"
-            />
-            <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
-              <span>0</span>
-              <span>750</span>
-              <span>1,500</span>
-            </div>
-          </div>
+          <InputSlider
+            id="units-slider"
+            label="Number of loaves"
+            value={units}
+            onChange={setUnits}
+            min={MIN_UNITS}
+            max={MAX_UNITS}
+            step={25}
+            displayValue={`${units} loaves`}
+            tickLeft="0"
+            tickRight="1,500"
+            fillColor="#0f62fe"
+          />
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
-              <div className="flex items-center justify-between gap-4">
-                <label htmlFor="variable-cost-slider" className="text-[0.94rem] font-semibold text-slate-700">
-                  Variable cost per loaf
-                </label>
-                <strong className="text-[1rem] text-slate-900">{formatCurrency(totalVariablePerUnit)}</strong>
-              </div>
-              <input
-                id="variable-cost-slider"
-                type="range"
-                min={MIN_VARIABLE_COST_PER_LOAF}
-                max={MAX_VARIABLE_COST_PER_LOAF}
-                step={0.05}
-                value={variableCostPerLoaf}
-                onChange={(event) => setVariableCostPerLoaf(Number(event.target.value))}
-                className="mt-4 h-3 w-full accent-[#f59e0b]"
-              />
-              <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
-                <span>{formatCurrency(MIN_VARIABLE_COST_PER_LOAF)}</span>
-                <span>{formatCurrency(0.9)}</span>
-                <span>{formatCurrency(MAX_VARIABLE_COST_PER_LOAF)}</span>
-              </div>
-            </div>
+            <InputSlider
+              id="variable-cost-slider"
+              label="Variable cost per loaf"
+              value={variableCostPerLoaf}
+              onChange={setVariableCostPerLoaf}
+              min={MIN_VARIABLE_COST_PER_LOAF}
+              max={MAX_VARIABLE_COST_PER_LOAF}
+              step={0.05}
+              displayValue={formatCurrency(totalVariablePerUnit)}
+              tickLeft={formatCurrency(MIN_VARIABLE_COST_PER_LOAF)}
+              tickRight={formatCurrency(MAX_VARIABLE_COST_PER_LOAF)}
+              fillColor="#f59e0b"
+              ariaValueText={`${formatCurrency(totalVariablePerUnit)} per loaf`}
+            />
 
-            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
-              <div className="flex items-center justify-between gap-4">
-                <label htmlFor="fixed-cost-slider" className="text-[0.94rem] font-semibold text-slate-700">
-                  Total fixed cost
-                </label>
-                <strong className="text-[1rem] text-slate-900">{formatWholePounds(totalFixedCosts)}</strong>
-              </div>
-              <input
-                id="fixed-cost-slider"
-                type="range"
-                min={MIN_TOTAL_FIXED_COST}
-                max={MAX_TOTAL_FIXED_COST}
-                step={50}
-                value={totalFixedCostTarget}
-                onChange={(event) => setTotalFixedCostTarget(Number(event.target.value))}
-                className="mt-4 h-3 w-full accent-[#0891b2]"
-              />
-              <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
-                <span>{formatWholePounds(MIN_TOTAL_FIXED_COST)}</span>
-                <span>{formatWholePounds(7000)}</span>
-                <span>{formatWholePounds(MAX_TOTAL_FIXED_COST)}</span>
-              </div>
-            </div>
+            <InputSlider
+              id="fixed-cost-slider"
+              label="Total fixed cost"
+              value={totalFixedCostTarget}
+              onChange={setTotalFixedCostTarget}
+              min={MIN_TOTAL_FIXED_COST}
+              max={MAX_TOTAL_FIXED_COST}
+              step={50}
+              displayValue={formatWholePounds(totalFixedCosts)}
+              tickLeft={formatWholePounds(MIN_TOTAL_FIXED_COST)}
+              tickRight={formatWholePounds(MAX_TOTAL_FIXED_COST)}
+              fillColor="#0891b2"
+            />
           </div>
 
           <div className="mt-4 flex flex-wrap gap-[10px]">
@@ -325,7 +330,7 @@ export default function FixedVariableCostsPage() {
                 <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
                   Cost behaviour by output volume
                 </h3>
-                <p className="mt-1 text-[0.92rem] leading-[1.5] text-slate-500">
+                <p className="mt-1 text-[0.92rem] leading-[1.5] text-slate-700">
                   The chart shows fixed cost as a flat line, while variable and total costs rise as output increases.
                 </p>
               </div>
@@ -339,18 +344,18 @@ export default function FixedVariableCostsPage() {
                       type="number"
                       domain={[MIN_UNITS, MAX_UNITS]}
                       ticks={X_AXIS_TICKS}
-                      tick={{ fill: "#64748b", fontSize: 12 }}
+                      tick={{ fill: "#0f172a", fontSize: 13 }}
                       tickLine={false}
-                      axisLine={{ stroke: "#cbd5e1" }}
-                      label={{ value: "Loaves", position: "insideBottom", offset: -2, fill: "#64748b", fontSize: 12 }}
+                      axisLine={{ stroke: "#64748b" }}
+                      label={{ value: "Loaves", position: "insideBottom", offset: -2, fill: "#0f172a", fontSize: 12 }}
                     />
                     <YAxis
                       domain={[0, MAX_CHART_COST]}
                       ticks={Y_AXIS_TICKS}
                       tickFormatter={formatAxisPounds}
-                      tick={{ fill: "#64748b", fontSize: 12 }}
+                      tick={{ fill: "#0f172a", fontSize: 13 }}
                       tickLine={false}
-                      axisLine={{ stroke: "#cbd5e1" }}
+                      axisLine={{ stroke: "#64748b" }}
                       width={84}
                     />
                     <Tooltip
@@ -376,23 +381,23 @@ export default function FixedVariableCostsPage() {
 
               <div className="mt-4 overflow-x-auto">
                 <table className="min-w-full border-separate border-spacing-y-2">
-                  <caption className="sr-only">
-                    Cost values shown in the chart for selected output volumes.
+                  <caption className="text-left text-[0.9rem] font-semibold text-slate-700">
+                    Graph key points table
                   </caption>
                   <thead>
-                    <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-500">
-                      <th className="px-3 py-1 font-semibold">Loaves</th>
-                      <th className="px-3 py-1 font-semibold">Fixed cost</th>
-                      <th className="px-3 py-1 font-semibold">Variable cost</th>
-                      <th className="px-3 py-1 font-semibold">Total cost</th>
+                    <tr className="text-left text-[0.78rem] uppercase tracking-[0.08em] text-slate-700">
+                      <th scope="col" className="px-3 py-1 font-semibold">Loaves</th>
+                      <th scope="col" className="px-3 py-1 font-semibold">Fixed cost</th>
+                      <th scope="col" className="px-3 py-1 font-semibold">Variable cost</th>
+                      <th scope="col" className="px-3 py-1 font-semibold">Total cost</th>
                     </tr>
                   </thead>
                   <tbody>
                     {chartPoints.map((point) => (
                       <tr key={point.volume} className="rounded-[14px] bg-white shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
-                        <td className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">
+                        <th scope="row" className="rounded-l-[14px] px-3 py-2 text-[0.92rem] font-semibold text-slate-900">
                           {point.volume}
-                        </td>
+                        </th>
                         <td className="px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.fixed)}</td>
                         <td className="px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.variable)}</td>
                         <td className="rounded-r-[14px] px-3 py-2 text-[0.92rem] text-slate-700">{formatWholePounds(point.total)}</td>

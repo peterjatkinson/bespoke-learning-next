@@ -57,9 +57,43 @@ function StatCard({ label, value, note, accent }) {
   return (
     <div className="relative overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,rgba(252,253,255,0.98)_0%,rgba(246,249,253,0.92)_100%)] p-[18px]">
       <span aria-hidden="true" className={`absolute bottom-0 left-0 top-0 w-1 ${accentClasses[accent]}`} />
-      <p className="m-0 text-[0.76rem] font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <p className="m-0 text-[0.76rem] font-bold uppercase tracking-[0.12em] text-slate-700">{label}</p>
       <p className="mt-[10px] text-[2rem] leading-none font-bold tracking-[-0.03em] text-slate-900">{value}</p>
-      <p className="mt-[10px] text-[0.95rem] leading-[1.55] text-slate-600">{note}</p>
+      <p className="mt-[10px] text-[0.95rem] leading-[1.55] text-slate-800">{note}</p>
+    </div>
+  );
+}
+
+function InputSlider({ id, label, value, onChange, min, max, step, displayValue, tickLeft, tickRight, fillColor, ariaValueText }) {
+  const percentage = ((value - min) / (max - min)) * 100;
+
+  return (
+    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+      <div className="flex items-center justify-between gap-4">
+        <label htmlFor={id} className="text-[0.94rem] font-semibold text-slate-700">
+          {label}
+        </label>
+        <strong className="text-[1rem] text-slate-900">{displayValue}</strong>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
+        aria-valuetext={ariaValueText ?? displayValue}
+        style={{
+          background: `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percentage}%, #9ca3af ${percentage}%, #9ca3af 100%)`,
+          "--slider-fill": fillColor,
+        }}
+        className="mt-4 h-2.5 w-full appearance-none rounded-full [&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:mt-[-5px] [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-[var(--slider-fill)] [&::-webkit-slider-thumb]:shadow-none [&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[#9ca3af] [&::-moz-range-track]:border-0 [&::-moz-range-progress]:h-2.5 [&::-moz-range-progress]:rounded-full [&::-moz-range-progress]:border-0 [&::-moz-range-progress]:bg-[var(--slider-fill)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[var(--slider-fill)]"
+      />
+      <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-600" aria-hidden="true">
+        <span>{tickLeft}</span>
+        <span>{tickRight}</span>
+      </div>
     </div>
   );
 }
@@ -122,19 +156,19 @@ export default function NpvSimulatorPage() {
   const isPositive = calculation.npv >= 0;
 
   return (
-    <main className='min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(15,98,254,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(8,145,178,0.12),transparent_22%),linear-gradient(180deg,#f8fbff_0%,#f2f6fb_100%)] font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
-      <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-sm:px-[14px] max-sm:pb-10">
-        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-sm:p-[18px]">
+    <main className='min-h-screen bg-white font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
+      <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1500px]:max-w-none max-[1500px]:px-0 max-[1500px]:pb-0 max-[1500px]:pt-0 max-sm:pb-0">
+        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
           <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">NPV simulator</h2>
-              <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-500">
+              <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-700">
                 Move the sliders to change the discount rate and initial investment, then see whether NPV stays
                 positive or turns negative.
               </p>
             </div>
             <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left sm:text-right">
-              <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">
+              <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">
                 Current decision
               </span>
               <strong className={`mt-1 block text-[1.15rem] ${isPositive ? "text-teal-700" : "text-orange-700"}`}>
@@ -144,53 +178,33 @@ export default function NpvSimulatorPage() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
-              <div className="flex items-center justify-between gap-4">
-                <label htmlFor="discount-rate" className="text-[0.95rem] font-bold text-slate-900">
-                  Discount rate
-                </label>
-                <strong className="text-[1rem] text-slate-900">{formatPercent(discountRate)}</strong>
-              </div>
-              <input
-                id="discount-rate"
-                type="range"
-                min={MIN_DISCOUNT_RATE}
-                max={MAX_DISCOUNT_RATE}
-                step="0.5"
-                value={discountRate}
-                onChange={(event) => setDiscountRate(Number(event.target.value))}
-                className="mt-4 h-3 w-full accent-[#0f62fe]"
-              />
-              <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
-                <span>5%</span>
-                <span>10%</span>
-                <span>15%</span>
-              </div>
-            </div>
+            <InputSlider
+              id="discount-rate"
+              label="Discount rate"
+              value={discountRate}
+              onChange={setDiscountRate}
+              min={MIN_DISCOUNT_RATE}
+              max={MAX_DISCOUNT_RATE}
+              step={0.5}
+              displayValue={formatPercent(discountRate)}
+              tickLeft="5%"
+              tickRight="15%"
+              fillColor="#0f62fe"
+            />
 
-            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
-              <div className="flex items-center justify-between gap-4">
-                <label htmlFor="initial-investment" className="text-[0.95rem] font-bold text-slate-900">
-                  Initial investment
-                </label>
-                <strong className="text-[1rem] text-slate-900">{formatCurrency(initialInvestment)}</strong>
-              </div>
-              <input
-                id="initial-investment"
-                type="range"
-                min={MIN_INITIAL_INVESTMENT}
-                max={MAX_INITIAL_INVESTMENT}
-                step="10000"
-                value={initialInvestment}
-                onChange={(event) => setInitialInvestment(Number(event.target.value))}
-                className="mt-4 h-3 w-full accent-[#0891b2]"
-              />
-              <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-500" aria-hidden="true">
-                <span>{formatCurrency(MIN_INITIAL_INVESTMENT)}</span>
-                <span>{formatCurrency(520000)}</span>
-                <span>{formatCurrency(MAX_INITIAL_INVESTMENT)}</span>
-              </div>
-            </div>
+            <InputSlider
+              id="initial-investment"
+              label="Initial investment"
+              value={initialInvestment}
+              onChange={setInitialInvestment}
+              min={MIN_INITIAL_INVESTMENT}
+              max={MAX_INITIAL_INVESTMENT}
+              step={10000}
+              displayValue={formatCurrency(initialInvestment)}
+              tickLeft={formatCurrency(MIN_INITIAL_INVESTMENT)}
+              tickRight={formatCurrency(MAX_INITIAL_INVESTMENT)}
+              fillColor="#0891b2"
+            />
           </div>
 
           <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -216,13 +230,13 @@ export default function NpvSimulatorPage() {
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-sm:p-[18px]">
+          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
             <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="m-0 text-[1.4rem] leading-[1.1] tracking-[-0.03em] text-slate-900">
                   Present values by year
                 </h3>
-                <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-500">
+                <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-700">
                   Later cash flows are worth less in today&apos;s money.
                 </p>
               </div>
@@ -233,12 +247,12 @@ export default function NpvSimulatorPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={calculation.years}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" vertical={false} />
-                    <XAxis dataKey="year" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 13 }} />
+                    <XAxis dataKey="year" tickLine={false} axisLine={false} tick={{ fill: "#0f172a", fontSize: 13 }} />
                     <YAxis
                       tickFormatter={formatAxisCurrency}
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fill: "#64748b", fontSize: 13 }}
+                      tick={{ fill: "#0f172a", fontSize: 13 }}
                       width={60}
                     />
                     <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(15,23,42,0.03)" }} />
@@ -253,42 +267,45 @@ export default function NpvSimulatorPage() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="flex h-full items-center justify-center rounded-[24px] border border-dashed border-[rgba(15,23,42,0.12)] bg-[#f8fafc] text-sm text-slate-500">
+                <div className="flex h-full items-center justify-center rounded-[24px] border border-dashed border-[rgba(15,23,42,0.12)] bg-[#f8fafc] text-sm text-slate-700">
                   Loading chart...
                 </div>
               )}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur-[16px] max-sm:p-[18px]">
+          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
             <div className="mb-[18px]">
               <h3 className="m-0 text-[1.4rem] leading-[1.1] tracking-[-0.03em] text-slate-900">Calculation table</h3>
-              <p className="mt-2 text-[0.95rem] leading-[1.6] text-slate-500">
+              <p className="mt-2 text-[0.95rem] leading-[1.6] text-slate-700">
                 Discount factors are rounded to three decimal places to match the teaching example.
               </p>
             </div>
 
             <div className="overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)]">
               <table className="min-w-full border-collapse">
+                <caption className="bg-white px-4 pt-3 text-left text-[0.9rem] font-semibold text-slate-700">
+                  Present value calculation table
+                </caption>
                 <thead>
                   <tr className="bg-[#f8fbff] text-left">
-                    <th className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">Year</th>
-                    <th className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">Cash inflow</th>
-                    <th className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">Factor</th>
-                    <th className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-500">Present value</th>
+                    <th scope="col" className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">Year</th>
+                    <th scope="col" className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">Cash inflow</th>
+                    <th scope="col" className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">Factor</th>
+                    <th scope="col" className="px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">Present value</th>
                   </tr>
                 </thead>
                 <tbody>
                   {calculation.years.map((item) => (
                     <tr key={item.year} className="border-t border-[rgba(15,23,42,0.06)] bg-white">
-                      <td className="px-4 py-3 text-[0.95rem] font-semibold text-slate-900">{item.year}</td>
+                      <th scope="row" className="px-4 py-3 text-left text-[0.95rem] font-semibold text-slate-900">{item.year}</th>
                       <td className="px-4 py-3 text-[0.95rem] text-slate-700">{formatCurrency(item.cashInflow)}</td>
                       <td className="px-4 py-3 text-[0.95rem] text-slate-700">{item.discountFactor.toFixed(3)}</td>
                       <td className="px-4 py-3 text-[0.95rem] font-semibold text-slate-900">{formatCurrency(item.presentValue)}</td>
                     </tr>
                   ))}
                   <tr className="border-t border-[rgba(15,23,42,0.08)] bg-[#f8fbff]">
-                    <td className="px-4 py-3 text-[0.95rem] font-bold text-slate-900">Total</td>
+                    <th scope="row" className="px-4 py-3 text-left text-[0.95rem] font-bold text-slate-900">Total</th>
                     <td className="px-4 py-3" />
                     <td className="px-4 py-3 text-[0.95rem] font-semibold text-slate-700">PV total</td>
                     <td className="px-4 py-3 text-[0.95rem] font-bold text-slate-900">
