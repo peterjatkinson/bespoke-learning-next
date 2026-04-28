@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Bar,
-  BarChart,
   CartesianGrid,
-  Cell,
+  ComposedChart,
+  Legend,
+  Line,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -90,7 +92,7 @@ function InputSlider({ id, label, value, onChange, min, max, step, displayValue,
         }}
         className="mt-4 h-2.5 w-full appearance-none rounded-full [&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:mt-[-5px] [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-[var(--slider-fill)] [&::-webkit-slider-thumb]:shadow-none [&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[#9ca3af] [&::-moz-range-track]:border-0 [&::-moz-range-progress]:h-2.5 [&::-moz-range-progress]:rounded-full [&::-moz-range-progress]:border-0 [&::-moz-range-progress]:bg-[var(--slider-fill)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[var(--slider-fill)]"
       />
-      <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-600" aria-hidden="true">
+      <div className="mt-[10px] flex justify-between text-[0.82rem] text-slate-800" aria-hidden="true">
         <span>{tickLeft}</span>
         <span>{tickRight}</span>
       </div>
@@ -115,7 +117,10 @@ function ChartTooltip({ active, payload, label }) {
         Discount factor: <span className="font-semibold text-slate-900">{entry.discountFactor.toFixed(3)}</span>
       </p>
       <p className="mt-1 text-sm text-slate-600">
-        Present value: <span className="font-semibold text-slate-900">{formatCurrency(entry.presentValue)}</span>
+        Yearly PV: <span className="font-semibold text-slate-900">{formatCurrency(entry.presentValue)}</span>
+      </p>
+      <p className="mt-1 text-sm text-slate-600">
+        Cumulative PV: <span className="font-semibold text-slate-900">{formatCurrency(entry.cumulativePresentValue)}</span>
       </p>
     </div>
   );
@@ -132,18 +137,21 @@ export default function NpvSimulatorPage() {
 
   const calculation = useMemo(() => {
     const rateAsDecimal = discountRate / 100;
+    let runningTotal = 0;
     const years = CASH_FLOWS.map((item) => {
       const discountFactor = roundDiscountFactor(rateAsDecimal, item.year);
       const presentValue = item.cashInflow * discountFactor;
+      runningTotal += presentValue;
 
       return {
         ...item,
         discountFactor,
         presentValue,
+        cumulativePresentValue: runningTotal,
       };
     });
 
-    const discountedCashFlows = years.reduce((sum, item) => sum + item.presentValue, 0);
+    const discountedCashFlows = runningTotal;
     const npv = discountedCashFlows - initialInvestment;
 
     return {
@@ -237,40 +245,61 @@ export default function NpvSimulatorPage() {
                   Present values by year
                 </h3>
                 <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-700">
-                  Later cash flows are worth less in today&apos;s money.
+                  Bars show each year&apos;s discounted cash inflow; the line is the running total. The project moves into positive NPV once the running total rises above the initial investment marker.
                 </p>
               </div>
             </div>
 
-            <div className="h-[320px] w-full">
+            <div className="h-[340px] w-full" aria-hidden="true">
               {hasMounted ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={calculation.years}>
+                  <ComposedChart data={calculation.years} margin={{ top: 10, right: 16, left: 0, bottom: 16 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" vertical={false} />
-                    <XAxis dataKey="year" tickLine={false} axisLine={false} tick={{ fill: "#0f172a", fontSize: 13 }} />
+                    <XAxis
+                      dataKey="year"
+                      tickLine={false}
+                      axisLine={false}
+                      tick={{ fill: "#0f172a", fontSize: 13 }}
+                      label={{ value: "Year", position: "insideBottom", offset: -6, fill: "#0f172a", fontSize: 12 }}
+                    />
                     <YAxis
                       tickFormatter={formatAxisCurrency}
                       tickLine={false}
                       axisLine={false}
                       tick={{ fill: "#0f172a", fontSize: 13 }}
-                      width={60}
+                      width={56}
+                      domain={[0, (dataMax) => Math.ceil(Math.max(dataMax, initialInvestment) * 1.08 / 50000) * 50000]}
                     />
                     <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(15,23,42,0.03)" }} />
-                    <Bar dataKey="presentValue" radius={[16, 16, 6, 6]}>
-                      {calculation.years.map((item) => (
-                        <Cell
-                          key={item.year}
-                          fill={item.year <= 2 ? "#0f62fe" : item.year <= 4 ? "#3b82f6" : "#0891b2"}
-                        />
-                      ))}
-                    </Bar>
-                  </BarChart>
+                    <Legend verticalAlign="top" height={28} wrapperStyle={{ fontSize: 12 }} />
+                    <ReferenceLine
+                      y={initialInvestment}
+                      stroke="#78350f"
+                      strokeDasharray="5 5"
+                      ifOverflow="extendDomain"
+                      label={{ value: "Initial investment", fill: "#78350f", position: "insideTopLeft", fontSize: 12, fontWeight: 600 }}
+                    />
+                    <Bar dataKey="presentValue" name="Yearly PV (bars)" fill="#1d4ed8" radius={[10, 10, 4, 4]} />
+                    <Line
+                      type="monotone"
+                      dataKey="cumulativePresentValue"
+                      name="Cumulative PV (line)"
+                      stroke="#0f172a"
+                      strokeWidth={2.5}
+                      dot={{ r: 3, fill: "#0f172a" }}
+                      activeDot={{ r: 5 }}
+                    />
+                  </ComposedChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="flex h-full items-center justify-center rounded-[24px] border border-dashed border-[rgba(15,23,42,0.12)] bg-[#f8fafc] text-sm text-slate-700">
                   Loading chart...
                 </div>
               )}
+            </div>
+
+            <div className="sr-only" aria-live="polite">
+              The chart shows each year&apos;s discounted cash inflow as a bar and the running cumulative total as a line, with a dashed reference line marking the initial investment. At a {formatPercent(discountRate)} discount rate, total discounted inflows reach {formatCurrency(calculation.discountedCashFlows)} by year 5, compared with an initial investment of {formatCurrency(initialInvestment)}, giving a net present value of {formatCurrency(calculation.npv)}. The project {isPositive ? "creates" : "destroys"} value at this discount rate.
             </div>
           </div>
 
