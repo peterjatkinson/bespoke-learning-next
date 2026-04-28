@@ -55,7 +55,7 @@ function StatCard({ label, value, note, accent }) {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,rgba(252,253,255,0.98)_0%,rgba(246,249,253,0.92)_100%)] p-[18px]">
+    <div className="relative overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,rgba(252,253,255,0.98)_0%,rgba(246,249,253,0.92)_100%)] p-[18px] max-[480px]:rounded-none max-[480px]:border-x-0">
       <span aria-hidden="true" className={`absolute bottom-0 left-0 top-0 w-1 ${accentClasses[accent]}`} />
       <p className="m-0 text-[0.76rem] font-bold uppercase tracking-[0.12em] text-slate-700">{label}</p>
       <p className="mt-[10px] text-[2rem] leading-none font-bold tracking-[-0.03em] text-slate-900">{value}</p>
@@ -68,7 +68,7 @@ function InputSlider({ id, label, value, onChange, min, max, step, displayValue,
   const percentage = ((value - min) / (max - min)) * 100;
 
   return (
-    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px] max-[480px]:rounded-none max-[480px]:border-x-0">
       <div className="flex items-center justify-between gap-4">
         <label htmlFor={id} className="text-[0.94rem] font-semibold text-slate-700">
           {label}
@@ -158,8 +158,8 @@ export default function NpvSimulatorPage() {
   return (
     <main className='min-h-screen bg-white font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
       <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1500px]:max-w-none max-[1500px]:px-0 max-[1500px]:pb-0 max-[1500px]:pt-0 max-sm:pb-0">
-        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
-          <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
+          <div className="mb-[18px] flex flex-col gap-4 max-[480px]:px-[18px] sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">NPV simulator</h2>
               <p className="mt-2 max-w-[620px] text-[0.95rem] leading-[1.6] text-slate-700">
@@ -167,7 +167,7 @@ export default function NpvSimulatorPage() {
                 positive or turns negative.
               </p>
             </div>
-            <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left sm:text-right">
+            <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left max-[480px]:-mx-[18px] max-[480px]:rounded-none max-[480px]:border-x-0 sm:text-right">
               <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">
                 Current decision
               </span>
@@ -230,8 +230,8 @@ export default function NpvSimulatorPage() {
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
-            <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
+            <div className="mb-[18px] flex flex-col gap-4 max-[480px]:px-[18px] sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="m-0 text-[1.4rem] leading-[1.1] tracking-[-0.03em] text-slate-900">
                   Present values by year
@@ -274,15 +274,15 @@ export default function NpvSimulatorPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
-            <div className="mb-[18px]">
+          <div className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
+            <div className="mb-[18px] max-[480px]:px-[18px]">
               <h3 className="m-0 text-[1.4rem] leading-[1.1] tracking-[-0.03em] text-slate-900">Calculation table</h3>
               <p className="mt-2 text-[0.95rem] leading-[1.6] text-slate-700">
                 Discount factors are rounded to three decimal places to match the teaching example.
               </p>
             </div>
 
-            <div className="overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)]">
+            <div className="overflow-hidden rounded-[22px] border border-[rgba(15,23,42,0.08)] max-[480px]:rounded-none max-[480px]:border-x-0">
               <table className="min-w-full border-collapse">
                 <caption className="bg-white px-4 pt-3 text-left text-[0.9rem] font-semibold text-slate-700">
                   Present value calculation table

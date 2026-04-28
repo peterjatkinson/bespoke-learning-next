@@ -362,7 +362,7 @@ export default function BreakEvenFormulaPage() {
             </div>
           ) : (
             <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-              <div className="min-w-0 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4 max-[480px]:rounded-none max-[480px]:border-x-0">
+              <div className="min-w-0 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4 max-[480px]:rounded-none max-[480px]:border-x-0 max-[480px]:px-2">
                 <div className="mb-3">
                   <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
                     Revenue and total cost at different output levels

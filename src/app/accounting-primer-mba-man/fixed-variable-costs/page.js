@@ -61,7 +61,7 @@ function formatWholePounds(value) {
 }
 
 function formatAxisPounds(value) {
-  return `£${Math.round(value).toLocaleString("en-GB")}`;
+  return `£${Math.round(value / 1000)}k`;
 }
 
 function BehaviourRow({
@@ -82,7 +82,7 @@ function BehaviourRow({
   };
 
   return (
-    <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] px-4 py-[15px] shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
+    <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.82)] px-4 py-[15px] shadow-[0_10px_24px_rgba(15,23,42,0.05)] max-[480px]:rounded-none max-[480px]:border-x-0">
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
@@ -174,7 +174,7 @@ function InputSlider({ id, label, value, onChange, min, max, step, displayValue,
   const percentage = ((value - min) / (max - min)) * 100;
 
   return (
-    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px]">
+    <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] px-[18px] pb-[14px] pt-[18px] max-[480px]:rounded-none max-[480px]:border-x-0">
       <div className="flex items-center justify-between gap-4">
         <label htmlFor={id} className="text-[0.94rem] font-semibold text-slate-700">
           {label}
@@ -239,8 +239,8 @@ export default function FixedVariableCostsPage() {
   return (
     <main className='min-h-full bg-white font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
       <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1500px]:max-w-none max-[1500px]:px-0 max-[1500px]:pb-0 max-[1500px]:pt-0 max-sm:pb-0">
-        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
-          <div className="mb-[18px] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
+          <div className="mb-[18px] flex flex-col gap-4 max-[480px]:px-[18px] sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="m-0 text-2xl leading-[1.1] tracking-[-0.03em] text-slate-900">
                 Fixed vs variable costs
@@ -249,7 +249,7 @@ export default function FixedVariableCostsPage() {
                 Change output volume and compare what moves with production against what stays constant in total.
               </p>
             </div>
-            <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left sm:text-right">
+            <div className="rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-[#f8fbff] px-4 py-3 text-left max-[480px]:-mx-[18px] max-[480px]:rounded-none max-[480px]:border-x-0 sm:text-right">
               <span className="block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-700">
                 Current output
               </span>
@@ -304,7 +304,7 @@ export default function FixedVariableCostsPage() {
             />
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-[10px]">
+          <div className="mt-4 flex flex-wrap gap-[10px] max-[480px]:px-[18px]">
             {SCENARIOS.map((scenario) => (
               <button
                 key={scenario}
@@ -323,9 +323,9 @@ export default function FixedVariableCostsPage() {
 
         </section>
 
-        <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px]">
+        <section className="mt-5 rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <div className="rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4">
+            <div className="min-w-0 rounded-[22px] border border-[rgba(15,23,42,0.08)] bg-[linear-gradient(180deg,#fcfdff_0%,#f6f9fd_100%)] p-4 max-[480px]:rounded-none max-[480px]:border-x-0 max-[480px]:px-2">
               <div className="mb-3">
                 <h3 className="m-0 text-[1.1rem] font-bold tracking-[-0.02em] text-slate-900">
                   Cost behaviour by output volume
@@ -337,7 +337,7 @@ export default function FixedVariableCostsPage() {
 
               <div className="h-[320px]" aria-hidden="true">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartPoints} margin={{ top: 10, right: 16, left: 8, bottom: 6 }}>
+                  <LineChart data={chartPoints} margin={{ top: 10, right: 12, left: 0, bottom: 6 }}>
                     <CartesianGrid stroke="#dbe4ee" strokeDasharray="3 3" />
                     <XAxis
                       dataKey="volume"
@@ -356,7 +356,7 @@ export default function FixedVariableCostsPage() {
                       tick={{ fill: "#0f172a", fontSize: 13 }}
                       tickLine={false}
                       axisLine={{ stroke: "#64748b" }}
-                      width={84}
+                      width={56}
                     />
                     <Tooltip
                       formatter={(value) => formatWholePounds(value)}
