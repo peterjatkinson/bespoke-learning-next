@@ -206,6 +206,7 @@ function calculatePayback(rows, initialCost) {
 export default function PaybackMethodPage() {
   const [initialCost, setInitialCost] = useState(DEFAULTS.initialCost);
   const [inflows, setInflows] = useState(DEFAULTS.inflows);
+  const [resetAnnouncement, setResetAnnouncement] = useState("");
 
   const rows = useMemo(() => {
     let cumulative = 0;
@@ -280,11 +281,13 @@ export default function PaybackMethodPage() {
     return data;
   }, [initialCost, projectedPayback, rows]);
 
-  const statusText = payback.recovered ? `Pays back in Year ${payback.year}` : "No payback in 5 years";
+  const statusText = payback.recovered ? `Pays back in year ${payback.year}` : "No payback in 5 years";
 
   const resetToDefaults = () => {
     setInitialCost(DEFAULTS.initialCost);
     setInflows(DEFAULTS.inflows);
+    setResetAnnouncement("");
+    setTimeout(() => setResetAnnouncement("Values have been reset to defaults."), 50);
   };
 
   const updateInflow = (index, value) => {
@@ -293,6 +296,7 @@ export default function PaybackMethodPage() {
 
   return (
     <main className='min-h-full bg-white font-["Avenir_Next",Avenir,"Segoe_UI",Helvetica,Arial,sans-serif] text-slate-900'>
+      <div aria-live="polite" aria-atomic="true" className="sr-only">{resetAnnouncement}</div>
       <div className="mx-auto max-w-[1120px] px-5 pb-14 pt-8 max-[1500px]:max-w-none max-[1500px]:px-0 max-[1500px]:pb-0 max-[1500px]:pt-0 max-sm:pb-0">
         <section className="rounded-3xl border border-[rgba(15,23,42,0.08)] bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] max-[1500px]:rounded-none max-[1500px]:border-x-0 max-[1500px]:shadow-none max-sm:p-[18px] max-[480px]:!px-0 max-[480px]:py-[18px]">
           <div className="mb-[18px] flex flex-col gap-4 max-[480px]:px-[18px] sm:flex-row sm:items-center sm:justify-between">
@@ -439,13 +443,13 @@ export default function PaybackMethodPage() {
                 </ResponsiveContainer>
               </div>
               {projectedPayback ? (
-                <p className="mt-2 text-[0.86rem] leading-[1.5] text-slate-700">
+                <p aria-hidden="true" className="mt-2 text-[0.86rem] leading-[1.5] text-slate-700">
                   The dashed continuation assumes the Year 5 inflow of {formatCurrency(projectedPayback.assumedAnnualInflow)} repeats beyond the known five-year period.
                 </p>
               ) : null}
 
-              <div className="sr-only" aria-live="polite">
-                The cumulative inflow after five years is {formatCurrency(totalInflows)} against an initial equipment cost of {formatCurrency(initialCost)}. {payback.recovered ? `The investment pays back in Year ${payback.year}, about ${formatMonths(payback.monthsIntoYear)} into that year.` : `The investment does not pay back within five years.${projectedPayback ? ` If the Year 5 inflow continued, it would pay back at about ${formatProjectedPayback(projectedPayback)}.` : ""}`}
+              <div className="sr-only">
+                Graph description. The cumulative inflow after five years is {formatCurrency(totalInflows)} against an initial equipment cost of {formatCurrency(initialCost)}. {payback.recovered ? `The investment pays back in Year ${payback.year}, about ${formatMonths(payback.monthsIntoYear)} into that year.` : `The investment does not pay back within five years.${projectedPayback ? ` If the Year 5 inflow continued, it would pay back at about ${formatProjectedPayback(projectedPayback)}.` : ""}`}
               </div>
 
               <div className="mt-4 overflow-x-auto">
