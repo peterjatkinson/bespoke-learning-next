@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -173,6 +173,10 @@ function AboveChartLabel({ viewBox, value, fill }) {
   );
 }
 
+function LegendText(value) {
+  return <span className="text-[0.82rem] leading-tight sm:text-[1rem]">{value}</span>;
+}
+
 function calculatePayback(rows, initialCost) {
   const recoveryRow = rows.find((row) => row.cumulative >= initialCost);
   const totalInflows = rows.at(-1)?.cumulative ?? 0;
@@ -207,6 +211,16 @@ export default function PaybackMethodPage() {
   const [initialCost, setInitialCost] = useState(DEFAULTS.initialCost);
   const [inflows, setInflows] = useState(DEFAULTS.inflows);
   const [resetAnnouncement, setResetAnnouncement] = useState("");
+  const [isMobileChart, setIsMobileChart] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+    const updateChartSize = () => setIsMobileChart(mediaQuery.matches);
+
+    updateChartSize();
+    mediaQuery.addEventListener("change", updateChartSize);
+    return () => mediaQuery.removeEventListener("change", updateChartSize);
+  }, []);
 
   const rows = useMemo(() => {
     let cumulative = 0;
@@ -248,6 +262,12 @@ export default function PaybackMethodPage() {
   const chartEndYear = projectedPayback ? Math.ceil(projectedPayback.x) : 5;
   const xTicks = Array.from({ length: chartEndYear + 1 }, (_, index) => index);
   const chartMax = Math.max(initialCost, totalInflows, 80000);
+  const chartMargin = isMobileChart
+    ? { top: 24, right: 12, left: 0, bottom: 14 }
+    : { top: 24, right: 12, left: 0, bottom: 6 };
+  const legendStyle = isMobileChart
+    ? { bottom: 2, lineHeight: 1.1 }
+    : { bottom: -8 };
 
   const chartData = useMemo(() => {
     const data = [
@@ -371,9 +391,9 @@ export default function PaybackMethodPage() {
                 </p>
               </div>
 
-              <div className="h-[320px]" aria-hidden="true">
+              <div className="h-[340px] sm:h-[320px]" aria-hidden="true">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 24, right: 12, left: 0, bottom: 6 }}>
+                  <LineChart data={chartData} margin={chartMargin}>
                     <CartesianGrid stroke="#dbe4ee" strokeDasharray="3 3" />
                     <XAxis
                       dataKey="year"
@@ -394,7 +414,7 @@ export default function PaybackMethodPage() {
                       width={58}
                     />
                     <Tooltip content={<ChartTooltip />} />
-                    <Legend verticalAlign="bottom" wrapperStyle={{ bottom: -8 }} />
+                    <Legend verticalAlign="bottom" formatter={LegendText} wrapperStyle={legendStyle} />
                     <ReferenceLine
                       y={initialCost}
                       stroke="#334155"
@@ -443,7 +463,7 @@ export default function PaybackMethodPage() {
                 </ResponsiveContainer>
               </div>
               {projectedPayback ? (
-                <p aria-hidden="true" className="mt-2 text-[0.86rem] leading-[1.5] text-slate-700">
+                <p aria-hidden="true" className="mt-4 text-[0.86rem] leading-[1.5] text-slate-700">
                   The dashed continuation assumes the Year 5 inflow of {formatCurrency(projectedPayback.assumedAnnualInflow)} repeats beyond the known five-year period.
                 </p>
               ) : null}
