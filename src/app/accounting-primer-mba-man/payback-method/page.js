@@ -166,7 +166,7 @@ function AboveChartLabel({ viewBox, value, fill }) {
       fill={fill}
       fontSize={12}
       fontWeight={600}
-      textAnchor="middle"
+      textAnchor="end"
     >
       {value}
     </text>
