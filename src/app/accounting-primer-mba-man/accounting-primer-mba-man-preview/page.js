@@ -154,7 +154,7 @@ const htmlContent = String.raw`
       </div>
       <div class="nav-item" onclick="showPage('s5-5-2')" id="nav-s5-5-2" style="padding-left: 2.8rem;">
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
-        5.5.2 The make or buy decision
+        5.5.2 Make or buy?
       </div>
       <div class="nav-item" onclick="showPage('s5-5-3')" id="nav-s5-5-3" style="padding-left: 2.8rem;">
         <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
@@ -174,8 +174,26 @@ const htmlContent = String.raw`
       </div>
     </div>
 
-    <div class="nav-section" style="opacity:0.4">
-      <div class="nav-module nav-locked">Session 6: Management accounting: Part 2</div>
+    <div class="nav-section">
+      <div class="nav-module active-module">
+        Session 6: Management accounting: Part 2
+      </div>
+      <div class="nav-item" onclick="showPage('s6-1')" id="nav-s6-1">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        6.1 Introduction
+      </div>
+      <div class="nav-item" onclick="showPage('s6-2')" id="nav-s6-2">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        6.2 The payback method
+      </div>
+      <div class="nav-item" onclick="showPage('s6-3')" id="nav-s6-3">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        6.3 Net Present Value (NPV)
+      </div>
+      <div class="nav-item" onclick="showPage('s6-4')" id="nav-s6-4">
+        <svg class="item-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h8v2H2z"/></svg>
+        6.4 Session review
+      </div>
     </div>
   </nav>
 </aside>
@@ -1057,7 +1075,7 @@ const htmlContent = String.raw`
           </div>
         </div>
 
-        <p>A key idea from the presentation is that revenue is recognised when a service or good has been delivered, not simply when cash changes hands. The scenarios below let you apply that principle directly. For each transaction, identify whether revenue should be recognised under accrual accounting, and what the impact on cash is.</p>
+        <p>A key idea from the presentation is that revenue is recognised when a service or good has been delivered, not simply when cash changes hands. The scenarios below let you apply that principle directly.</p>
 
         <div class="quiz-header">
           <h2>Activity</h2>
@@ -1065,7 +1083,7 @@ const htmlContent = String.raw`
         <div class="quiz-body">
           <div class="q-block">
             <div class="q-text">
-              <p>For each transaction identify whether we should recognise revenue under accrual accounting and the impact on cash.</p>
+              <p>For each transaction identify whether we should recognise revenue under accrual accounting and the impact on cash. Add either a number or a 'No' to each cell that you can type into, depending on your answers.</p>
               <table>
                 <thead>
                   <tr>
@@ -1750,7 +1768,7 @@ const htmlContent = String.raw`
       </div>
 
       <div class="page-body" style="margin-bottom:1.5rem">
-        <p>Explore the <a href="https://www.cocacolaep.com/assets/Global/Investors/2025-Annual-Report/CCEP-Annual-Report-and-Form-20-F-2025.pdf" target="_blank" style="color:var(--accent)">Cash Flow Statement of Coca-Cola Europacific Partners</a>, world's largest independent Coca-Cola bottler, page 213 in the PDF or 211 of the report.</p>
+        <p>Explore the <a href="https://www.cocacolaep.com/assets/Global/Investors/2025-Annual-Report/CCEP-Annual-Report-and-Form-20-F-2025.pdf" target="_blank" style="color:var(--accent)">Cash flow statement of Coca-Cola Europacific Partners</a>, world's largest independent Coca-Cola bottler, page 213 in the PDF or 211 of the report. Answer the following questions.</p>
       </div>
 
       <div class="quiz-header">
@@ -1775,7 +1793,7 @@ const htmlContent = String.raw`
           <div class="feedback-box" id="fb-4-3-1-q2">
             <div class="fb-label">✓ Feedback</div>
             <div class="fb-content">
-              <p>Under the investing section, the company lists €15m investment in subsidiaries for 2025 and €567m for 2024. The much larger 2024 figure was primarily due to an investment writedown rather than ongoing capital expenditure.</p>
+              <p>Under the investing section, the company lists €15m investment in subsidiaries for 2025 and €567m for 2024. That was primarily due to an investment write-down in 2024.</p>
             </div>
           </div>
           <button class="submit-btn" onclick="toggleFeedback('fb-4-3-1-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
@@ -1787,7 +1805,10 @@ const htmlContent = String.raw`
           <div class="feedback-box" id="fb-4-3-1-q3">
             <div class="fb-label">✓ Feedback</div>
             <div class="fb-content">
-              <p>In 2025 the company paid €386m in dividends and repaid €1,750m in borrowings (listed under financing activities), plus €141m in interest. In 2024 the figures were €4,050m in dividends, €3,650m in loan repayments, and €154m in interest.</p>
+              <p>Coca-Cola Europacific Partners repaid €1,750m in 2025 (listed under financing activities) and €3,650m in 2024. The business paid interest on the loan of €141m in 2025 and €154m in 2024.</p>
+              <p>The company raised further debt in both years: €3,483m in 2025 and €777m in 2024.</p>
+              <p>The net impact of proceeding from new borrowings, repayments, paid interest and lease obligations is the net financing cash flow.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
             </div>
           </div>
           <button class="submit-btn" onclick="toggleFeedback('fb-4-3-1-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
@@ -2204,14 +2225,14 @@ const htmlContent = String.raw`
 
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s5-5')">← 5.5 Short-term decision making</button>
-        <button class="nav-btn primary" onclick="showPage('s5-5-2')">Next: 5.5.2 The make or buy decision →</button>
+        <button class="nav-btn primary" onclick="showPage('s5-5-2')">Next: 5.5.2 Make or buy? →</button>
       </div>
     </div>
 
     <div class="page" id="page-s5-5-2">
       <div class="page-header">
         <div class="page-eyebrow">Session 5 · Management accounting: Part 1</div>
-        <h1 class="page-title">5.5.2 The make or buy decision</h1>
+        <h1 class="page-title">5.5.2 Make or buy?</h1>
       </div>
 
       <div class="page-body" style="margin-bottom:1.5rem">
@@ -2334,7 +2355,7 @@ const htmlContent = String.raw`
       </div>
 
       <div class="page-nav">
-        <button class="nav-btn" onclick="showPage('s5-5-2')">← 5.5.2 The make or buy decision</button>
+        <button class="nav-btn" onclick="showPage('s5-5-2')">← 5.5.2 Make or buy?</button>
         <button class="nav-btn primary" onclick="showPage('s5-5-4')">Next: 5.5.4 Limiting factors →</button>
       </div>
     </div>
@@ -2430,13 +2451,13 @@ const htmlContent = String.raw`
           </div>
         </div>
 
-        <p>The interactive tool below is set up using the Innocent Drinks example you've just heard about. At the default settings you should recognise the numbers from the presentation. Try adjusting the four sliders — fixed costs, selling price, variable cost per bottle and forecast sales — to see how each one shifts the break-even point and the margin of safety. Then complete the exercise that follows.</p>
+        <p>The interactive break-even calculator tool below draws on the bakery example you encountered earlier in the session when looking at fixed and variable costs, but now adds the revenue side of the picture: a selling price per loaf. Use the sliders to see how fixed costs, variable cost, selling price and output combine to determine the contribution per loaf, the break-even point and the bakery's margin of safety. Spend a couple of minutes experimenting with the tool to see how the numbers move together before working through the questions that follow.</p>
 
         <div class="video-placeholder" style="aspect-ratio:unset;height:200px;padding:1.5rem 0">
           <div class="video-inner">
             <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
             <div style="margin-bottom:0.75rem;font-size:0.9rem">Break-even calculator tool</div>
-            <a href="https://bespoke-learning-next.vercel.app/accounting-primer-mba-man/break-even-formula" target="_blank" style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;margin-bottom:0.75rem">Open tool in new tab ↗</a>
+            <a href="https://bespoke-interactives.vercel.app/accounting-primer-mba-man/break-even-formula" target="_blank" style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;margin-bottom:0.75rem">Open tool in new tab ↗</a>
             <div class="video-label-pending">This tool will be embedded directly in Canvas — the button above opens it in a new tab for now.</div>
           </div>
         </div>
@@ -2445,11 +2466,37 @@ const htmlContent = String.raw`
       <div class="quiz-header">
         <h2>Activity</h2>
       </div>
-      <div class="quiz-body" style="border-top:3px solid var(--gold)">
-        <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-          <strong>Provisional</strong> — Questions and feedback still to be added.
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>Keep variable cost at £0.70 and fixed costs at £6,950. Set output to 400 loaves and note the break-even point. Now drag the selling price down from £2.50 to £1.50. What happens to the break-even point, and why?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-6-q1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The break-even point rises sharply because the contribution margin (selling price minus variable cost) has shrunk from £1.80 to £0.80 per loaf. Each loaf now contributes less toward covering fixed costs, so far more loaves must be sold before the bakery breaks even.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-5-6-q1', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
         </div>
-        <p style="color:var(--ink-soft);font-size:0.93rem">This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+        <div class="q-block">
+          <div class="q-text"><p>With selling price at £2.50 and variable cost at £0.70, increase fixed costs from £6,950 to £10,000. By how much does the break-even point (in loaves) increase? What does this tell you about the relationship between fixed costs and break-even?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-6-q2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The break-even point rises from 3,861 loaves to 5,556 loaves, an increase of 1,695 loaves. This shows that break-even moves in direct proportion to fixed costs: a higher fixed cost burden requires more units sold just to reach zero profit. Variable costs and selling price are unchanged, so the contribution margin stays at £1.80.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-5-6-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+        <div class="q-block">
+          <div class="q-text"><p>Set selling price to £2.50, variable cost to £0.70, and fixed costs to £6,950. The break-even point is around 3,861 loaves. Now raise the selling price to £3.50. What happens to the break-even point, and what does this reveal about how a business might use pricing strategy to reduce risk?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-6-q3">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>With the adjusted price, the break-even point falls to around 2,482 loaves. The contribution margin has grown from £1.80 to £2.80 per loaf, meaning each loaf now covers more of the fixed costs. If a business can raise prices without losing too much demand (i.e. demand is relatively inelastic), it will need to sell fewer units to break even.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-5-6-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
       </div>
 
       <div class="page-nav">
@@ -2535,7 +2582,302 @@ const htmlContent = String.raw`
 
       <div class="page-nav">
         <button class="nav-btn" onclick="showPage('s5-6')">← 5.6 The break-even formula</button>
-        <button class="nav-btn" style="opacity:0.5;cursor:default">Session 6 coming soon →</button>
+        <button class="nav-btn" onclick="showPage('s6-1')">Next: 6.1 Introduction →</button>
+      </div>
+    </div>
+
+    <!-- SESSION 6 -->
+
+    <div class="page" id="page-s6-1">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 6 · Management accounting: Part 2</div>
+        <h1 class="page-title">6.1 Introduction</h1>
+      </div>
+      <div class="page-body">
+        <p>Welcome to session six! In this session, we turn to long-term decision-making, the question of how a business decides whether a major investment is financially worth making. You'll explore two of the key methods used to answer that question, and see why they can sometimes result in differing conclusions about the same investment.</p>
+        <p>Now watch the following presentation where your AI facilitator, Laila, will explain what you can expect from this session.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">Session introduction</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Please take the time to review the learning outcomes for this session below.</p>
+
+        <div class="lo-box">
+          <h2>Learning outcomes</h2>
+          <h5>By the end of this session, you will be able to:</h5>
+          <ul>
+            <li>Apply capital investment appraisal methods to long-term investment decisions</li>
+            <li>Calculate the payback period for an investment and recognise its limitations as an appraisal method</li>
+            <li>Calculate Net Present Value (NPV) and use it to evaluate whether a long-term investment should be accepted or rejected.</li>
+          </ul>
+        </div>
+
+        <p>In the next activity, we start with the most intuitive of the two methods: the payback period.</p>
+      </div>
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s5-7')">← 5.7 Session review</button>
+        <button class="nav-btn primary" onclick="showPage('s6-2')">Next: 6.2 The payback method →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s6-2">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 6 · Management accounting: Part 2</div>
+        <h1 class="page-title">6.2 The payback method</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>When a business is considering a major investment, one of the first questions it will ask is: how long will it take to get the money back? The payback method helps to answer that question. In the next presentation, Laila explains how it works, as well as its limitations.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">The payback method</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>Use the interactive payback method tool below to complete the exercise that follows. This should help you further understand how the payback period is calculated.</p>
+
+        <div class="video-placeholder" style="aspect-ratio:unset;height:200px;padding:1.5rem 0">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+            <div style="margin-bottom:0.75rem;font-size:0.9rem">Payback method interactive tool</div>
+            <a href="https://bespoke-learning-next.vercel.app/accounting-primer-mba-man/payback-method" target="_blank" style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;margin-bottom:0.75rem">Open tool in new tab ↗</a>
+            <div class="video-label-pending">This tool will be embedded directly in Canvas — the button above opens it in a new tab for now.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text">
+            <p>Imagine a tech startup is investing in new server infrastructure to support its SaaS platform. Below you can see their initial equipment cost and each year's net cash inflow (subscription revenue minus running costs):</p>
+            <ul>
+              <li>Initial equipment cost: £50,000</li>
+              <li>Year 1 net inflow: £8,000</li>
+              <li>Year 2 net inflow: £12,000</li>
+              <li>Year 3 net inflow: £15,000</li>
+              <li>Year 4 net inflow: £18,000</li>
+              <li>Year 5 net inflow: £20,000.</li>
+            </ul>
+            <p>On the interactive tool above, keep all inflows at their default values. Look at the graph or the table's cumulative inflow column: in which year does the investment pay back, and roughly how many months into that year?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-2-q1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The investment pays back partway through Year 4. By the end of Year 3, cumulative inflows total £35,000, leaving £15,000 still to recover. Year 4 brings in £18,000, so the remaining £15,000 is recovered after about 10 months (£15,000 ÷ £18,000 × 12). The payback period is therefore 3 years and 10 months.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-2-q1', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>Keep the equipment cost at £50,000. Now drag Year 1 and Year 2 inflows up to £20,000 each, leaving Years 3–5 unchanged. How does the payback period change, and what does this tell you about the timing of cash inflows?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-2-q2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The payback period falls significantly: the investment now pays back between 2 to 3 years (2 years and 8 months). This illustrates a key insight of the payback method: earlier cash inflows are better. A business that generates strong returns quickly reduces its financial risk faster, and frees up capital for reinvestment sooner.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-2-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>Reset all sliders to their defaults. Now increase the equipment cost to £80,000 without changing any of the annual inflows. Does the investment pay back within 5 years? What does this tell you about the payback method as a decision-making tool?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-2-q3">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>At £80,000 the total inflows over 5 years reach £73,000, so the investment does not pay back within the period. The payback method would lead a business to reject this investment outright. This highlights both a strength and a limitation of the method: it is simple and prioritises financial risk, but it ignores any returns generated after the payback period.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-2-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text">
+            <p>Reset the tool to its default values, then reverse the order of the annual inflows, so that: Year 1 = £20,000, Year 2 = £18,000, Year 3 = £15,000, Year 4 = £12,000 and Year 5 = £8,000.</p>
+            <p>The total cash returned over five years is unchanged from the default values, at £73,000. But how does the payback period compare with the default, and what does this reveal about how the method values cash flow timing?</p>
+          </div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-2-q4">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>The payback period is now 2 years and 10 months. The project pays back sooner than in the original scenario of 3 years and 10 months because the initial cash flows (Year 1, Year 2) are now larger. Judged on total returns alone the two scenarios are equivalent, yet the payback method ranks them very differently.</p>
+              <p>In the next activity, we'll consider another method that can help to evaluate long-term investment decisions: Net Present Value (or NPV).</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-2-q4', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s6-1')">← 6.1 Introduction</button>
+        <button class="nav-btn primary" onclick="showPage('s6-3')">Next: 6.3 Net Present Value (NPV) →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s6-3">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 6 · Management accounting: Part 2</div>
+        <h1 class="page-title">6.3 Net Present Value (NPV)</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>As you have heard, the payback method is a useful starting point but it has a significant blind spot, in that it treats money received in the future as worth exactly the same as money today. In the next presentation, Laila introduces Net Present Value (NPV), which addresses that limitation by accounting for the time value of money.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">NPV: Part 1</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>In the following presentation, you will see an application of the NPV method to the same Brompton Bicycle investment example you just heard about, working through the full calculation and reaching an investment decision.</p>
+
+        <div class="video-placeholder">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div style="margin-bottom:0.4rem">NPV: Part 2</div>
+            <div class="video-label-pending">Video to be added</div>
+          </div>
+        </div>
+
+        <p>The interactive NPV tool below uses the same Brompton example from the presentations. Move the sliders to see how the NPV changes as the discount rate and initial investment vary.</p>
+
+        <div class="video-placeholder" style="aspect-ratio:unset;height:200px;padding:1.5rem 0">
+          <div class="video-inner">
+            <div class="video-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+            <div style="margin-bottom:0.75rem;font-size:0.9rem">NPV simulator tool</div>
+            <a href="https://bespoke-interactives.vercel.app/accounting-primer-mba-man/npv-simulator" target="_blank" style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.45rem 1rem;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;margin-bottom:0.75rem">Open tool in new tab ↗</a>
+            <div class="video-label-pending">This tool will be embedded directly in Canvas — the button above opens it in a new tab for now.</div>
+          </div>
+        </div>
+
+        <p>Now use this tool to answer the questions below.</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="q-block">
+          <div class="q-text"><p>Look at the calculation table. Which year contributes the largest present value? What does this tell you about why applying a discount rate matters when evaluating an investment?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-3-q1">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>Year 4 and Year 5 both have cash inflows of £150,000 and £130,000 respectively, but Year 3 contributes the largest present value at £112,650. This is because Year 3 combines a large cash inflow (£150,000) with a discount factor that hasn't yet fallen too far (0.751). Year 4 also has £150,000 but its factor has dropped to 0.683, giving a lower present value of £102,450. This illustrates the core logic of discounting: money received later is worth less today, so the timing of inflows matters.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-3-q1', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>Drag the discount rate down from 10% toward 5%. Look at the impact of the different percentages along the way. At what point does the decision switch from 'reject' to 'accept', and what does crossing that threshold tell you about the relationship between the discount rate and NPV?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-3-q2">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content"><p>The decision flips to 'accept' as the discount rate falls below roughly 7–8%. At lower rates, each year's discount factor is higher, meaning future cash inflows lose less of their value when converted to today's terms. This pushes the total discounted inflows above the £500,000 investment, turning NPV positive.</p></div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-3-q2', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>Set the discount rate back to 10%. Now drag the initial investment down from £500,000 to £420,000. What happens to the NPV, and what does this reveal about how a business might use NPV when negotiating the cost of a project?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-6-3-q3">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>With a £420,000 investment and the same discounted inflows of £467,670, the NPV turns positive at around £47,670. The project now creates value, showing that NPV is sensitive not just to the discount rate but to the upfront cost.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-6-3-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s6-2')">← 6.2 The payback method</button>
+        <button class="nav-btn primary" onclick="showPage('s6-4')">Next: 6.4 Session review →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-s6-4">
+      <div class="page-header">
+        <div class="page-eyebrow">Session 6 · Management accounting: Part 2</div>
+        <h1 class="page-title">6.4 Session review</h1>
+      </div>
+
+      <div class="page-body" style="margin-bottom:1.5rem">
+        <p>You have now reached the end of this primer — well done!</p>
+        <p>In this last session, you explored how businesses evaluate long-term investment decisions, including by using the more straightforward payback method, as well as the more rigorous test that NPV provides.</p>
+        <p>Let's now return to the learning outcomes outlined in the session introduction. To what extent do you feel you have achieved each of this session's learning outcomes?</p>
+      </div>
+
+      <div class="quiz-header">
+        <h2>Activity</h2>
+      </div>
+      <div class="quiz-body">
+        <div class="self-review">
+          <div class="self-review-header">
+            <div>Learning outcome</div>
+            <div style="text-align:center">Confident</div>
+            <div style="text-align:center">Need to review</div>
+            <div style="text-align:center">Need support</div>
+          </div>
+          <div class="self-review-row">
+            <div>Apply capital investment appraisal methods to long-term investment decisions</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Calculate the payback period for an investment and recognise its limitations as an appraisal method</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+          <div class="self-review-row">
+            <div>Calculate Net Present Value (NPV) and use it to evaluate whether a long-term investment should be accepted or rejected</div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+            <div class="sr-radio-group"><div class="sr-radio" onclick="selectSR(this)"></div></div>
+          </div>
+        </div>
+
+        <div class="q-block" style="margin-top:1.5rem">
+          <div class="q-number">Timing feedback</div>
+          <div class="q-text"><p>Was the estimated timing accurate?</p></div>
+          <div class="mcq-options" id="mcq-s6-timing">
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s6-timing')"><div class="mcq-radio"></div>It took less time to complete the tasks and exercises than estimated</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s6-timing')"><div class="mcq-radio"></div>It took about the same amount of time to complete the tasks and exercises as estimated</div>
+            <div class="mcq-option" onclick="selectMCQ(this, 'mcq-s6-timing')"><div class="mcq-radio"></div>It took more time to complete the tasks and exercises than estimated</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-number">Open feedback</div>
+          <div class="q-text"><p>Please provide feedback on the content covered.</p></div>
+          <textarea class="q-textarea" placeholder="Your thoughts on this session…" rows="4"></textarea>
+        </div>
+
+        <div class="feedback-box" id="fb-s6-review" style="display:none">
+          <div class="fb-label">✓ Submitted</div>
+          <div class="fb-content">
+            <p>Congratulations on the primer! We hope you'll find it a useful foundation for your subsequent studies in this area.</p>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="toggleFeedback('fb-s6-review', this)">Submit session review</button>
+      </div>
+
+      <div class="page-nav">
+        <button class="nav-btn" onclick="showPage('s6-3')">← 6.3 Net Present Value (NPV)</button>
       </div>
     </div>
   </div>
@@ -2572,11 +2914,15 @@ const pages = {
   "s5-4": "5.4 Cost classification: Fixed vs variable",
   "s5-5": "5.5 Short-term decision making",
   "s5-5-1": "5.5.1 The special order",
-  "s5-5-2": "5.5.2 The make or buy decision",
+  "s5-5-2": "5.5.2 Make or buy?",
   "s5-5-3": "5.5.3 Continue or discontinue?",
   "s5-5-4": "5.5.4 Limiting factors",
   "s5-6": "5.6 The break-even formula",
   "s5-7": "5.7 Session review",
+  "s6-1": "6.1 Introduction",
+  "s6-2": "6.2 The payback method",
+  "s6-3": "6.3 Net Present Value (NPV)",
+  "s6-4": "6.4 Session review",
 };
 
 export default function AccountingPrimerSession1Page() {
