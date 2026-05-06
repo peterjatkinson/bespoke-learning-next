@@ -2497,6 +2497,21 @@ const htmlContent = String.raw`
           </div>
           <button class="submit-btn" onclick="toggleFeedback('fb-5-6-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
         </div>
+
+        <div class="q-block">
+          <div class="q-text"><p>With the adjusted price, the break-even point falls to around 2,482 loaves. The contribution margin has grown from £1.80 to £2.80 per loaf, meaning each loaf now covers more of the fixed costs. If a business can raise prices without losing too much demand, i.e. demand is relatively inelastic, it will need to sell fewer units to break even.</p>
+          <p>Set the selling price back to £2.50 and variable cost to £0.70, with fixed costs at £6,950. Now drag the output slider up past the break-even point of 3,861 loaves. What happens to the margin of safety, and what does this tell you about how output relates to profitability?</p></div>
+          <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
+          <div class="feedback-box" id="fb-5-6-q4">
+            <div class="fb-label">✓ Feedback</div>
+            <div class="fb-content">
+              <p>As output rises past 3,861 loaves the margin of safety turns positive. We cross the break-even point and the business starts to generate a profit. At 5,500 loaves, the margin of safety is around 1,640 loaves (~30%). Every additional loaf above the break-even point generates £1.80 of pure profit (the contribution per unit), as all fixed costs are now covered.</p>
+              <p>For a business to generate profit, it should operate above the margin of safety. Note the margin of safety provides a proxy of how much business revenue can fall, before it starts to incur only losses.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="toggleFeedback('fb-5-6-q4', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
+        </div>
       </div>
 
       <div class="page-nav">
