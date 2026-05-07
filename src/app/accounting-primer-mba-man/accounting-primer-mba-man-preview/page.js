@@ -2192,7 +2192,7 @@ const htmlContent = String.raw`
 
       <div class="page-body" style="margin-bottom:1.5rem">
         <p>A hotel chain wants 5,000 branded notebooks at £14 each. Your normal price is £20. Your variable cost is £12.</p>
-        <p>Do you accept?</p>
+        <p>If you want to maximise your profit in the short term, do you accept?</p>
       </div>
 
       <div class="quiz-header">
@@ -2492,6 +2492,7 @@ const htmlContent = String.raw`
             <div class="fb-label">✓ Feedback</div>
             <div class="fb-content">
               <p>With the adjusted price, the break-even point falls to around 2,482 loaves. The contribution margin has grown from £1.80 to £2.80 per loaf, meaning each loaf now covers more of the fixed costs. If a business can raise prices without losing too much demand (i.e. demand is relatively inelastic), it will need to sell fewer units to break even.</p>
+              <p>This brings us to the end of the session. In the next activity, you will review what you've learned in this session.</p>
             </div>
           </div>
           <button class="submit-btn" onclick="toggleFeedback('fb-5-6-q3', this)" style="margin-top:1rem">Submit &amp; see feedback</button>
