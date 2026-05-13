@@ -1667,9 +1667,7 @@ const htmlContent = String.raw`
         </div>
 
         <div class="q-block">
-          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-            <strong>Note</strong> — The following questions are still to be checked/finalised.
-          </div>
+      
           <div class="q-text">
             <p>Now that you have sorted the cash flows into their correct sections, test your understanding of the three main types of activities covered on a cash flow statement a little further.</p>
             <p>Most companies use the indirect method to present operating activities. What does this method start from?</p>
@@ -1687,9 +1685,7 @@ const htmlContent = String.raw`
         </div>
 
         <div class="q-block">
-          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-            <strong>Note</strong> — The following question is still to be checked/finalised.
-          </div>
+     
           <div class="q-text">
             <p>A company buys a new piece of manufacturing machinery for £100,000. How does this cash outflow appear in the cash flow statement?</p>
           </div>
@@ -1706,9 +1702,7 @@ const htmlContent = String.raw`
         </div>
 
         <div class="q-block">
-          <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-            <strong>Note</strong> — The following question is still to be checked/finalised.
-          </div>
+       
           <div class="q-text">
             <p>A company issues new shares and uses the proceeds to repay an existing bank loan. Where would both of these appear in the cash flow statement?</p>
           </div>
