@@ -1530,9 +1530,6 @@ const htmlContent = String.raw`
         <h1 class="page-title">4.1 Introduction</h1>
       </div>
       <div class="page-body">
-        <div style="background:var(--gold-light);border:1px solid #e8c86a;border-radius:6px;padding:0.6rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#7a5a1a">
-          <strong>Note</strong> — This session is currently a bit light; we may add more exercises in due course.
-        </div>
         <p>Welcome to session four!&nbsp;In this session, we turn to the final core financial statement: the cash flow statement. You'll explore why cash and profit can tell very different stories about a business, and what it means for a company's financial health.</p>
         <p>Now watch the following presentation where your AI facilitator, Laila, will explain what you can expect from this session.</p>
 
