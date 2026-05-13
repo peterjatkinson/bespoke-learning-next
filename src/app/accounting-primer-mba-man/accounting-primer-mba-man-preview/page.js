@@ -2490,8 +2490,8 @@ const htmlContent = String.raw`
         </div>
 
         <div class="q-block">
-          <div class="q-text"><p>With the adjusted price, the break-even point falls to around 2,482 loaves. The contribution margin has grown from £1.80 to £2.80 per loaf, meaning each loaf now covers more of the fixed costs. If a business can raise prices without losing too much demand, i.e. demand is relatively inelastic, it will need to sell fewer units to break even.</p>
-          <p>Set the selling price back to £2.50 and variable cost to £0.70, with fixed costs at £6,950. Now drag the output slider up past the break-even point of 3,861 loaves. What happens to the margin of safety, and what does this tell you about how output relates to profitability?</p></div>
+          <div class="q-text">
+          <p>Keep the default selling price (£2.50), variable cost (£0.70) and fixed costs (£6,950). The bakery is currently producing only 400 loaves. Drag the output slider upwards, crossing the break-even point (at around 3,861 loaves). How does the 'Margin of safety' figure change as you push further beyond that point? Why might a business aim to operate well above break-even rather than just at it? </p></div>
           <textarea class="q-textarea" placeholder="Write your answer here…" rows="4"></textarea>
           <div class="feedback-box" id="fb-5-6-q4">
             <div class="fb-label">✓ Feedback</div>
